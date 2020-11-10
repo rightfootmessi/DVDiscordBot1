@@ -53,6 +53,10 @@ client.on('message', message => {
 		for (i = 1; i < args.length; i++) {
 			questname += " " + args[i];
 		}
+		if (!questname) {
+			message.channel.send("You must give me a quest name to look for!");
+			return;
+		}
 		let dragon = questTable[questname.toLowerCase()];
 		if (dragon) message.channel.send("Use a(n) **" + dragon + "** to complete the quest \"" + questname + "\"");
 		else message.channel.send("\"" + questname + "\" is not a recognized quest name (did you type it correctly?)");
