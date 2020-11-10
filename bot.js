@@ -1,14 +1,18 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
+const cmdPrefix = 'd!';
+
 client.on('ready', () => {
     console.log('I am ready!');
 });
  
 client.on('message', message => {
-    if (message.content === 'ping') {
-        message.reply('pong');
-    }
+    if (!message.content.startsWith(cmdPrefix) || message.author.bot) return;
+    
+    const args = message.content.slice(prefix.length).trim().split(/ +/);
+	const command = args.shift().toLowerCase();
+    message.channel.send("Received command " + command + " with arguments " + args);
 });
  
 // THIS  MUST  BE  THIS  WAY
