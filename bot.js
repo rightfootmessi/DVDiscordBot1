@@ -23,6 +23,7 @@ client.on('ready', () => {
 			var questsTableHTML = htmlDoc.getElementById('tabber-9effcf7958cd8e73b6b03de0c8c97743').getElementsByClassName('tabbertab')[0].getElementsByTagName('table')[0];
 			var entries = questsTableHTML.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
 			console.log("Found " + entries.length + " table entries");
+			console.log(entries);
 			var numLoaded = 0;
 			for (const entry of entries) {
 				var boxes = entry.getElementsByTagName('td');
