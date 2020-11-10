@@ -12,8 +12,16 @@ client.on('message', message => {
     console.log("Prefix found and messenger is not bot");
 	
     const args = message.content.slice(cmdPrefix.length).trim().split(" ");
-    const command = args.shift().toLowerCase();
-    message.channel.send("Received command " + command + " with arguments " + args);
+    const cmd = args.shift().toLowerCase();
+	if (cmd === 'quest') {
+		var questname = args[0];
+		for (i = 1; i < args.length; i++) {
+			questname += " " + args[i];
+		}
+		message.channel.send("You are looking for the dragon whose quest is " + questname);
+	} else {
+    	message.channel.send("Received command " + cmd + " with arguments " + args);
+	}
 });
  
 // THIS  MUST  BE  THIS  WAY
