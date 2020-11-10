@@ -8,9 +8,9 @@ client.on('ready', () => {
 });
  
 client.on('message', message => {
+	message.reply('Looking for command prefix ' + cmdPrefix);
     if (!message.content.startsWith(cmdPrefix) || message.author.bot) return;
     
-	message.reply('Handling command...');
 	
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const command = args.shift().toLowerCase();
