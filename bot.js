@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const http = require('http');
+const https = require('https');
 
 const cmdPrefix = 'd!';
 
@@ -10,8 +10,11 @@ const questsLoaded = false;
 client.on('ready', () => {
 	console.log('I am ready!');
 	
-	http.get('https://dragonvale.fandom.com/wiki/Quests', (res) => {
-		console.log(data.toString());
+	https.get('https://dragonvale.fandom.com/wiki/Quests', (res) => {
+		console.log("Received " + res.statusCode + " status code");
+		res.on('data', (body) => {
+			console.log("Received data:\n" + body);
+		});
 	});
 });
  
