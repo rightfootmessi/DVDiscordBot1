@@ -12,8 +12,12 @@ client.on('ready', () => {
 	
 	https.get('https://dragonvale.fandom.com/wiki/Quests', (res) => {
 		console.log("Received " + res.statusCode + " status code");
-		res.on('data', (body) => {
-			console.log("Received data:\n" + body);
+		var body = [];
+		res.on('data', (chunk) => {
+			body.push(chunk);
+		}).on('end', () => {
+			body = Buffer.concat(body).toString();
+			console.log("Finale result:\n" + body);
 		});
 	});
 });
