@@ -25,6 +25,7 @@ client.on('ready', () => {
 			var numLoaded = 0;
 			for (const entry of entries) {
 				var boxes = entry.getElementsByTagName('td');
+				console.log(boxes);
 				var qName = boxes[0].innerText;
 				var qDragon = boxes[2].innerText;
 				questTable[qName] = qDragon;
