@@ -20,7 +20,18 @@ client.on('ready', () => {
 		}).on('end', () => {
 			body = Buffer.concat(body).toString();
 			var htmlDoc = new JSDOM(body).window.document;
-			console.log("Quests table:\n" + htmlDoc.getElementById('tabber-9effcf7958cd8e73b6b03de0c8c97743').innerHTML);
+			var questsTableHTML = htmlDoc.getElementById('tabber-9effcf7958cd8e73b6b03de0c8c97743').getElementsByClassName('tabbertab')[0].getElementsByTagName('table')[0];
+			var entries = questsTableHTML.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+			var numLoaded = 0;
+			entries.forEach((entry) => {
+				var boxes = entry.getElementsByTagName('td');
+				var qName = boxes[0].innerText;
+				var qDragon = boxes[2].innerText;
+				questTable[qName] = qDragon;
+				numLoaded++;
+			});
+			console.log(numLoaded + " quests loaded!");
+			questsLoaded = true;
 		}).on('error', (e) => {
 			console.error("An error occurred, quests could not be loaded.\nStack trace:\n" + e);
 		});
