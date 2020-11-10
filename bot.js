@@ -1,6 +1,8 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const https = require('https');
+const jsdom = require('jsdom');
+const { JSDOM } = jsdom;
 
 const cmdPrefix = 'd!';
 
@@ -17,8 +19,7 @@ client.on('ready', () => {
 			body.push(chunk);
 		}).on('end', () => {
 			body = Buffer.concat(body).toString();
-			var parser = new DOMParser();
-			var htmlDoc = parser.parseFromString(body, 'text/html');
+			var htmlDoc = new JSDOM(body).window.document;
 			console.log("Quests table:\n" + htmlDoc.getElementById('tabber-9effcf7958cd8e73b6b03de0c8c97743'));
 		}).on('error', (e) => {
 			console.error("An error occurred, quests could not be loaded.\nStack trace:\n" + e);
