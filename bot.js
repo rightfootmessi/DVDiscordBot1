@@ -8,13 +8,12 @@ client.on('ready', () => {
 });
  
 client.on('message', message => {
-	message.reply('Looking for command prefix ${cmdPrefix}');
     if (!message.content.startsWith(cmdPrefix) || message.author.bot) return;
-    
+    console.log("Prefix found and messenger is not bot");
 	
-    const args = message.content.slice(prefix.length).trim().split(/ +/);
+    const args = message.content.slice(prefix.length).trim().split(" ");
     const command = args.shift().toLowerCase();
-    message.channel.send("Received command ${command} with arguments ${args}");
+    message.channel.send("Received command " + command + " with arguments " + args);
 });
  
 // THIS  MUST  BE  THIS  WAY
