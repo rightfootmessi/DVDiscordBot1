@@ -55,11 +55,16 @@ client.on('message', message => {
 		let dragon = questTable[questname.toLowerCase()];
 		if (dragon) message.channel.send("Use a(n) **" + dragon + "** to complete the quest \"" + questname + "\"");
 		else message.channel.send("\"" + questname + "\" is not a recognized quest name (did you type it correctly?)");
+	} else if (cmd === 'help') {
+		const helpMsg = "Command list:(prefix all commands with `" + cmdPrefix + "`)\n"
+				+ "`quest <quest name>` - get the correct dragon to send on a quest\n"
+				+ "`help` - view this message";
+		message.channel.send(helpMsg);
 	} else {
-		message.channel.send("Received unhandled command " + cmd + " with arguments " + args);
+		message.channel.send("Unknown command. Type " + cmdPrefix + "help for a list of commands");
 	}
 });
 
-// Comment/uncomment before committing to git
+// Comment/uncomment appropriately before committing to git
 client.login(process.env.BOT_TOKEN);
 //client.login('Nzc1MzgyODQyNjcwMDU1NDI1.X6lhiw.T0cDEvKNISj5VyBuWNpGWwn479s');
