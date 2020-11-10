@@ -60,5 +60,5 @@ client.on('message', message => {
 });
 
 // Comment/uncomment before committing to git
-//client.login(process.env.BOT_TOKEN);
-client.login('Nzc1MzgyODQyNjcwMDU1NDI1.X6lhiw.T0cDEvKNISj5VyBuWNpGWwn479s');
+client.login(process.env.BOT_TOKEN);
+//client.login('Nzc1MzgyODQyNjcwMDU1NDI1.X6lhiw.T0cDEvKNISj5VyBuWNpGWwn479s');
