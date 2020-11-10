@@ -26,13 +26,14 @@ client.on('ready', () => {
 			var numLoaded = 0;
 			for (const entry of entries) {
 				var boxes = entry.getElementsByTagName('td');
-				console.log(boxes);
-				
-				var qName = boxes.item(0).innerText;
-				var qDragon = boxes.item(2).innerText;
-				console.log("Added quest to table - Name: " + qName + "; Dragon: " + qDragon);
-				numLoaded++;
-				
+				if (boxes.length > 0) {
+					console.log(boxes);
+
+					var qName = boxes.item(0).innerText;
+					var qDragon = boxes.item(2).innerText;
+					console.log("Added quest to table - Name: " + qName + "; Dragon: " + qDragon);
+					numLoaded++;
+				}
 			}
 			console.log(numLoaded + " quests loaded!");
 			questsLoaded = true;
