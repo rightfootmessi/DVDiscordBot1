@@ -10,8 +10,10 @@ client.on('ready', () => {
 client.on('message', message => {
     if (!message.content.startsWith(cmdPrefix) || message.author.bot) return;
     
+	message.reply('Handling command...');
+	
     const args = message.content.slice(prefix.length).trim().split(/ +/);
-	const command = args.shift().toLowerCase();
+    const command = args.shift().toLowerCase();
     message.channel.send("Received command " + command + " with arguments " + args);
 });
  
