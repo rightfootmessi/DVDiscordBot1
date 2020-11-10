@@ -7,7 +7,7 @@ const { JSDOM } = jsdom;
 const cmdPrefix = 'd!';
 
 const questTable = {};
-const questsLoaded = false;
+var questsLoaded = false;
 
 client.on('ready', () => {
 	console.log('I am ready!');
