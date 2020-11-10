@@ -43,7 +43,8 @@ client.on('message', message => {
 
 	const args = message.content.slice(cmdPrefix.length).trim().split(" ");
 	const cmd = args.shift().toLowerCase();
-	if (cmd === 'quest') {
+	if (cmd === '') return;
+	else if (cmd === 'quest') {
 		if (!questsLoaded) {
 			message.channel.send("Quests have not been loaded yet!");
 			return;
@@ -61,7 +62,7 @@ client.on('message', message => {
 				+ "`help` - view this message";
 		message.channel.send(helpMsg);
 	} else {
-		message.channel.send("Unknown command. Type " + cmdPrefix + "help for a list of commands");
+		message.channel.send("Unknown command. Type `" + cmdPrefix + "help` for a list of commands");
 	}
 });
 
