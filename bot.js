@@ -20,18 +20,18 @@ client.on('ready', () => {
 		}).on('end', () => {
 			body = Buffer.concat(body).toString();
 			var htmlDoc = new JSDOM(body).window.document;
-			var questsTableHTML = htmlDoc.getElementById('tabber-9effcf7958cd8e73b6b03de0c8c97743').getElementsByClassName('tabbertab')[0].getElementsByTagName('table')[0];
+			var questsTableHTML = document.getElementById('tabber-9effcf7958cd8e73b6b03de0c8c97743').getElementsByClassName('tabbertab')[0].getElementsByTagName('table')[0];
 			var entries = questsTableHTML.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
 			var numLoaded = 0;
 			for (const entry of entries) {
 				var boxes = entry.getElementsByTagName('td');
-				console.log(boxes);
-				/*
+				//console.log(boxes);
+				
 				var qName = boxes[0].innerText;
 				var qDragon = boxes[2].innerText;
-				questTable[qName] = qDragon;
+				console.log("Name: " + qName + "; Dragon: " + qDragon);
 				numLoaded++;
-				*/
+				
 			}
 			console.log(numLoaded + " quests loaded!");
 			questsLoaded = true;
