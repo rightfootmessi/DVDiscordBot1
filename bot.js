@@ -21,7 +21,7 @@ client.on('ready', () => {
 			dummyDoc.innerHTML = body;
 			console.log("Quests table:\n" + dummyDoc.getElementById('tabber-9effcf7958cd8e73b6b03de0c8c97743'));
 		}).on('error', (e) => {
-			console.error('An error occurred, quests could not be loaded.\nStack trace:\n" + e);
+			console.error("An error occurred, quests could not be loaded.\nStack trace:\n" + e);
 		});
 	});
 });
@@ -43,5 +43,4 @@ client.on('message', message => {
 	}
 });
  
-// THIS  MUST  BE  THIS  WAY
 client.login(process.env.BOT_TOKEN);//BOT_TOKEN is the Client Secret
