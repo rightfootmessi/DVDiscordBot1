@@ -17,7 +17,11 @@ client.on('ready', () => {
 			body.push(chunk);
 		}).on('end', () => {
 			body = Buffer.concat(body).toString();
-			console.log("Finale result:\n" + body);
+			let dummyDoc = document.createElement('html');
+			dummyDoc.innerHTML = body;
+			console.log("Quests table:\n" + dummyDoc.getElementById('tabber-9effcf7958cd8e73b6b03de0c8c97743'));
+		}).on('error', (e) => {
+			console.error('An error occurred, quests could not be loaded.\nStack trace:\n" + e);
 		});
 	});
 });
