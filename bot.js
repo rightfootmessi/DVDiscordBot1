@@ -52,8 +52,9 @@ client.on('message', message => {
 		for (i = 1; i < args.length; i++) {
 			questname += " " + args[i];
 		}
-		if (questTable[questname.toLowerCase()]) message.channel.send("The matching dragon for " + questname + " is " + questTable[questname.toLowerCase()]);
-		else message.channel.send(questname + " is not a recognized quest name (did you type it correctly?)");
+		let dragon = questTable[questname.toLowerCase()];
+		if (dragon) message.channel.send("Use a(n) **" + dragon + "** to complete the quest \"" + questname + "\"");
+		else message.channel.send("\"" + questname + "\" is not a recognized quest name (did you type it correctly?)");
 	} else {
 		message.channel.send("Received unhandled command " + cmd + " with arguments " + args);
 	}
