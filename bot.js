@@ -81,7 +81,7 @@ client.on('message', message => {
 			return;
 		}
 		if (dragon in breedComboCache) {
-			message.send(breedComboCache[dragon]);
+			message.channel.send(breedComboCache[dragon]);
 		} else {
 			var dragon_ = dragon.replace(/ /g, "_");
 			https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
