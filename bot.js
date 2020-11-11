@@ -276,6 +276,7 @@ prettyString = function(words, separator) {
 		str = str.charAt(0).toUpperCase() + str.substring(1);
 		result += separator + str;
 	}
+	result = result.replace(/’/g, "'");
 	return result;
 }
 
