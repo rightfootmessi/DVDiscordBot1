@@ -41,6 +41,12 @@ const evolutions = ["Ghostly Plant Dragon",
 					"Curlyleaf Dragon",
 					"Karroot Dragon",
 					"Vidalia Dragon"];
+const noQuest    = ["Wendigo Dragon",
+					"Hanno Dragon",
+					"Clairvoyant Dragon",
+					"Razzle Dragon",
+					"Riptide Dragon",
+					"Dash Dragon"];
 const dragonList = ["Plant Dragon", 
 					"Fire Dragon", 
 					"Earth Dragon", 
@@ -89,6 +95,7 @@ client.on('ready', () => {
 			});
 			console.log(numLoaded + " quests loaded!");
 			questsLoaded = true;
+			dragonList.concat(noQuest);
 		}).on('error', (e) => {
 			console.error("An error occurred, quests could not be loaded.\nStack trace:\n" + e);
 		});
@@ -100,8 +107,7 @@ client.on('message', message => {
 
 	const args = message.content.slice(cmdPrefix.length).trim().split(" ");
 	const cmd = args.shift().toLowerCase();
-	if (cmd === '') return;
-	else if (cmd === 'quest') {
+	if (cmd === 'quest') {
 		if (!questsLoaded) {
 			message.channel.send("Quests have not been loaded yet!");
 			return;
@@ -245,7 +251,7 @@ client.on('message', message => {
 				});
 			});
 		}
-	} else if (cmd === 'help') {
+	} else if (cmd === '' || cmd === 'help') {
 		const helpMsg = "Command list:(prefix all commands with `" + cmdPrefix + "`)\n"
 				+ "`quest <quest name>` - get the correct dragon to send on a quest\n"
 				+ "`breed <dragon name>` - find out how to breed a dragon\n"
