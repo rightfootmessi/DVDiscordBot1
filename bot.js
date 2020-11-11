@@ -240,7 +240,7 @@ client.on('message', message => {
 						}
 					}
 					result += "It normally costs 100 gems to evolve a dragon, but during events where the " + dragon + " is available to purchase it may instead cost 1000 event currency."
-					evoCache[dragon] = response;
+					evoCache[dragon] = result;
 					message.channel.send(result);
 				});
 			});
