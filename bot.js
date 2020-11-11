@@ -62,6 +62,7 @@ var questsLoaded = false;
 
 const breedComboCache = {};
 const elementsCache = {};
+const evoCache = {};
 
 client.on('ready', () => {
 	console.log('I am ready!');
@@ -214,8 +215,8 @@ client.on('message', message => {
 			message.channel.send(dragon + " is a primary dragon, its only element is in its name...");
 			return;
 		}
-		if (dragon in elementsCache) {
-			message.channel.send(elementsCache[dragon]);
+		if (dragon in evoCache) {
+			message.channel.send(evoCache[dragon]);
 		} else {
 			var dragon_ = dragon.replace(/ /g, "_");
 			https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
@@ -239,6 +240,7 @@ client.on('message', message => {
 						}
 					}
 					result += "It normally costs 100 gems to evolve a dragon, but during events where the " + dragon + " is available to purchase it may instead cost 1000 event currency."
+					evoCache[dragon] = response;
 					message.channel.send(result);
 				});
 			});
