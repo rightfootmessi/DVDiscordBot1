@@ -69,6 +69,7 @@ var questsLoaded = false;
 const breedComboCache = {};
 const elementsCache = {};
 const evoCache = {};
+const ratesCache = {};
 
 client.on('ready', () => {
 	console.log('I am ready!');
@@ -107,6 +108,15 @@ client.on('message', message => {
 
 	const args = message.content.slice(cmdPrefix.length).trim().split(" ");
 	const cmd = args.shift().toLowerCase();
+
+	if (message.channel.type === "dm" && cmd === 'clearcache') {
+		breedComboCache = {};
+		elementsCache = {};
+		evoCache = {};
+		ratesCache = {};
+		message.channel.send("Cache cleared. Information given should now reflect the most recent wiki changes.");
+	}
+
 	if (cmd === 'quest') {
 		if (!questsLoaded) {
 			message.channel.send("Quests have not been loaded yet!");
@@ -251,8 +261,31 @@ client.on('message', message => {
 				});
 			});
 		}
+	} else if (cmd === 'rates') {
+		/* d!rates <dragon> [numBoosts] [rift]
+		must handle following cases:
+		- non-epic dragon, x boosts, non-rift
+		- non-epic dragon, rift
+		- epic dragon, x boosts, non-rift
+		- epic dragon, rift
+		- gemstone dragon, non-rift
+		- gemstone dragon, rift
+		- earning rates not known (table cell filled with ??)
+		- primary dragon (table goes to 21 not 20)
+		
+		Get max # of applicable boosts: $(".dragonbox").first().find('tr').eq(9).children().eq(1).children().length - 1
+
+		JSON structure:
+		var ratesList = 
+		{
+			dragonName: {
+				non-rift: [zeroBoostStr, oneBoostStr, ... nBoostStr], <--- can add out of order (i.e. if array[2] is added first, array[0] and array[1] == undefined)
+				rift : [riftStr]
+			}
+		}
+		*/
 	} else if (cmd === '' || cmd === 'help') {
-		const helpMsg = "Command list:(prefix all commands with `" + cmdPrefix + "`)\n"
+		const helpMsg = "Command list: (prefix all commands with `" + cmdPrefix + "`)\n"
 				+ "`quest <quest name>` - get the correct dragon to send on a quest\n"
 				+ "`breed <dragon name>` - find out how to breed a dragon\n"
 				+ "`elements <dragon name>` - get the breeding elements (aka hidden elements) of a dragon\n"
