@@ -47,7 +47,7 @@ const noQuest    = ["Wendigo Dragon",
 					"Razzle Dragon",
 					"Riptide Dragon",
 					"Dash Dragon"];
-const dragonList = ["Plant Dragon", 
+var dragonList = ["Plant Dragon", 
 					"Fire Dragon", 
 					"Earth Dragon", 
 					"Cold Dragon", 
