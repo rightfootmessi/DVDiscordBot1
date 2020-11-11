@@ -146,8 +146,8 @@ client.on('message', message => {
 });
 
 // Comment/uncomment appropriately before committing to git
-//client.login(process.env.BOT_TOKEN);
-client.login('Nzc1MzgyODQyNjcwMDU1NDI1.X6lhiw.T0cDEvKNISj5VyBuWNpGWwn479s');
+client.login(process.env.BOT_TOKEN);
+//client.login('Nzc1MzgyODQyNjcwMDU1NDI1.X6lhiw.T0cDEvKNISj5VyBuWNpGWwn479s');
 
 prettyString = function(words, separator) {
 	if (words.length == 0) return false;
