@@ -198,7 +198,7 @@ client.on('message', message => {
 							elems.push(imgName.split(" ")[1].replace(".png", ""));
 						}
 					});
-					var response = (elems.length == 10) ? dragon + " adds all 10 elements when breeding (often called a *pseudo*)." : dragon + " adds the " + prettyString(elems, ", ") + " elements when breeding.";
+					var response = (elems.length == 10) ? dragon + " adds all 10 elements when breeding (often called a *pseudo*)." : (elems.length > 0) ? dragon + " adds the " + prettyString(elems, ", ") + " elements when breeding." : "Error: The wiki is missing the breeding elements of the " + dragon;
 					elementsCache[dragon] = response;
 					message.channel.send(response);
 				});
