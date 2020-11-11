@@ -232,7 +232,7 @@ client.on('message', message => {
 					var index = 0; // Safeguard to prevent infinite loop (will only happen if the page html is abnormal)
 					while (true) {
 						curr = curr.next();
-						if (curr.children().first().attr('id') === 'Breeding' || index > 10) break;
+						if (curr.children().first().attr('id') === 'Breeding' || curr.children().first().attr('id') === 'Earning_Rates' || index > 10) break;
 						else {
 							var str = curr.text().trim();
 							if (!str.startsWith("It can also be purchased") && !str.startsWith("During") && !str.startsWith("The cost of")) result += str.trim() + " ";
