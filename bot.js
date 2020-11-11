@@ -114,7 +114,8 @@ client.on('message', message => {
 		elementsCache = {};
 		evoCache = {};
 		ratesCache = {};
-		message.channel.send("Cache cleared. Information given should now reflect the most recent wiki changes.");
+		message.author.send("Cache cleared. Information given should now reflect the most recent wiki changes.");
+		return;
 	}
 
 	if (cmd === 'quest') {
