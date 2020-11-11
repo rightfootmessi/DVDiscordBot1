@@ -10,6 +10,9 @@ const dragonList = ["Plant Dragon", "Fire Dragon", "Earth Dragon", "Cold Dragon"
 const questTable = {};
 var questsLoaded = false;
 
+const breedComboCache = {};
+const elementsCache = {};
+
 client.on('ready', () => {
 	console.log('I am ready!');
 	
@@ -77,22 +80,27 @@ client.on('message', message => {
 			message.channel.send(dragon + " is a primary dragon, just breed two of them together to get more...");
 			return;
 		}
-		var dragon_ = dragon.replace(/ /g, "_");
-		https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
-			console.log("Received " + res.statusCode + " status code for breeding request");
-			var body = [];
-			res.on('data', (chunk) => {
-				body.push(chunk);
-			}).on('end', () => {
-				body = Buffer.concat(body).toString();
-				const $ = cheerio.load(body);
-				response = $("#Breeding").parent().next().text().trim();
-				if ($("td[style='border-top-style:hidden;border-left-style:hidden;']").last().text().trim() === "EXPIRED") {
-					response += " *Note: This dragon is not available right now (per the wiki)!*";
-				}
-				message.channel.send(response);	
+		if (dragon in breedComboCache) {
+			message.send(breedComboCache[dragon]);
+		} else {
+			var dragon_ = dragon.replace(/ /g, "_");
+			https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
+				console.log("Received " + res.statusCode + " status code for breeding request");
+				var body = [];
+				res.on('data', (chunk) => {
+					body.push(chunk);
+				}).on('end', () => {
+					body = Buffer.concat(body).toString();
+					const $ = cheerio.load(body);
+					response = $("#Breeding").parent().next().text().trim();
+					if ($("td[style='border-top-style:hidden;border-left-style:hidden;']").last().text().trim() === "EXPIRED") {
+						response += " *Note: This dragon is not available right now (per the wiki)!*";
+					}
+					breedComboCache[dragon] = response;
+					message.channel.send(response);	
+				});
 			});
-		});
+		}
 	} else if (cmd === 'elements') {
 		var dragon = prettyString(args, " ");
 		if (!dragon) {
@@ -110,29 +118,31 @@ client.on('message', message => {
 			message.channel.send(dragon + " is a primary dragon, its only element is in its name...");
 			return;
 		}
-		var dragon_ = dragon.replace(/ /g, "_");
-		https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
-			console.log("Received " + res.statusCode + " status code for elements request");
-			var body = [];
-			res.on('data', (chunk) => {
-				body.push(chunk);
-			}).on('end', () => {
-				body = Buffer.concat(body).toString();
-				const $ = cheerio.load(body);
-				var elems = [];
-				$(".dragonbox").first().find('tr').eq(17).children('td').first().children().each((i, elem) => {
-					var imgName = $(elem).children().first().attr('data-image-name');
-					if (!imgName.includes("Iconb")) {
-						elems.push(imgName.split(" ")[1].replace(".png", ""));
-					}
+		if (dragon in elementsCache) {
+			message.channel.send(elementsCache[dragon]);
+		} else {
+			var dragon_ = dragon.replace(/ /g, "_");
+			https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
+				console.log("Received " + res.statusCode + " status code for elements request");
+				var body = [];
+				res.on('data', (chunk) => {
+					body.push(chunk);
+				}).on('end', () => {
+					body = Buffer.concat(body).toString();
+					const $ = cheerio.load(body);
+					var elems = [];
+					$(".dragonbox").first().find('tr').eq(17).children('td').first().children().each((i, elem) => {
+						var imgName = $(elem).children().first().attr('data-image-name');
+						if (!imgName.includes("Iconb")) {
+							elems.push(imgName.split(" ")[1].replace(".png", ""));
+						}
+					});
+					var response = (elems.length == 10) ? dragon + " adds all 10 elements when breeding (often called a *pseudo*)." : dragon + " adds the " + prettyString(elems, ", ") + " elements when breeding.";
+					elementsCache[dragon] = response;
+					message.channel.send(response);
 				});
-				if (elems.length == 10) {
-					message.channel.send(dragon + " adds all 10 elements when breeding (often called a *pseudo*).");
-				} else {
-					message.channel.send(dragon + " adds the " + prettyString(elems, ", ") + " elements when breeding.");
-				}
 			});
-		});
+		}
 	} else if (cmd === 'help') {
 		const helpMsg = "Command list:(prefix all commands with `" + cmdPrefix + "`)\n"
 				+ "`quest <quest name>` - get the correct dragon to send on a quest\n"
