@@ -277,6 +277,7 @@ prettyString = function(words, separator) {
 		result += separator + str;
 	}
 	result = result.replace(/’/g, "'");
+	result = result.replace(/.../g, "…");
 	return result;
 }
 
