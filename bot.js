@@ -95,7 +95,7 @@ client.on('ready', () => {
 			});
 			console.log(numLoaded + " quests loaded!");
 			questsLoaded = true;
-			dragonList.concat(noQuest);
+			dragonList = dragonList.concat(noQuest);
 		}).on('error', (e) => {
 			console.error("An error occurred, quests could not be loaded.\nStack trace:\n" + e);
 		});
