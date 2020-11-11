@@ -5,8 +5,58 @@ const cheerio = require('cheerio');
 
 const cmdPrefix = 'd!';
 
-const primaries = ["Plant Dragon", "Fire Dragon", "Earth Dragon", "Cold Dragon", "Lightning Dragon", "Water Dragon", "Air Dragon", "Metal Dragon", "Light Dragon", "Dark Dragon"];
-const dragonList = ["Plant Dragon", "Fire Dragon", "Earth Dragon", "Cold Dragon", "Lightning Dragon", "Water Dragon", "Air Dragon", "Metal Dragon", "Light Dragon", "Dark Dragon", "Monolith Dragon", "Snowflake Dragon"];
+const primaries  = ["Plant Dragon", 
+					"Fire Dragon", 
+					"Earth Dragon", 
+					"Cold Dragon", 
+					"Lightning Dragon", 
+					"Water Dragon", 
+					"Air Dragon", 
+					"Metal Dragon", 
+					"Light Dragon", 
+					"Dark Dragon"];
+const evolutions = ["Ghostly Plant Dragon", 
+					"Ghostly Fire Dragon", 
+					"Ghostly Earth Dragon", 
+					"Ghostly Cold Dragon", 
+					"Corrupticorn Dragon",
+					"Wrath Dragon",
+					"Porcelain Dragon",
+					"Avarice Dragon",
+					"Burglehoo Dragon",
+					"Gulletail Dragon",
+					"Jadice Dragon",
+					"Lokilure Dragon",
+					"Libretto Dragon",
+					"Nibwhip Dragon",
+					"Saccharine Dragon",
+					"Sugarplum Dragon",
+					"Trepak Dragon",
+					"Minchi Dragon",
+					"Hedera Dragon",
+					"Glyph Dragon",
+					"Pixie Dragon",
+					"Aubergine Dragon",
+					"Bloatato Dragon",
+					"Curlyleaf Dragon",
+					"Karroot Dragon",
+					"Vidalia Dragon"];
+const dragonList = ["Plant Dragon", 
+					"Fire Dragon", 
+					"Earth Dragon", 
+					"Cold Dragon", 
+					"Lightning Dragon", 
+					"Water Dragon", 
+					"Air Dragon", 
+					"Metal Dragon", 
+					"Light Dragon", 
+					"Dark Dragon", 
+					"Ghostly Plant Dragon", 
+					"Ghostly Fire Dragon", 
+					"Ghostly Earth Dragon", 
+					"Ghostly Cold Dragon", 
+					"Monolith Dragon", 
+					"Snowflake Dragon"];
 const questTable = {};
 var questsLoaded = false;
 
@@ -45,7 +95,7 @@ client.on('ready', () => {
 });
  
 client.on('message', message => {
-	if (!message.content.startsWith(cmdPrefix) || message.author.bot) return;
+	if (!message.content.toLowerCase().startsWith(cmdPrefix) || message.author.bot) return;
 
 	const args = message.content.slice(cmdPrefix.length).trim().split(" ");
 	const cmd = args.shift().toLowerCase();
@@ -78,6 +128,10 @@ client.on('message', message => {
 		}
 		if (isPrimary(dragon)) {
 			message.channel.send(dragon + " is a primary dragon, just breed two of them together to get more...");
+			return;
+		}
+		if (isEvolution(dragon)) {
+			message.channel.send(dragon + " is an evolved dragon, you must breed two of them together to get more. To find out how to evolve this dragon, type `d!evolve " + dragon + "`");
 			return;
 		}
 		if (dragon in breedComboCache) {
@@ -143,11 +197,58 @@ client.on('message', message => {
 				});
 			});
 		}
+	} else if (cmd === 'evolve') {
+		var dragon = prettyString(args, " ");
+		if (!dragon) {
+			message.channel.send("You must specify a dragon!");
+			return;
+		}
+		if (dragon.indexOf("Dragon") == -1) {
+			dragon += " Dragon";
+		}
+		if (!dragonList.includes(dragon)) {
+			message.channel.send("Unrecognized dragon name \"" + dragon + "\" (did you spell it correctly?)");
+			return;
+		}
+		if (isPrimary(dragon)) {
+			message.channel.send(dragon + " is a primary dragon, its only element is in its name...");
+			return;
+		}
+		if (dragon in elementsCache) {
+			message.channel.send(elementsCache[dragon]);
+		} else {
+			var dragon_ = dragon.replace(/ /g, "_");
+			https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
+				console.log("Received " + res.statusCode + " status code for evolution request");
+				var body = [];
+				res.on('data', (chunk) => {
+					body.push(chunk);
+				}).on('end', () => {
+					body = Buffer.concat(body).toString();
+					const $ = cheerio.load(body);
+					var curr = $("#Obtaining").parent();
+					var result = "";
+					var index = 0; // Safeguard to prevent infinite loop (will only happen if the page html is abnormal)
+					while (true) {
+						curr = curr.next();
+						if (curr.children().first().attr('id') === 'Breeding' || index > 10) break;
+						else {
+							var str = curr.text().trim();
+							if (!str.startsWith("It can also be purchased") && !str.startsWith("During") && !str.startsWith("The cost of")) result += str.trim() + " ";
+							index++;
+						}
+					}
+					result += "It normally costs 100 gems to evolve a dragon, but during events where the " + dragon + " is available to purchase it may instead cost 1000 event currency."
+					message.channel.send(result);
+				});
+			});
+		}
 	} else if (cmd === 'help') {
 		const helpMsg = "Command list:(prefix all commands with `" + cmdPrefix + "`)\n"
 				+ "`quest <quest name>` - get the correct dragon to send on a quest\n"
 				+ "`breed <dragon name>` - find out how to breed a dragon\n"
 				+ "`elements <dragon name>` - get the breeding elements (aka hidden elements) of a dragon\n"
+				+ "`evolve <dragon name>` - find the evolution requirements for a dragon\n"
 				+ "`help` - view this message";
 		message.channel.send(helpMsg);
 	} else {
@@ -173,4 +274,8 @@ prettyString = function(words, separator) {
 isPrimary = function(dName) {
 	dName = dName.replace(" Rift", "");
 	return primaries.includes(dName);
+}
+
+isEvolution = function(dName) {
+	return evolutions.includes(dName);
 }
