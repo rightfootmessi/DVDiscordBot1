@@ -5,6 +5,7 @@ const cheerio = require('cheerio');
 
 const cmdPrefix = 'd!';
 
+const dragonList = [];
 const questTable = {};
 var questsLoaded = false;
 
@@ -27,6 +28,7 @@ client.on('ready', () => {
 					var qName = $(elem).children('td').eq(0).text().trim().toLowerCase();
 					var qDragon = $(elem).children('td').eq(2).text().trim();
 					questTable[qName] = qDragon;
+					dragonList.push(qDragon);
 					numLoaded++;
 				}
 			});
@@ -60,10 +62,38 @@ client.on('message', message => {
 		let dragon = questTable[questname.toLowerCase()];
 		if (dragon) message.channel.send("Use a(n) **" + dragon + "** to complete the quest \"" + questname + "\"");
 		else message.channel.send("\"" + questname + "\" is not a recognized quest name (did you type it correctly?)");
+	} else if (cmd === 'breed') {
+		var dragon = args[0].toLowerCase();
+		dragon = dragon.charAt(0).toUpperCase() + dragon.substring(1);
+		for (i = 1; i < args.length; i++) {
+			var str = args[i].toLowerCase();
+			str = str.charAt(0).toUpperCase() + str.substring(1);
+			dragon += " " + str;
+		}
+		if (args[args.length - 1].toLowerCase() != 'dragon') {
+			dragon += " Dragon";
+		}
+		if (!dragonList.includes(dragon)) {
+			message.channel.send("Unrecognized dragon name \"" + dragon + "\" (did you spell it correctly?)");
+			return;
+		}
+		var dragon_ = dragon.replace(/ /g, "_");
+		https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
+			console.log("Received " + res.statusCode + " status code");
+			var body = [];
+			res.on('data', (chunk) => {
+				body.push(chunk);
+			}).on('end', () => {
+				body = Buffer.concat(body).toString();
+				const $ = cheerio.load(body);
+				message.channel.send($("#Breeding").parent().next().text().trim());	
+			});
+		});
 	} else if (cmd === 'help') {
 		const helpMsg = "Command list:(prefix all commands with `" + cmdPrefix + "`)\n"
 				+ "`quest <quest name>` - get the correct dragon to send on a quest\n"
-				+ "`help` - view this message";
+				+ "`help` - view this message\n"
+				+ "`breed <dragon name>` - find out how to breed a dragon";
 		message.channel.send(helpMsg);
 	} else {
 		message.channel.send("Unknown command. Type `" + cmdPrefix + "help` for a list of commands");
