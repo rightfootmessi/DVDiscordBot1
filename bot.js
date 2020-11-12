@@ -66,10 +66,10 @@ var dragonList = ["Plant Dragon",
 const questTable = {};
 var questsLoaded = false;
 
-const breedComboCache = {};
-const elementsCache = {};
-const evoCache = {};
-const ratesCache = {};
+var breedComboCache = {};
+var elementsCache = {};
+var evoCache = {};
+var ratesCache = {};
 
 client.on('ready', () => {
 	console.log('I am ready!');
@@ -109,7 +109,7 @@ client.on('message', message => {
 	const args = message.content.slice(cmdPrefix.length).trim().split(" ");
 	const cmd = args.shift().toLowerCase();
 
-	if (message.channel.type == "dm" && cmd === 'clearcache') {
+	if (message.channel.type == 'dm' && cmd === 'clearcache') {
 		breedComboCache = {};
 		elementsCache = {};
 		evoCache = {};
@@ -165,7 +165,7 @@ client.on('message', message => {
 					body = Buffer.concat(body).toString();
 					const $ = cheerio.load(body);
 					response = $("#Breeding").parent().next().text().trim();
-					if ($("td[style='border-top-style:hidden;border-left-style:hidden;']").last().text().trim() === "EXPIRED") {
+					if ($(".dragonbox").first().find('tr').eq(14).children('td').first().text().trim() === "EXPIRED") {
 						response += " *Note: This dragon is not available right now (per the wiki)!*";
 					}
 					breedComboCache[dragon] = response;
@@ -263,34 +263,173 @@ client.on('message', message => {
 			});
 		}
 	} else if (cmd === 'rates') {
-		/* d!rates <dragon> [numBoosts] [rift]
-		must handle following cases:
-		- non-epic dragon, x boosts, non-rift
-		- non-epic dragon, rift
-		- epic dragon, x boosts, non-rift
-		- epic dragon, rift
-		- gemstone dragon, non-rift
-		- gemstone dragon, rift
-		- earning rates not known (table cell filled with ??)
-		- primary dragon (table goes to 21 not 20)
-		
-		Get max # of applicable boosts: $(".dragonbox").first().find('tr').eq(9).children().eq(1).children().length - 1
-
-		JSON structure:
-		var ratesList = 
-		{
-			dragonName: {
-				non-rift: [zeroBoostStr, oneBoostStr, ... nBoostStr], <--- can add out of order (i.e. if array[2] is added first, array[0] and array[1] == undefined)
-				rift : [riftStr]
+		var rift = false;
+		var boosts = 0;
+		var lastArg = args.pop();
+		if (lastArg == 'rift') {
+			rift = true;
+		} else if (!isNaN(parseInt(lastArg))) {
+			boosts = parseInt(lastArg);
+			if (boosts < 0 || !Number.isInteger(boosts)) {
+				message.channel.send("The number of boosts must be an integer greater than 0.");
+				return;
+			}
+		} else {
+			args.push(lastArg);
+		}
+		var dragon = prettyString(args, " ");
+		if (!dragon) {
+			message.channel.send("You must specify a dragon!");
+			return;
+		}
+		if (dragon.indexOf("Dragon") == -1) {
+			dragon += " Dragon";
+		}
+		if (!dragonList.includes(dragon)) {
+			message.channel.send("Unrecognized dragon name \"" + dragon + "\" (did you spell it correctly?)");
+			return;
+		}
+		if (dragon in ratesCache) {
+			if ("maxBoosts" in ratesCache[dragon]) {
+				var boosts = Math.min(boosts, ratesCache[dragon]["maxBoosts"]);
+				if (!rift && "non-rift" in ratesCache[dragon] ) {
+					if (ratesCache[dragon]["non-rift"][boosts] != undefined) {
+						message.channel.send(ratesCache[dragon]["non-rift"][boosts]);
+						return;
+					}
+				} else if (rift && "rift" in ratesCache[dragon]) {
+					message.channel.send(ratesCache[dragon]["rift"]);
+					return;
+				}
 			}
 		}
-		*/
+		var dragon_ = dragon.replace(/ /g, "_");
+		https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
+			console.log("Received " + res.statusCode + " status code for rates request");
+			var body = [];
+			res.on('data', (chunk) => {
+				body.push(chunk);
+			}).on('end', () => {
+				body = Buffer.concat(body).toString();
+				const $ = cheerio.load(body);
+				var maxBoosts = $(".dragonbox").first().find('tr').eq(9).children().eq(1).children().length - 1;
+
+				var firstElemIconName = $(".dragonbox").first().find('tr').eq(8).children('td').first().children().first().children().first().attr('data-image-name');
+				var isGemstone = firstElemIconName.includes("Gemstone") || firstElemIconName.includes("Crystalline");
+				if (!isGemstone) {
+					var isEpicDragon = false;
+					$(".dragonbox").first().find('tr').eq(8).children('td').first().children().each((i, elem) => {
+						var imgName = $(elem).children().first().attr('data-image-name');
+						if (!imgName.includes("Iconb")) {
+							var element = imgName.split(" ")[1].replace(".png", "");
+							if (isEpic(element)) isEpicDragon = true;
+						}
+					});
+
+					if (!rift) {
+						var rates = [];
+						boosts = Math.min(boosts, maxBoosts);
+						var title = $("#Earning_Rates").length ? $("#Earning_Rates") : $("#Earning_Rate");
+						title.parent().next().next().children().first().children().eq(1).children().each((i, elem) => {
+							rates[i] = Math.ceil(parseInt($(elem).text().trim()) * (1 + 0.3 * boosts));
+						});
+						title.parent().next().next().children().first().children().eq(3).children().each((i, elem) => {
+							rates[i+10] = Math.ceil(parseInt($(elem).text().trim()) * (1 + 0.3 * boosts));
+						});
+						var table = "```| Lvl : DC/min | Lvl : DC/min |"
+								+ "\n|-----:--------|-----:--------|";
+						for (i = 0; i < 10; i++) {
+							var lvlA = i + 1;
+							var lvlB = i + 11;
+		
+							result = "\n| " + lvlA + getSpacing(4, lvlA) + ":" + getSpacing(7, rates[i]) + rates[i] + " | " + lvlB + getSpacing(4, lvlB) + ":" + getSpacing(7, rates[i+10]) + rates[i+10] + " |";
+							table += result;
+						}
+						var response = "DragonCash earning rates for " + dragon + " (" + boosts + "/" + maxBoosts + " boosts):\n" + table + "```";
+						if (!(dragon in ratesCache)) ratesCache[dragon] = {};
+						if (!("non-rift" in ratesCache[dragon])) ratesCache[dragon]["non-rift"] = [];
+						ratesCache[dragon]["non-rift"][boosts] = response;
+						ratesCache[dragon]["isGemstone"] = false;
+						ratesCache[dragon]["isEpic"] = isEpicDragon;
+						ratesCache[dragon]["maxBoosts"] = maxBoosts;
+						message.channel.send(response);
+					} else {
+						var rates = [];
+						for (i = 0; i < 20; i++) {
+							rates[i] = Math.ceil((i+1) * (isEpicDragon ? 1.5 : 1));
+						}
+						var table = "```| Lvl : Eth/hr | Lvl : Eth/hr |"
+								+ "\n|-----:--------|-----:--------|";
+						for (i = 0; i < 10; i++) {
+							var lvlA = i + 1;
+							var lvlB = i + 11;
+		
+							result = "\n| " + lvlA + getSpacing(4, lvlA) + ":" + getSpacing(7, rates[i]) + rates[i] + " | " + lvlB + getSpacing(4, lvlB) + ":" + getSpacing(7, rates[i+10]) + rates[i+10] + " |";
+							table += result;
+						}
+						var response = "Etherium earning rates for " + dragon + ":\n" + table + "```";
+						if (!(dragon in ratesCache)) ratesCache[dragon] = {};
+						ratesCache[dragon]["rift"] = response;
+						ratesCache[dragon]["isGemstone"] = false;
+						ratesCache[dragon]["isEpic"] = isEpicDragon;
+						ratesCache[dragon]["maxBoosts"] = maxBoosts;
+						message.channel.send(response);
+					}
+				} else {
+					if (!rift) {
+						var rates = [];
+						var title = $("#Earning_Rates").length ? $("#Earning_Rates") : $("#Earning_Rate");
+						var rows = title.parent().next().next().children();
+						rows.children().first().children().each((i, elem) => {
+							rates[i] = {"lvls": $(elem).text().trim().replace("Lvl", "").replace("s", "").replace(". ", ""), "rate": rows.children().last().children().eq(i).text().trim()};
+						});
+						var table = "```| Lvls : Gem Rate |"
+								+ "\n|------:----------|";
+						for (i = 0; i < 4; i++) {
+							result = "\n| " + rates[i]["lvls"] + getSpacing(5, rates[i]["lvls"]) + ":" + getSpacing(9, rates[i]["rate"]) + rates[i]["rate"] + " |";
+							table += result;
+						}
+						var response = "Gem earning rates for " + dragon + ":\n" + table + "```";
+						if (!(dragon in ratesCache)) ratesCache[dragon] = {};
+						if (!("non-rift" in ratesCache[dragon])) ratesCache[dragon]["non-rift"] = [];
+						ratesCache[dragon]["non-rift"][boosts] = response;
+						ratesCache[dragon]["isGemstone"] = true;
+						ratesCache[dragon]["isEpic"] = true;
+						ratesCache[dragon]["maxBoosts"] = maxBoosts;
+						message.channel.send(response);
+					} else {
+						var rates = [];
+						for (i = 0; i < 10; i++) {
+							rates[i] = Math.ceil((i+1) * 1.5);
+						}
+						var table = "```| Lvl : Eth/hr | Lvl : Eth/hr |"
+								+ "\n|-----:--------|-----:--------|";
+						for (i = 0; i < 5; i++) {
+							var lvlA = i + 1;
+							var lvlB = i + 6;
+		
+							result = "\n| " + lvlA + getSpacing(4, lvlA) + ":" + getSpacing(7, rates[i]) + rates[i] + " | " + lvlB + getSpacing(4, lvlB) + ":" + getSpacing(7, rates[i+5]) + rates[i+5] + " |";
+							table += result;
+						}
+						var response = "Etherium earning rates for " + dragon + ":\n" + table + "```";
+						if (!(dragon in ratesCache)) ratesCache[dragon] = {};
+						ratesCache[dragon]["rift"] = response;
+						ratesCache[dragon]["isGemstone"] = true;
+						ratesCache[dragon]["isEpic"] = true;
+						ratesCache[dragon]["maxBoosts"] = maxBoosts;
+						message.channel.send(response);
+					}
+				}
+				ratesCache[dragon]["maxBoosts"] = maxBoosts;
+			});
+		});
 	} else if (cmd === '' || cmd === 'help') {
 		const helpMsg = "Command list: (prefix all commands with `" + cmdPrefix + "`)\n"
 				+ "`quest <quest name>` - get the correct dragon to send on a quest\n"
 				+ "`breed <dragon name>` - find out how to breed a dragon\n"
 				+ "`elements <dragon name>` - get the breeding elements (aka hidden elements) of a dragon\n"
 				+ "`evolve <dragon name>` - find the evolution requirements for a dragon\n"
+				+ "`rates <dragon name> [number of boosts OR 'rift']` - get the earning rates of a dragon\n"
 				+ "`help` - view this message";
 		message.channel.send(helpMsg);
 	} else {
@@ -322,4 +461,12 @@ isPrimary = function(dName) {
 
 isEvolution = function(dName) {
 	return evolutions.includes(dName);
+}
+
+getSpacing = function(baseLength, int) {
+	return Array(baseLength - int.toString().length).fill(" ").join("");
+}
+
+isEpic = function(element) {
+	return !["Plant", "Fire", "Earth", "Cold", "Lightning", "Water", "Air", "Metal", "Light", "Dark"].includes(element);
 }
