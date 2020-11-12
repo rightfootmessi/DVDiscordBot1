@@ -312,7 +312,7 @@ client.on('message', message => {
 			}).on('end', () => {
 				body = Buffer.concat(body).toString();
 				const $ = cheerio.load(body);
-				var maxBoosts = $(".dragonbox").first().find('tr').eq(9).children().eq(1).children().length - 1;
+				var maxBoosts = $(".dragonbox").first().find('tr').eq(9).children().eq(1).find('img').length - 1;
 
 				var firstElemIconName = $(".dragonbox").first().find('tr').eq(8).children('td').first().children().first().children().first().attr('data-image-name');
 				var isGemstone = firstElemIconName.includes("Gemstone") || firstElemIconName.includes("Crystalline");
@@ -468,5 +468,5 @@ getSpacing = function(baseLength, int) {
 }
 
 isEpic = function(element) {
-	return !["Plant", "Fire", "Earth", "Cold", "Lightning", "Water", "Air", "Metal", "Light", "Dark"].includes(element);
+	return !["Plant", "Fire", "Earth", "Cold", "Lightning", "Water", "Air", "Metal", "Light", "Dark", "Rift"].includes(element);
 }
