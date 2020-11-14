@@ -46,7 +46,8 @@ const noQuest    = ["Wendigo Dragon",
 					"Clairvoyant Dragon",
 					"Razzle Dragon",
 					"Riptide Dragon",
-					"Dash Dragon"];
+					"Dash Dragon",
+					"Ocular Dragon"];
 var dragonList   = ["Plant Dragon", 
 					"Fire Dragon", 
 					"Earth Dragon", 
