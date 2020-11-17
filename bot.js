@@ -46,8 +46,7 @@ const noQuest    = ["Wendigo Dragon",
 					"Clairvoyant Dragon",
 					"Razzle Dragon",
 					"Riptide Dragon",
-					"Dash Dragon",
-					"Ocular Dragon"];
+					"Dash Dragon"];
 var dragonList   = ["Plant Dragon", 
 					"Fire Dragon", 
 					"Earth Dragon", 
@@ -251,6 +250,8 @@ client.on('message', message => {
 				});
 			}
 		}
+	} else if (cmd === 'lodestoned') {
+		message.channel.send("", {files: ["https://i.imgur.com/2NBePN9.jpg"]});
 	} else if (cmd === '' || cmd === 'help') {
 		const helpMsg = "Command list: (prefix all commands with `" + cmdPrefix + "`)\n"
 				+ "- `quest <quest name>` - get the correct dragon to send on a quest\n"
