@@ -94,7 +94,7 @@ client.on('ready', () => {
 client.on('message', message => {
 	if (!message.content.toLowerCase().startsWith(cmdPrefix) || message.author.bot) return;
 
-	const args = message.content.slice(cmdPrefix.length).trim().split(" ");
+	const args = message.content.toLowerCase().slice(cmdPrefix.length).trim().split(" ");
 	const cmd = args.shift().toLowerCase();
 
 	if (message.channel.type == 'dm' && cmd === 'clearcache') {
@@ -121,8 +121,11 @@ client.on('message', message => {
 		return;
 	}
 
-	if (prettyString(args, " ") == "Monolith Dragon" || prettyString(args, " ") == "Snowflake Dragon") {
-		message.channel.send("I am currently unable to provide information for " + prettyString(args, " ") + "s, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/" + prettyString(args, "_"));
+	if (args.includes("monolith")) {
+		message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Monolith_Dragon");
+		return;
+	} else if (args.includes("snowflake")) {
+		message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Snowflake_Dragon");
 		return;
 	}
 
