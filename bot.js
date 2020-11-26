@@ -123,6 +123,7 @@ client.on('message', message => {
 
 	if (prettyString(args, " ") == "Monolith Dragon" || prettyString(args, " ") == "Snowflake Dragon") {
 		message.channel.send("I am currently unable to provide information for " + prettyString(args, " ") + "s, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/" + prettyString(args, "_"));
+		return;
 	}
 
 	if (cmd === 'quest') {
