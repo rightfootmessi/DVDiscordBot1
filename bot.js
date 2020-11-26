@@ -121,6 +121,10 @@ client.on('message', message => {
 		return;
 	}
 
+	if (prettyString(args, " ") == "Monolith Dragon" || prettyString(args, " ") == "Snowflake Dragon") {
+		message.channel.send("I am currently unable to provide information for " + prettyString(args, " ") + "s, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/" + prettyString(args, "_"));
+	}
+
 	if (cmd === 'quest') {
 		if (!questsLoaded) message.channel.send("Quests have not been loaded yet!");
 		else {
