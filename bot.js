@@ -41,12 +41,8 @@ const evolutions = ["Ghostly Plant Dragon",
 					"Curlyleaf Dragon",
 					"Karroot Dragon",
 					"Vidalia Dragon"];
-const noQuest    = ["Wendigo Dragon",
-					"Hanno Dragon",
-					"Clairvoyant Dragon",
-					"Razzle Dragon",
-					"Riptide Dragon",
-					"Dash Dragon"];
+const noQuest    = ["Nox Dragon",
+					"Hanno Dragon"];
 var dragonList   = ["Plant Dragon", 
 					"Fire Dragon", 
 					"Earth Dragon", 
