@@ -41,8 +41,7 @@ const evolutions = ["Ghostly Plant Dragon",
 					"Curlyleaf Dragon",
 					"Karroot Dragon",
 					"Vidalia Dragon"];
-const noQuest    = ["Nox Dragon",
-					"Hanno Dragon"];
+const noQuest    = [];
 var dragonList   = ["Plant Dragon", 
 					"Fire Dragon", 
 					"Earth Dragon", 
@@ -256,6 +255,41 @@ client.on('message', message => {
 		}
 	} else if (cmd === 'lodestoned') {
 		message.channel.send("", {files: ["https://i.imgur.com/2NBePN9.jpg"]});
+	} else if (cmd === 'sandbox' || cmd === 'dvbox') {
+		if (args.length == 0) message.channel.send("The DragonVale Sandbox (or dvbox, for short) can be found at https://dvbox.bin.sh/\n\nNote: dvbox is fanmade. As such, it may not be entirely up-to-date. In addition, the breeding odds are not accurate and should not be trusted.");
+		else {
+			var beb = false, fast = false, lastArg = args.pop();
+			if (lastArg === 'fast') {
+				fast = true;
+				lastArg = args.pop();
+				if (lastArg === 'beb') beb = true;
+				else args.push(lastArg);
+			} else if (lastArg === 'beb') {
+				beb = true;
+				lastArg = args.pop();
+				if (lastArg === 'fast') fast = true;
+				else args.push(lastArg);
+			}
+			else args.push(lastArg);
+			var parents = args.join(" ").split(",");
+			if (parents.length != 2) message.channel.send("You must specify 2 dragons for the parents.");
+			else {
+				var d1 = prettyString(parents[0].trim().split(" "), " ");
+				if (d1.indexOf("Dragon") == -1) d1 += " Dragon";
+				var d2 = prettyString(parents[1].trim().split(" "), " ");
+				if (d2.indexOf("Dragon") == -1) d2 += " Dragon";
+				if (!dragonList.includes(d1)) message.channel.send("Unrecognized dragon name \"" + d1 + "\" (did you spell it correctly?)");
+				else if (!dragonList.includes(d2)) message.channel.send("Unrecognized dragon name \"" + d2 + "\" (did you spell it correctly?)");
+				else {
+					var link = "https://dvbox.bin.sh/#";
+					link += "d1=" + d1.replace(/ /g, "").replace("Dragon", "").toLowerCase();
+					link += ";d2=" + d2.replace(/ /g, "").replace("Dragon", "").toLowerCase();
+					if (beb) link += ";beb=1";
+					if (fast) link += ";fast=1";
+					message.channel.send("See the breeding results of " + d1 + " x " + d2 + " at: " + link);
+				}
+			}
+		}
 	} else if (cmd === '' || cmd === 'help') {
 		const helpMsg = "Command list: (prefix all commands with `" + cmdPrefix + "`)\n"
 				+ "- `quest <quest name>` - get the correct dragon to send on a quest\n"
@@ -263,7 +297,8 @@ client.on('message', message => {
 				+ "- `elements <dragon name>` - get the breeding elements (aka hidden elements) of a dragon\n"
 				+ "- `evolve <dragon name>` - find the evolution requirements for a dragon\n"
 				+ "- `rates <dragon name> [number of boosts OR 'rift']` - get the earning rates of a dragon\n"
-				+ "- `timer <dragon name>` - get the breeding times of the dragon"
+				+ "- `timer <dragon name>` - get the breeding times of the dragon\n"
+				+ "- `sandbox <dragon1>,<dragon2> [beb] [fast]` - open the sandbox for the specified breeding combo (alias: `dvbox`)\n"
 				+ "- `help` - view this message";
 		message.channel.send(helpMsg);
 	} else {
