@@ -41,7 +41,7 @@ const evolutions = ["Ghostly Plant Dragon",
 					"Curlyleaf Dragon",
 					"Karroot Dragon",
 					"Vidalia Dragon"];
-const noQuest    = [];
+const noQuest    = ["Yanghis Dragon"];
 var dragonList   = ["Plant Dragon", 
 					"Fire Dragon", 
 					"Earth Dragon", 
@@ -75,7 +75,13 @@ cache: {
 			isEpic: boolean,
 			isGemstone: boolean
 		},
-		timer: string
+		timer: string,
+		pictures: {
+			adult: link,
+			juvenile: link,
+			baby: link,
+			egg: link
+		}
 	},
 	// etc.
 }
@@ -281,13 +287,69 @@ client.on('message', message => {
 				if (!dragonList.includes(d1)) message.channel.send("Unrecognized dragon name \"" + d1 + "\" (did you spell it correctly?)");
 				else if (!dragonList.includes(d2)) message.channel.send("Unrecognized dragon name \"" + d2 + "\" (did you spell it correctly?)");
 				else {
-					var link = "https://dvbox.bin.sh/#";
-					link += "d1=" + d1.replace(/ /g, "").replace("Dragon", "").toLowerCase();
-					link += ";d2=" + d2.replace(/ /g, "").replace("Dragon", "").toLowerCase();
-					if (beb) link += ";beb=1";
-					if (fast) link += ";fast=1";
-					message.channel.send("See the breeding results of " + d1 + " x " + d2 + " at: " + link);
+					var imgLink = "https://dvbox.bin.sh/#";
+					imgLink += "d1=" + d1.replace(/ /g, "").replace("Dragon", "").toLowerCase();
+					imgLink += ";d2=" + d2.replace(/ /g, "").replace("Dragon", "").toLowerCase();
+					if (beb) imgLink += ";beb=1";
+					if (fast) imgLink += ";fast=1";
+					message.channel.send("See the breeding results of " + d1 + " x " + d2 + " at: " + imgLink);
 				}
+			}
+		}
+	} else if (cmd === 'image' || cmd === 'picture' || cmd === 'img' || cmd === 'pic') {
+		var lastArg = (args.length > 1) ? args.pop() : "";
+		var dragon = prettyString(args, " ");
+		if (!dragon) message.channel.send("You must specify a dragon!");
+		else {
+			if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
+			if (!dragonList.includes(dragon)) message.channel.send("Unrecognized dragon name \"" + dragon + "\" (did you spell it correctly?)");
+			else if (dragon in cache) {
+				var imgLink;
+						switch (lastArg) {
+							case 'adult':
+								imgLink = cache[dragon]["pictures"]["adult"];
+								break;
+							case 'juvenile':
+								imgLink = cache[dragon]["pictures"]["juvenile"];
+								break;
+							case 'baby':
+								imgLink = cache[dragon]["pictures"]["baby"];
+								break;
+							case 'egg':
+								imgLink = cache[dragon]["pictures"]["egg"];
+								break;
+							default:
+								imgLink = cache[dragon]["pictures"]["adult"];
+						}
+						message.channel.send(imgLink);
+			} else {
+				var dragon_ = dragon.replace(/ /g, "_");
+				https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
+					console.log("Received " + res.statusCode + " status code for " + dragon + "'s page");
+					var body = [];
+					res.on('data', (chunk) => body.push(chunk)).on('end', () => {
+						const $ = cheerio.load(Buffer.concat(body).toString());
+						readWikiPage(dragon, $);
+						var imgLink;
+						switch (lastArg) {
+							case 'adult':
+								imgLink = cache[dragon]["pictures"]["adult"];
+								break;
+							case 'juvenile':
+								imgLink = cache[dragon]["pictures"]["juvenile"];
+								break;
+							case 'baby':
+								imgLink = cache[dragon]["pictures"]["baby"];
+								break;
+							case 'egg':
+								imgLink = cache[dragon]["pictures"]["egg"];
+								break;
+							default:
+								imgLink = cache[dragon]["pictures"]["adult"];
+						}
+						message.channel.send(imgLink);
+					});
+				});
 			}
 		}
 	} else if (cmd === '' || cmd === 'help') {
@@ -299,6 +361,7 @@ client.on('message', message => {
 				+ "- `rates <dragon name> [number of boosts OR 'rift']` - get the earning rates of a dragon\n"
 				+ "- `timer <dragon name>` - get the breeding times of the dragon\n"
 				+ "- `sandbox <dragon1>,<dragon2> [beb] [fast]` - open the sandbox for the specified breeding combo (alias: `dvbox`)\n"
+				+ "- `image <dragon> <adult/juvenile/baby/egg>` - get a PNG image of the dragon; defaults to adult if no stage specified (aliases: `picture`, `img`, `pic`)\n"
 				+ "- `help` - view this message";
 		message.channel.send(helpMsg);
 	} else {
@@ -306,7 +369,7 @@ client.on('message', message => {
 	}
 });
 
-// Note to self: if running locally, remember to replace the variable with the secret token itself
+// Note to self: if running locally, remember to replace the variable with the secret token itself; otherwise, make sure it says process.env.BOT_TOKEN !!!
 client.login(process.env.BOT_TOKEN);
 
 prettyString = function(words, separator) {
@@ -383,7 +446,13 @@ cache: {
 			isEpic: boolean,
 			isGemstone: boolean
 		},
-		timer: string
+		timer: string,
+		pictures: {
+			adult: link,
+			juvenile: link,
+			baby: link,
+			egg: link
+		}
 	},
 	// etc.
 }
@@ -393,6 +462,7 @@ readWikiPage = (dragon, $) => {
 	cache[dragon] = {};
 	cache[dragon]["rates"] = {};
 	cache[dragon]["rates"]["non-rift"] = [];
+	cache[dragon]["pictures"] = {};
 	// READ PAGE CONTENTS
 	// Breeding combo
 	var breedResponse = $("#Breeding").parent().next().text().trim();
@@ -509,4 +579,10 @@ readWikiPage = (dragon, $) => {
 	var regTimer = $(".dragonbox").first().find('tr').eq(5).children().last().text().trim();
 	var upTimer = $(".dragonbox").first().find('tr').eq(6).children().last().text().trim();
 	cache[dragon]["timer"] = "The breeding times of " + dragon + " are **" + regTimer + "** (regular cave) or **" + upTimer + "** (upgraded cave).";
+	// Pictures
+	const dragonNoSpace = dragon.replace(/ /g, '');
+	cache[dragon]["pictures"]["adult"] = $("[alt='" + dragonNoSpace + "Adult.png']").first().attr('src');
+	cache[dragon]["pictures"]["juvenile"] = $("[alt='" + dragonNoSpace + "Juvenile.png']").first().attr('src');
+	cache[dragon]["pictures"]["baby"] = $("[alt='" + dragonNoSpace + "Baby.png']").first().attr('src');
+	cache[dragon]["pictures"]["egg"] = $("[alt='" + dragonNoSpace + "Egg.png']").first().attr('data-src');
 }
