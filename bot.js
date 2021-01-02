@@ -41,7 +41,41 @@ const evolutions = ["Ghostly Plant Dragon",
 					"Curlyleaf Dragon",
 					"Karroot Dragon",
 					"Vidalia Dragon"];
-const enhanced   = [];
+const enhanced   = ["Armament Dragon",
+					"Bastion Dragon",
+					"Darcowl Dragon",
+					"Dash Dragon",
+					"Dazzle Dragon",
+					"Eldritch Dragon",
+					"Elegant Dragon",
+					"Monte Dragon",
+					"Outrider Dragon",
+					"Psyche Dragon",
+					"Quantum Dragon",
+					"Razzle Dragon",
+					"Riptide Dragon",
+					"Ruckus Dragon",
+					"Sailback Dragon",
+					"Sparkles Dragon",
+					"Toco Dragon",
+					"Vanguard Dragon",
+					"Vibe Dragon"];
+const dayNight   = ["Dawnbringer Dragon",
+					"Dazzle Dragon",
+					"Elegant Dragon",
+					"Iden Dragon",
+					"Kwall Dragon",
+					"Lycan Dragon",
+					"Monte Dragon",
+					"Moriante Dragon",
+					"Nightbloom Dragon",
+					"Razzle Dragon",
+					"Ruckus Dragon",
+					"Sailback Dragon",
+					"Sunscorch Dragon",
+					"Toco Dragon",
+					"Vibe Dragon",
+					"Wendigo Dragon"];
 const noQuest    = ["Ketu Dragon",
 					"Yanghis Dragon"];
 var dragonList   = ["Plant Dragon", 
@@ -79,12 +113,19 @@ cache: {
 		},
 		timer: string,
 		pictures: {
-			options: [normal, day, night, organic, conjured, dayEnhanced, nightEnhanced, charlatan, scourge, barbarous, macabre],
-			adult: link,
-			juvenile: link,
-			baby: link,
-			egg: link,
-
+			options: [normal/day, night, organic, conjured, enhanced, nightEnhanced, charlatan, scourge, barbarous, macabre],
+			normal: {
+				adult: link,
+				juvenile: link,
+				baby: link,
+			},
+			night: {
+				adult: link,
+				juvenile: link,
+				baby: link,
+			},
+			--etc.,
+			egg: link
 		}
 	},
 	// etc.
@@ -212,15 +253,15 @@ client.on('message', message => {
 	} else if (cmd === 'rates') {
 		var rift = false;
 		var boosts = 0;
-		var lastArg = args.pop();
-		if (lastArg == 'rift') rift = true;
-		else if (!isNaN(parseInt(lastArg))) {
-			boosts = parseInt(lastArg);
+		var age = args.pop();
+		if (age == 'rift') rift = true;
+		else if (!isNaN(parseInt(age))) {
+			boosts = parseInt(age);
 			if (boosts < 0 || !Number.isInteger(boosts)) {
 				message.channel.send("The number of boosts must be an integer greater than 0.");
 				return;
 			}
-		} else args.push(lastArg);
+		} else args.push(age);
 		var dragon = prettyString(args, " ");
 		if (!dragon) message.channel.send("You must specify a dragon!");
 		else {
@@ -268,19 +309,19 @@ client.on('message', message => {
 	} else if (cmd === 'sandbox' || cmd === 'dvbox') {
 		if (args.length == 0) message.channel.send("The DragonVale Sandbox (or dvbox, for short) can be found at https://dvbox.bin.sh/\n\nNote: dvbox is fanmade. As such, it may not be entirely up-to-date. In addition, the breeding odds are not accurate and should not be trusted.");
 		else {
-			var beb = false, fast = false, lastArg = args.pop();
-			if (lastArg === 'fast') {
+			var beb = false, fast = false, age = args.pop();
+			if (age === 'fast') {
 				fast = true;
-				lastArg = args.pop();
-				if (lastArg === 'beb') beb = true;
-				else args.push(lastArg);
-			} else if (lastArg === 'beb') {
+				age = args.pop();
+				if (age === 'beb') beb = true;
+				else args.push(age);
+			} else if (age === 'beb') {
 				beb = true;
-				lastArg = args.pop();
-				if (lastArg === 'fast') fast = true;
-				else args.push(lastArg);
+				age = args.pop();
+				if (age === 'fast') fast = true;
+				else args.push(age);
 			}
-			else args.push(lastArg);
+			else args.push(age);
 			var parents = args.join(" ").split(",");
 			if (parents.length != 2) message.channel.send("You must specify 2 dragons for the parents.");
 			else {
@@ -301,7 +342,18 @@ client.on('message', message => {
 			}
 		}
 	} else if (cmd === 'image' || cmd === 'picture' || cmd === 'img' || cmd === 'pic') {
-		var lastArg = (args.length > 1) ? args.pop() : "";
+		const qualifiers = ["normal", "day", "night", "organic", "conjured", "enhanced", "nightenhanced", "charlatan", "scourge", "barbarous", "macabre"];
+		const ages = ["adult", "juvenile", "baby", "egg"];
+		var qualifier = args.pop();
+		if (!qualifiers.includes(qualifier)) {
+			args.push(qualifier);
+			qualifier = "normal";
+		}
+		var age = args.pop();
+		if (!ages.includes(age)) {
+			args.push(age);
+			age = "adult";
+		}
 		var dragon = prettyString(args, " ");
 		if (!dragon) message.channel.send("You must specify a dragon!");
 		else {
@@ -309,23 +361,45 @@ client.on('message', message => {
 			if (!dragonList.includes(dragon)) message.channel.send("Unrecognized dragon name \"" + dragon + "\" (did you spell it correctly?)");
 			else if (dragon in cache) {
 				var imgLink;
-						switch (lastArg) {
+				if (age == 'egg') imgLink = cache[dragon]["pictures"]["egg"];
+				else if (qualifier == 'night') {
+					if (!dayNight.includes(dragon)) message.channel.send(dragon + " does not have a night form!");
+					else {
+						switch (age) {
 							case 'adult':
-								imgLink = cache[dragon]["pictures"]["adult"];
+								imgLink = cache[dragon]["pictures"]["night"]["adult"];
 								break;
 							case 'juvenile':
-								imgLink = cache[dragon]["pictures"]["juvenile"];
+								imgLink = cache[dragon]["pictures"]["night"]["juvenile"];
 								break;
 							case 'baby':
-								imgLink = cache[dragon]["pictures"]["baby"];
-								break;
-							case 'egg':
-								imgLink = cache[dragon]["pictures"]["egg"];
+								imgLink = cache[dragon]["pictures"]["night"]["baby"];
 								break;
 							default:
-								imgLink = cache[dragon]["pictures"]["adult"];
+								imgLink = cache[dragon]["pictures"]["night"]["adult"];
 						}
-						message.channel.send(imgLink ? imgLink : "Sorry, I couldn't find the image you were looking for! Here's the wiki page to retrieve it yourself: " + 'https://dragonvale.fandom.com/wiki/' + dragon.replace(/ /g, "_"));
+					}
+				} else {
+					if (qualifier == 'day' || qualifier == 'normal') {
+						switch (age) {
+							case 'adult':
+								imgLink = cache[dragon]["pictures"]["normal"]["adult"];
+								break;
+							case 'juvenile':
+								imgLink = cache[dragon]["pictures"]["normal"]["juvenile"];
+								break;
+							case 'baby':
+								imgLink = cache[dragon]["pictures"]["normal"]["baby"];
+								break;
+							default:
+								imgLink = cache[dragon]["pictures"]["normal"]["adult"];
+						}
+					} else {
+						if (!cache[dragon]["pictures"][qualifier]) message.channel.send(dragon + " does not have a(n) " + qualifier + " form!\nValid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch)");
+						else imgLink = cache[dragon]["pictures"][qualifier];
+					}
+				}
+				message.channel.send(imgLink ? imgLink : "Sorry, I couldn't find the image you were looking for! Here's the wiki page to retrieve it yourself: " + 'https://dragonvale.fandom.com/wiki/' + dragon.replace(/ /g, "_"));
 			} else {
 				var dragon_ = dragon.replace(/ /g, "_");
 				https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
@@ -335,23 +409,45 @@ client.on('message', message => {
 						const $ = cheerio.load(Buffer.concat(body).toString());
 						readWikiPage(dragon, $);
 						var imgLink;
-						switch (lastArg) {
-							case 'adult':
-								imgLink = cache[dragon]["pictures"]["adult"];
-								break;
-							case 'juvenile':
-								imgLink = cache[dragon]["pictures"]["juvenile"];
-								break;
-							case 'baby':
-								imgLink = cache[dragon]["pictures"]["baby"];
-								break;
-							case 'egg':
-								imgLink = cache[dragon]["pictures"]["egg"];
-								break;
-							default:
-								imgLink = cache[dragon]["pictures"]["adult"];
+						if (age == 'egg') imgLink = cache[dragon]["pictures"]["egg"];
+						else if (qualifier == 'night') {
+							if (!dayNight.includes(dragon)) message.channel.send(dragon + " does not have a night form!");
+							else {
+								switch (age) {
+									case 'adult':
+										imgLink = cache[dragon]["pictures"]["night"]["adult"];
+										break;
+									case 'juvenile':
+										imgLink = cache[dragon]["pictures"]["night"]["juvenile"];
+										break;
+									case 'baby':
+										imgLink = cache[dragon]["pictures"]["night"]["baby"];
+										break;
+									default:
+										imgLink = cache[dragon]["pictures"]["night"]["adult"];
+								}
+							}
+						} else {
+							if (qualifier == 'day' || qualifier == 'normal') {
+								switch (age) {
+									case 'adult':
+										imgLink = cache[dragon]["pictures"]["normal"]["adult"];
+										break;
+									case 'juvenile':
+										imgLink = cache[dragon]["pictures"]["normal"]["juvenile"];
+										break;
+									case 'baby':
+										imgLink = cache[dragon]["pictures"]["normal"]["baby"];
+										break;
+									default:
+										imgLink = cache[dragon]["pictures"]["normal"]["adult"];
+								}
+							} else {
+								if (!cache[dragon]["pictures"][qualifier]) message.channel.send(dragon + " does not have a(n) " + qualifier + " form!\nValid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch)");
+								else imgLink = cache[dragon]["pictures"][qualifier];
+							}
 						}
-						message.channel.send(imgLink ? imgLink : "Sorry, I couldn't find the image you were looking for! Here's the wiki page to retrieve it yourself: " + 'https://dragonvale.fandom.com/wiki/' + dragon_);
+						message.channel.send(imgLink ? imgLink : "Sorry, I couldn't find the image you were looking for! Here's the wiki page to retrieve it yourself: " + 'https://dragonvale.fandom.com/wiki/' + dragon.replace(/ /g, "_"));
 					});
 				});
 			}
@@ -365,7 +461,7 @@ client.on('message', message => {
 				+ "- `rates <dragon name> [number of boosts OR 'rift']` - get the earning rates of a dragon\n"
 				+ "- `timer <dragon name>` - get the breeding times of the dragon\n"
 				+ "- `sandbox <dragon1>,<dragon2> [beb] [fast]` - open the sandbox for the specified breeding combo (alias: `dvbox`)\n"
-				+ "- `image <dragon> <adult/juvenile/baby/egg>` - get a PNG image of the dragon; defaults to adult if no stage specified (aliases: `picture`, `img`, `pic`)\n"
+				+ "- `image <dragon> <adult/juvenile/baby/egg> [qualifier]` - get a PNG image of the dragon; defaults to adult if no stage specified; valid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch) (aliases: `picture`, `img`, `pic`)\n"
 				+ "- `help` - view this message";
 		message.channel.send(helpMsg);
 	} else {
@@ -452,9 +548,18 @@ cache: {
 		},
 		timer: string,
 		pictures: {
-			adult: link,
-			juvenile: link,
-			baby: link,
+			options: [normal/day, night, organic, conjured, enhanced, nightEnhanced, charlatan, scourge, barbarous, macabre],
+			normal: {
+				adult: link,
+				juvenile: link,
+				baby: link,
+			},
+			night: {
+				adult: link,
+				juvenile: link,
+				baby: link,
+			},
+			--etc.,
 			egg: link
 		}
 	},
@@ -585,8 +690,35 @@ readWikiPage = (dragon, $) => {
 	cache[dragon]["timer"] = "The breeding times of " + dragon + " are **" + regTimer + "** (regular cave) or **" + upTimer + "** (upgraded cave).";
 	// Pictures
 	const dragonNoSpace = dragon.replace(/ /g, '');
-	cache[dragon]["pictures"]["adult"] = $("[alt='" + dragonNoSpace + "Adult.png']").first().attr('src');
-	cache[dragon]["pictures"]["juvenile"] = $("[alt='" + dragonNoSpace + "Juvenile.png']").first().attr('src');
-	cache[dragon]["pictures"]["baby"] = $("[alt='" + dragonNoSpace + "Baby.png']").first().attr('src');
-	cache[dragon]["pictures"]["egg"] = $("[alt='" + dragonNoSpace + "Egg.png']").first().attr('src');
+	cache[dragon]["pictures"]["normal"] = {};
+	cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='" + dragonNoSpace + "Adult.png']").first().attr('src');
+	cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='" + dragonNoSpace + "Juvenile.png']").first().attr('src');
+	cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='" + dragonNoSpace + "Baby.png']").first().attr('src');
+	cache[dragon]["pictures"]["egg"] = $("[alt='" + dragonNoSpace + "Egg.png']").first().attr('data-src');
+	if (enhanced.includes(dragon)) {
+		if (dragon == "Eldritch Dragon") {
+			cache[dragon]["pictures"]["barbarous"] = $("[alt='EldritchDragonAdultBarbarous.png']").first().attr('data-src');
+			cache[dragon]["pictures"]["charlatan"] = $("[alt='EldritchDragonAdultCharlatan.png']").first().attr('data-src');
+			cache[dragon]["pictures"]["macabre"] = $("[alt='EldritchDragonAdultMacabre.png']").first().attr('data-src');
+			cache[dragon]["pictures"]["scourge"] = $("[alt='EldritchDragonAdultScourge.png']").first().attr('data-src');
+		} else if (dayNight.includes(dragon)) {
+			cache[dragon]["pictures"]["enhanced"] = $("[alt='" + dragonNoSpace + "AdultEnhanced.png']").first().attr('data-src');
+			cache[dragon]["pictures"]["nightenhanced"] = $("[alt='" + dragonNoSpace + "AdultNightEnhanced.png']").first().attr('data-src');
+		} else {
+			cache[dragon]["pictures"]["organic"] = $("[alt='" + dragonNoSpace + "AdultOrganic.png']").first().attr('data-src');
+			cache[dragon]["pictures"]["conjured"] = $("[alt='" + dragonNoSpace + "AdultConjured.png']").first().attr('data-src');
+		}
+	}
+	if (dayNight.includes(dragon)) {
+		cache[dragon]["pictures"]["night"] = {};
+		if (dragon == "Lycan Dragon") {
+			cache[dragon]["pictures"]["night"]["adult"] = $("[alt='LycanDragonAdultFullMoon.png']").first().attr('data-src');
+			cache[dragon]["pictures"]["night"]["juvenile"] = $("[alt='LycanDragonJuvenileFullMoon.png']").first().attr('data-src');
+			cache[dragon]["pictures"]["night"]["baby"] = $("[alt='LycanDragonBabyFullMoon.png']").first().attr('data-src');
+		} else {
+			cache[dragon]["pictures"]["night"]["adult"] = $("[alt='" + dragonNoSpace + "AdultNight.png']").first().attr('data-src');
+			cache[dragon]["pictures"]["night"]["juvenile"] = $("[alt='" + dragonNoSpace + "JuvenileNight.png']").first().attr('data-src');
+			cache[dragon]["pictures"]["night"]["baby"] = $("[alt='" + dragonNoSpace + "BabyNight.png']").first().attr('data-src');
+		}
+	}
 }
