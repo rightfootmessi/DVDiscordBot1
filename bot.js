@@ -366,6 +366,9 @@ client.on('message', message => {
 					if (!dayNight.includes(dragon)) message.channel.send(dragon + " does not have a night form!");
 					else {
 						switch (age) {
+							case 'elder':
+								imgLink = cache[dragon]["pictures"]["night"]["elder"];
+								break;
 							case 'adult':
 								imgLink = cache[dragon]["pictures"]["night"]["adult"];
 								break;
@@ -382,6 +385,9 @@ client.on('message', message => {
 				} else {
 					if (qualifier == 'day' || qualifier == 'normal') {
 						switch (age) {
+							case 'elder':
+								imgLink = cache[dragon]["pictures"]["normal"]["elder"];
+								break;
 							case 'adult':
 								imgLink = cache[dragon]["pictures"]["normal"]["adult"];
 								break;
@@ -414,6 +420,9 @@ client.on('message', message => {
 							if (!dayNight.includes(dragon)) message.channel.send(dragon + " does not have a night form!");
 							else {
 								switch (age) {
+									case 'elder':
+										imgLink = cache[dragon]["pictures"]["night"]["elder"];
+										break;
 									case 'adult':
 										imgLink = cache[dragon]["pictures"]["night"]["adult"];
 										break;
@@ -430,6 +439,9 @@ client.on('message', message => {
 						} else {
 							if (qualifier == 'day' || qualifier == 'normal') {
 								switch (age) {
+									case 'elder':
+										imgLink = cache[dragon]["pictures"]["normal"]["elder"];
+										break;
 									case 'adult':
 										imgLink = cache[dragon]["pictures"]["normal"]["adult"];
 										break;
@@ -695,6 +707,7 @@ readWikiPage = (dragon, $) => {
 	cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='" + dragonNoSpace + "Juvenile.png']").first().attr('src');
 	cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='" + dragonNoSpace + "Baby.png']").first().attr('src');
 	cache[dragon]["pictures"]["egg"] = $("[alt='" + dragonNoSpace + "Egg.png']").first().attr('data-src');
+	if (isPrimary(dragon)) cache[dragon]["pictures"]["normal"]["elder"] = $("[alt='" + dragonNoSpace + "Elder.png']").first().attr('src');
 	if (enhanced.includes(dragon)) {
 		if (dragon == "Eldritch Dragon") {
 			cache[dragon]["pictures"]["barbarous"] = $("[alt='EldritchDragonAdultBarbarous.png']").first().attr('data-src');
