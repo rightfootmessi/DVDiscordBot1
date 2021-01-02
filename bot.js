@@ -41,7 +41,9 @@ const evolutions = ["Ghostly Plant Dragon",
 					"Curlyleaf Dragon",
 					"Karroot Dragon",
 					"Vidalia Dragon"];
-const noQuest    = ["Yanghis Dragon"];
+const enhanced   = [];
+const noQuest    = ["Ketu Dragon",
+					"Yanghis Dragon"];
 var dragonList   = ["Plant Dragon", 
 					"Fire Dragon", 
 					"Earth Dragon", 
@@ -77,10 +79,12 @@ cache: {
 		},
 		timer: string,
 		pictures: {
+			options: [normal, day, night, organic, conjured, dayEnhanced, nightEnhanced, charlatan, scourge, barbarous, macabre],
 			adult: link,
 			juvenile: link,
 			baby: link,
-			egg: link
+			egg: link,
+
 		}
 	},
 	// etc.
@@ -321,7 +325,7 @@ client.on('message', message => {
 							default:
 								imgLink = cache[dragon]["pictures"]["adult"];
 						}
-						message.channel.send(imgLink);
+						message.channel.send(imgLink ? imgLink : "Sorry, I couldn't find the image you were looking for! Here's the wiki page to retrieve it yourself: " + 'https://dragonvale.fandom.com/wiki/' + dragon.replace(/ /g, "_"));
 			} else {
 				var dragon_ = dragon.replace(/ /g, "_");
 				https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
@@ -347,7 +351,7 @@ client.on('message', message => {
 							default:
 								imgLink = cache[dragon]["pictures"]["adult"];
 						}
-						message.channel.send(imgLink);
+						message.channel.send(imgLink ? imgLink : "Sorry, I couldn't find the image you were looking for! Here's the wiki page to retrieve it yourself: " + 'https://dragonvale.fandom.com/wiki/' + dragon_);
 					});
 				});
 			}
@@ -584,5 +588,5 @@ readWikiPage = (dragon, $) => {
 	cache[dragon]["pictures"]["adult"] = $("[alt='" + dragonNoSpace + "Adult.png']").first().attr('src');
 	cache[dragon]["pictures"]["juvenile"] = $("[alt='" + dragonNoSpace + "Juvenile.png']").first().attr('src');
 	cache[dragon]["pictures"]["baby"] = $("[alt='" + dragonNoSpace + "Baby.png']").first().attr('src');
-	cache[dragon]["pictures"]["egg"] = $("[alt='" + dragonNoSpace + "Egg.png']").first().attr('data-src');
+	cache[dragon]["pictures"]["egg"] = $("[alt='" + dragonNoSpace + "Egg.png']").first().attr('src');
 }
