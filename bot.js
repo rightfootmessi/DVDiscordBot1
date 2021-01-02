@@ -343,7 +343,7 @@ client.on('message', message => {
 		}
 	} else if (cmd === 'image' || cmd === 'picture' || cmd === 'img' || cmd === 'pic') {
 		const qualifiers = ["normal", "day", "night", "organic", "conjured", "enhanced", "nightenhanced", "charlatan", "scourge", "barbarous", "macabre"];
-		const ages = ["adult", "juvenile", "baby", "egg"];
+		const ages = ["elder", "adult", "juvenile", "baby", "egg"];
 		var qualifier = args.pop();
 		if (!qualifiers.includes(qualifier)) {
 			args.push(qualifier);
