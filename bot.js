@@ -671,10 +671,11 @@ readWikiPage = (dragon, $) => {
 		var rows = title.parent().next().next().children();
 		rows.children().first().children().each((i, elem) => {
 			rates[i] = {"lvls": $(elem).text().trim().replace("Lvl", "").replace("s", "").replace(". ", ""), "rate": rows.children().last().children().eq(i).text().trim()};
+			if (rates[i]["lvls"].endsWith("10") && rates[i]["lvls"].includes("??")) rates[i]["lvls"] = rates[i]["lvls"].substring(2);
 		});
 		var table = "```| Lvls : Gem Rate |"
 				+ "\n|------:----------|";
-		for (i = 0; i < 4; i++) {
+		for (i = 0; i < rates.length; i++) {
 			result = "\n| " + rates[i]["lvls"] + getSpacing(5, rates[i]["lvls"]) + ":" + getSpacing(9, rates[i]["rate"]) + rates[i]["rate"] + " |";
 			table += result;
 		}
