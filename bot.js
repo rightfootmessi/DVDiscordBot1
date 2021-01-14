@@ -306,6 +306,8 @@ client.on('message', message => {
 		}
 	} else if (cmd === 'lodestoned') {
 		message.channel.send("", {files: ["https://i.imgur.com/2NBePN9.jpg"]});
+	} else if (cmd === 'smoulderbrushed' || cmd === 'smoulderbushed') {
+		message.channel.send("I just got a freaking Smoulderbush for the 30 day event gift. Is this a sick joke...? I didn't spend 30 days playing this event for a freaking SMOULDERBUSH DRAGON. I'm so mad this isn't even funny.");
 	} else if (cmd === 'sandbox' || cmd === 'dvbox') {
 		if (args.length == 0) message.channel.send("The DragonVale Sandbox (or dvbox, for short) can be found at https://dvbox.bin.sh/\n\nNote: dvbox is fanmade. As such, it may not be entirely up-to-date. In addition, the breeding odds are not accurate and should not be trusted.");
 		else {
