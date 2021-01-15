@@ -175,7 +175,7 @@ client.on('message', message => {
 	}
 
 	if (cmd === 'quest') {
-		if (message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
+		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
 
 		if (!questsLoaded) message.channel.send("Quests have not been loaded yet!");
 		else {
@@ -188,7 +188,7 @@ client.on('message', message => {
 			}
 		}
 	} else if (cmd === 'breed') {
-		if (message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
+		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
 
 		var dragon = prettyString(args, " ");
 		if (!dragon) message.channel.send("You must specify a dragon!");
@@ -217,7 +217,7 @@ client.on('message', message => {
 			}
 		}
 	} else if (cmd === 'elements') {
-		if (message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
+		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
 
 		var dragon = prettyString(args, " ");
 		if (!dragon) message.channel.send("You must specify a dragon!");
@@ -245,7 +245,7 @@ client.on('message', message => {
 			}
 		}
 	} else if (cmd === 'evolve') {
-		if (message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
+		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
 
 		var dragon = prettyString(args, " ");
 		if (!dragon) message.channel.send("You must specify a dragon!");
@@ -273,7 +273,7 @@ client.on('message', message => {
 			}
 		}
 	} else if (cmd === 'rates') {
-		if (message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
+		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
 
 		var rift = false;
 		var boosts = 0;
@@ -314,7 +314,7 @@ client.on('message', message => {
 			}
 		}
 	} else if (cmd === 'timer') {
-		if (message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
+		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
 
 		var dragon = prettyString(args, " ");
 		if (!dragon) message.channel.send("You must specify a dragon!");
@@ -345,7 +345,7 @@ client.on('message', message => {
 	} else if (cmd === 'smoulderbrushed' || cmd === 'smoulderbushed') {
 		message.channel.send("I just got a freaking Smoulderbush for the 30 day event gift. Is this a sick joke...? I didn't spend 30 days playing this event for a freaking SMOULDERBUSH DRAGON. I'm so mad this isn't even funny.");
 	} else if (cmd === 'sandbox' || cmd === 'dvbox') {
-		if (message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
+		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
 
 		if (args.length == 0) message.channel.send("The DragonVale Sandbox (or dvbox, for short) can be found at https://dvbox.bin.sh/\n\nNote: dvbox is fanmade. As such, it may not be entirely up-to-date. In addition, the breeding odds are not accurate and should not be trusted.");
 		else {
@@ -510,7 +510,7 @@ client.on('message', message => {
 			}
 		}
 	} else if (cmd === '' || cmd === 'help') {
-		if (message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
+		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
 
 		const helpMsg = "Command list: (prefix all commands with `" + cmdPrefix + "`)\n"
 				+ "- `quest <quest name>` - get the correct dragon to send on a quest\n"
@@ -524,7 +524,7 @@ client.on('message', message => {
 				+ "- `help` - view this message";
 		message.channel.send(helpMsg);
 	} else {
-		if (message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
+		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
 
 		message.channel.send("Unknown command. Type `" + cmdPrefix + "help` for a list of commands");
 	}
