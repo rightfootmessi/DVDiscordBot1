@@ -385,7 +385,7 @@ client.on('message', message => {
 		const qualifiers = ["normal", "day", "night", "organic", "conjured", "enhanced", "nightenhanced", "charlatan", "scourge", "barbarous", "macabre"];
 		const ages = ["elder", "adult", "juvenile", "baby", "egg"];
 		var qualifier = args.pop();
-		if (!qualifiers.includes(qualifier)) {
+		if (!qualifiers.includes(qualifier) || args.length == 0) {
 			args.push(qualifier);
 			qualifier = "normal";
 		}
