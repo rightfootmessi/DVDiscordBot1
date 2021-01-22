@@ -76,7 +76,8 @@ const dayNight   = ["Dawnbringer Dragon",
 					"Toco Dragon",
 					"Vibe Dragon",
 					"Wendigo Dragon"];
-const noQuest    = ["Ketu Dragon"];
+const noQuest    = ["Ketu Dragon",
+					"Scuttle Dragon"];
 var dragonList   = ["Plant Dragon", 
 					"Fire Dragon", 
 					"Earth Dragon", 
@@ -197,7 +198,9 @@ client.on('message', message => {
 			if (!dragonList.includes(dragon)) message.channel.send("Unrecognized dragon name \"" + dragon + "\" (did you spell it correctly?)");
 			else if (isPrimary(dragon)) message.channel.send(dragon + " is a primary dragon, just breed two of them together to get more...");
 			else if (isEvolution(dragon)) message.channel.send(dragon + " is an evolved dragon, you must breed two of them together to get more. To find out how to evolve this dragon, type `d!evolve " + dragon + "`");
-			else if (dragon in cache) message.channel.send(cache[dragon]["breedCombo"]);
+			else if (dragon in cache) message.channel.send(cache[dragon]["breedCombo"]).catch(error => {
+				message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+			});
 			else {
 				var dragon_ = dragon.replace(/ /g, "_");
 				https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
@@ -205,13 +208,10 @@ client.on('message', message => {
 					var body = [];
 					res.on('data', (chunk) => body.push(chunk)).on('end', () => {
 						const $ = cheerio.load(Buffer.concat(body).toString());
-						try {
-							readWikiPage(dragon, $);
-							message.channel.send(cache[dragon]["breedCombo"]);
-						} catch (error) {
+						readWikiPage(dragon, $);
+						message.channel.send(cache[dragon]["breedCombo"]).catch(error => {
 							message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-							delete cache[dragon];
-						}
+						});
 					});
 				});
 			}
@@ -225,7 +225,9 @@ client.on('message', message => {
 			if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
 			if (!dragonList.includes(dragon)) message.channel.send("Unrecognized dragon name \"" + dragon + "\" (did you spell it correctly?)");
 			else if (isPrimary(dragon)) message.channel.send(dragon + " is a primary dragon, its only element is in its name...");
-			else if (dragon in cache) message.channel.send(cache[dragon]["elements"]);
+			else if (dragon in cache) message.channel.send(cache[dragon]["elements"]).catch(error => {
+				message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+			});
 			else {
 				var dragon_ = dragon.replace(/ /g, "_");
 				https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
@@ -233,13 +235,10 @@ client.on('message', message => {
 					var body = [];
 					res.on('data', (chunk) => body.push(chunk)).on('end', () => {
 						const $ = cheerio.load(Buffer.concat(body).toString());
-						try {
-							readWikiPage(dragon, $);
-							message.channel.send(cache[dragon]["elements"]);
-						} catch (error) {
+						readWikiPage(dragon, $);
+						message.channel.send(cache[dragon]["elements"]).catch(error => {
 							message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-							delete cache[dragon];
-						}
+						});
 					});
 				});
 			}
@@ -253,7 +252,9 @@ client.on('message', message => {
 			if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
 			if (!dragonList.includes(dragon)) message.channel.send("Unrecognized dragon name \"" + dragon + "\" (did you spell it correctly?)");
 			else if (!isEvolution(dragon)) message.channel.send(dragon + " is not obtained through evolution.");
-			else if (dragon in cache) message.channel.send(cache[dragon]["evolve"]);
+			else if (dragon in cache) message.channel.send(cache[dragon]["evolve"]).catch(error => {
+				message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+			});
 			else {
 				var dragon_ = dragon.replace(/ /g, "_");
 				https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
@@ -261,13 +262,10 @@ client.on('message', message => {
 					var body = [];
 					res.on('data', (chunk) => body.push(chunk)).on('end', () => {
 						const $ = cheerio.load(Buffer.concat(body).toString());
-						try {
-							readWikiPage(dragon, $);
-							message.channel.send(cache[dragon]["evolve"]);
-						} catch (error) {
+						readWikiPage(dragon, $);
+						message.channel.send(cache[dragon]["evolve"]).catch(error => {
 							message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-							delete cache[dragon];
-						}
+						});
 					});
 				});
 			}
@@ -292,8 +290,12 @@ client.on('message', message => {
 			if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
 			if (!dragonList.includes(dragon)) message.channel.send("Unrecognized dragon name \"" + dragon + "\" (did you spell it correctly?)");
 			else if (dragon in cache) {
-				if (!rift) message.channel.send(cache[dragon]["rates"]["non-rift"][Math.min(boosts, cache[dragon]["rates"]["maxBoosts"])]);
-				else message.channel.send(cache[dragon]["rates"]["rift"]);
+				if (!rift) message.channel.send(cache[dragon]["rates"]["non-rift"][Math.min(boosts, cache[dragon]["rates"]["maxBoosts"])]).catch(error => {
+					message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+				});
+				else message.channel.send(cache[dragon]["rates"]["rift"]).catch(error => {
+					message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+				});
 			} else {
 				var dragon_ = dragon.replace(/ /g, "_");
 				https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
@@ -301,14 +303,11 @@ client.on('message', message => {
 					var body = [];
 					res.on('data', (chunk) => body.push(chunk)).on('end', () => {
 						const $ = cheerio.load(Buffer.concat(body).toString());
-						try {
-							readWikiPage(dragon, $);
-							if (!rift) message.channel.send(cache[dragon]["rates"]["non-rift"][Math.min(boosts, cache[dragon]["rates"]["maxBoosts"])]);
-							else message.channel.send(cache[dragon]["rates"]["rift"]);
-						} catch (error) {
+						readWikiPage(dragon, $);
+						if (!rift) message.channel.send(cache[dragon]["rates"]["non-rift"][Math.min(boosts, cache[dragon]["rates"]["maxBoosts"])]);
+						else message.channel.send(cache[dragon]["rates"]["rift"]).catch(error => {
 							message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-							delete cache[dragon];
-						}
+						});
 					});
 				});
 			}
@@ -321,7 +320,9 @@ client.on('message', message => {
 		else {
 			if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
 			if (!dragonList.includes(dragon)) message.channel.send("Unrecognized dragon name \"" + dragon + "\" (did you spell it correctly?)");
-			else if (dragon in cache) message.channel.send(cache[dragon]["timer"]);
+			else if (dragon in cache) message.channel.send(cache[dragon]["timer"]).catch(error => {
+				message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+			});
 			else {
 				var dragon_ = dragon.replace(/ /g, "_");
 				https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
@@ -329,13 +330,10 @@ client.on('message', message => {
 					var body = [];
 					res.on('data', (chunk) => body.push(chunk)).on('end', () => {
 						const $ = cheerio.load(Buffer.concat(body).toString());
-						try {
-							readWikiPage(dragon, $);
-							message.channel.send(cache[dragon]["timer"]);
-						} catch (error) {
+						readWikiPage(dragon, $);
+						message.channel.send(cache[dragon]["timer"]).catch(error => {
 							message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-							delete cache[dragon];
-						}
+						});
 					});
 				});
 			}
@@ -445,7 +443,9 @@ client.on('message', message => {
 						else imgLink = cache[dragon]["pictures"][qualifier];
 					}
 				}
-				message.channel.send(imgLink ? imgLink : "Sorry, I couldn't find the image you were looking for! Here's the wiki page to retrieve it yourself: " + 'https://dragonvale.fandom.com/wiki/' + dragon.replace(/ /g, "_"));
+				message.channel.send(imgLink ? imgLink : "Sorry, I couldn't find the image you were looking for! Here's the wiki page to retrieve it yourself: " + 'https://dragonvale.fandom.com/wiki/' + dragon.replace(/ /g, "_")).catch(error => {
+					message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+				});
 			} else {
 				var dragon_ = dragon.replace(/ /g, "_");
 				https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
@@ -453,58 +453,55 @@ client.on('message', message => {
 					var body = [];
 					res.on('data', (chunk) => body.push(chunk)).on('end', () => {
 						const $ = cheerio.load(Buffer.concat(body).toString());
-						try {
-							readWikiPage(dragon, $);
-							var imgLink;
-							if (age == 'egg') imgLink = cache[dragon]["pictures"]["egg"];
-							else if (qualifier == 'night') {
-								if (!dayNight.includes(dragon)) message.channel.send(dragon + " does not have a night form!");
-								else {
-									switch (age) {
-										case 'elder':
-											imgLink = cache[dragon]["pictures"]["night"]["elder"];
-											break;
-										case 'adult':
-											imgLink = cache[dragon]["pictures"]["night"]["adult"];
-											break;
-										case 'juvenile':
-											imgLink = cache[dragon]["pictures"]["night"]["juvenile"];
-											break;
-										case 'baby':
-											imgLink = cache[dragon]["pictures"]["night"]["baby"];
-											break;
-										default:
-											imgLink = cache[dragon]["pictures"]["night"]["adult"];
-									}
-								}
-							} else {
-								if (qualifier == 'day' || qualifier == 'normal') {
-									switch (age) {
-										case 'elder':
-											imgLink = cache[dragon]["pictures"]["normal"]["elder"];
-											break;
-										case 'adult':
-											imgLink = cache[dragon]["pictures"]["normal"]["adult"];
-											break;
-										case 'juvenile':
-											imgLink = cache[dragon]["pictures"]["normal"]["juvenile"];
-											break;
-										case 'baby':
-											imgLink = cache[dragon]["pictures"]["normal"]["baby"];
-											break;
-										default:
-											imgLink = cache[dragon]["pictures"]["normal"]["adult"];
-									}
-								} else {
-									if (!cache[dragon]["pictures"][qualifier]) message.channel.send(dragon + " does not have a(n) " + qualifier + " form!\nValid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch)");
-									else imgLink = cache[dragon]["pictures"][qualifier];
+						readWikiPage(dragon, $);
+						var imgLink;
+						if (age == 'egg') imgLink = cache[dragon]["pictures"]["egg"];
+						else if (qualifier == 'night') {
+							if (!dayNight.includes(dragon)) message.channel.send(dragon + " does not have a night form!");
+							else {
+								switch (age) {
+									case 'elder':
+										imgLink = cache[dragon]["pictures"]["night"]["elder"];
+										break;
+									case 'adult':
+										imgLink = cache[dragon]["pictures"]["night"]["adult"];
+										break;
+									case 'juvenile':
+										imgLink = cache[dragon]["pictures"]["night"]["juvenile"];
+										break;
+									case 'baby':
+										imgLink = cache[dragon]["pictures"]["night"]["baby"];
+										break;
+									default:
+										imgLink = cache[dragon]["pictures"]["night"]["adult"];
 								}
 							}
-							message.channel.send(imgLink ? imgLink : "Sorry, I couldn't find the image you were looking for! Here's the wiki page to retrieve it yourself: " + 'https://dragonvale.fandom.com/wiki/' + dragon.replace(/ /g, "_"));
-						} catch (error) {
-							message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-							delete cache[dragon];
+						} else {
+							if (qualifier == 'day' || qualifier == 'normal') {
+								switch (age) {
+									case 'elder':
+										imgLink = cache[dragon]["pictures"]["normal"]["elder"];
+										break;
+									case 'adult':
+										imgLink = cache[dragon]["pictures"]["normal"]["adult"];
+										break;
+									case 'juvenile':
+										imgLink = cache[dragon]["pictures"]["normal"]["juvenile"];
+										break;
+									case 'baby':
+										imgLink = cache[dragon]["pictures"]["normal"]["baby"];
+										break;
+									default:
+										imgLink = cache[dragon]["pictures"]["normal"]["adult"];
+								}
+							} else {
+								if (!cache[dragon]["pictures"][qualifier]) message.channel.send(dragon + " does not have a(n) " + qualifier + " form!\nValid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch)");
+								else imgLink = cache[dragon]["pictures"][qualifier];
+							}
 						}
+						message.channel.send(imgLink ? imgLink : "Sorry, I couldn't find the image you were looking for! Here's the wiki page to retrieve it yourself: " + 'https://dragonvale.fandom.com/wiki/' + dragon.replace(/ /g, "_")).catch(error => {
+							message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+						});
 					});
 				});
 			}
@@ -685,10 +682,12 @@ readWikiPage = (dragon, $) => {
 			var rates = [];
 			var title = $("#Earning_Rates").length ? $("#Earning_Rates") : $("#Earning_Rate");
 			title.parent().next().next().children().first().children().eq(1).children().each((i, elem) => {
-				rates[i] = Math.ceil(parseInt($(elem).text().trim()) * (1 + 0.3 * boosts));
+				let num = Math.ceil(parseInt($(elem).text().trim()) * Math.pow(1.3, boosts));
+				rates[i] = (num < 1500) ? num : "~1500";
 			});
 			title.parent().next().next().children().first().children().eq(3).children().each((i, elem) => {
-				rates[i+10] = Math.ceil(parseInt($(elem).text().trim()) * (1 + 0.3 * boosts));
+				let num = Math.ceil(parseInt($(elem).text().trim()) * Math.pow(1.3, boosts));
+				rates[i+10] = (num < 1500) ? num : "~1500";
 			});
 			var table = "```| Lvl : DC/min | Lvl : DC/min |"
 					+ "\n|-----:--------|-----:--------|";
@@ -698,7 +697,8 @@ readWikiPage = (dragon, $) => {
 				result = "\n| " + lvlA + getSpacing(4, lvlA) + ":" + getSpacing(7, rates[i]) + rates[i] + " | " + lvlB + getSpacing(4, lvlB) + ":" + getSpacing(7, rates[i+10]) + rates[i+10] + " |";
 				table += result;
 			}
-			cache[dragon]["rates"]["non-rift"][boosts] = "DragonCash earning rates for " + dragon + " (" + boosts + "/" + maxBoosts + " boosts):\n" + table + "```";
+			cache[dragon]["rates"]["non-rift"][boosts] = "DragonCash earning rates for " + dragon + " (" + boosts + "/" + maxBoosts + " boosts):\n" + table + "```"
+					+ (boosts > 0 ? "\nNOTE: Your dragon's profile will likely show a lower number than what's in this table. That number is wrong (this has been experimentally proven). The numbers here are the *actual* earning rates." : "");
 		}
 		var rates = [];
 		for (i = 0; i < 20; i++) {
