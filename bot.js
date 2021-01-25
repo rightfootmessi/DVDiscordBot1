@@ -634,7 +634,7 @@ readWikiPage = (dragon, $) => {
 	// Breeding combo
 	var breedResponse = $("#Breeding").parent().next().text().trim();
 	if ($(".dragonbox").first().find('tr').eq(14).children('td').first().text().trim() === "EXPIRED") {
-		breedResponse += " *Note: This dragon is not available right now (per the wiki)!*";
+		breedResponse += " *Note: This dragon is not available right now (per the wiki, which may not be fully up to date - check the Dragonarium to double check)!*";
 	}
 	cache[dragon]["breedCombo"] = breedResponse;
 	// Elements
