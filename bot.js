@@ -144,6 +144,11 @@ client.on('message', message => {
 	const args = message.content.toLowerCase().replace(/\s{2,}/g, ' ').slice(cmdPrefix.length).trim().split(" ");
 	const cmd = args.shift().toLowerCase();
 
+	if (!['lodestoned', 'smoulderbrushed', 'smoulderbushed'].includes(cmd)) {
+		// (DragonVale server only) prevent non-meme commands from being executed outside #bot-spam
+		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
+	}
+
 	if (message.channel.type == 'dm' && cmd === 'clearcache') {
 		dragonList   = ["Plant Dragon", 
 						"Fire Dragon", 
@@ -177,8 +182,6 @@ client.on('message', message => {
 	}
 
 	if (cmd === 'quest') {
-		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
-
 		if (!questsLoaded) message.channel.send("Quests have not been loaded yet!");
 		else {
 			var questname = prettyString(args, " ");
@@ -190,8 +193,6 @@ client.on('message', message => {
 			}
 		}
 	} else if (cmd === 'breed') {
-		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
-
 		var dragon = prettyString(args, " ");
 		if (!dragon) message.channel.send("You must specify a dragon!");
 		else {
@@ -218,8 +219,6 @@ client.on('message', message => {
 			}
 		}
 	} else if (cmd === 'elements') {
-		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
-
 		var dragon = prettyString(args, " ");
 		if (!dragon) message.channel.send("You must specify a dragon!");
 		else {
@@ -245,8 +244,6 @@ client.on('message', message => {
 			}
 		}
 	} else if (cmd === 'evolve') {
-		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
-
 		var dragon = prettyString(args, " ");
 		if (!dragon) message.channel.send("You must specify a dragon!");
 		else {
@@ -272,8 +269,6 @@ client.on('message', message => {
 			}
 		}
 	} else if (cmd === 'rates') {
-		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
-
 		var rift = false;
 		var boosts = 0;
 		var age = args.pop();
@@ -314,8 +309,6 @@ client.on('message', message => {
 			}
 		}
 	} else if (cmd === 'timer') {
-		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
-
 		var dragon = prettyString(args, " ");
 		if (!dragon) message.channel.send("You must specify a dragon!");
 		else {
@@ -344,8 +337,6 @@ client.on('message', message => {
 	} else if (cmd === 'smoulderbrushed' || cmd === 'smoulderbushed') {
 		message.channel.send("I just got a freaking Smoulderbush for the 30 day event gift. Is this a sick joke...? I didn't spend 30 days playing this event for a freaking SMOULDERBUSH DRAGON. I'm so mad this isn't even funny.");
 	} else if (cmd === 'sandbox' || cmd === 'dvbox') {
-		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
-
 		if (args.length == 0) message.channel.send("The DragonVale Sandbox (or dvbox, for short) can be found at https://dvbox.bin.sh/\n\nNote: dvbox is fanmade. As such, it may not be entirely up-to-date. In addition, the breeding odds are not accurate and should not be trusted.");
 		else {
 			var beb = false, fast = false, age = args.pop();
@@ -522,8 +513,6 @@ client.on('message', message => {
 				+ "- `help` - view this message";
 		message.channel.send(helpMsg);
 	} else {
-		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
-
 		message.channel.send("Unknown command. Type `" + cmdPrefix + "help` for a list of commands");
 	}
 });
