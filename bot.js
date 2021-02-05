@@ -498,6 +498,14 @@ client.on('message', message => {
 				});
 			}
 		}
+	} else if (cmd === 'wiki') {
+		var dragon = prettyString(args, " ");
+		if (!dragon) message.channel.send("You must specify a dragon!");
+		else {
+			if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
+			if (!dragonList.includes(dragon)) message.channel.send("Unrecognized dragon name \"" + dragon + "\" (did you spell it correctly?)");
+			else message.channel.send('https://dragonvale.fandom.com/wiki/' + dragon.replace(/ /g, "_"));
+		}
 	} else if (cmd === '' || cmd === 'help') {
 		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
 
@@ -510,6 +518,7 @@ client.on('message', message => {
 				+ "- `timer <dragon name>` - get the breeding times of the dragon\n"
 				+ "- `sandbox <dragon1>,<dragon2> [beb] [fast]` - open the sandbox for the specified breeding combo (alias: `dvbox`)\n"
 				+ "- `image <dragon> <adult/juvenile/baby/egg> [qualifier]` - get a PNG image of the dragon; defaults to adult if no stage specified; valid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch) (aliases: `picture`, `img`, `pic`)\n"
+				+ "- `wiki <dragon name>` - get the link to a dragon's wiki page\n"
 				+ "- `help` - view this message";
 		message.channel.send(helpMsg);
 	} else {
