@@ -78,7 +78,7 @@ const dayNight   = ["Dawnbringer Dragon",
 					"Vibe Dragon",
 					"Wendigo Dragon"];
 const noQuest    = ["Ketu Dragon",
-					"Scuttle Dragon"];
+					"Grace Dragon"];
 var dragonList   = ["Plant Dragon", 
 					"Fire Dragon", 
 					"Earth Dragon", 
