@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const https = require('https');
 const cheerio = require('cheerio');
+const jsdom = require('jsdom');
 
 const cmdPrefix = 'd!';
 
@@ -132,6 +133,22 @@ cache: {
 	// etc.
 }
 */
+var dvboxCache = {
+    normal: {},
+    fast: {}
+};
+/*
+dvboxCache: {
+    normal: {
+        d1|d2: timerList,
+        ...
+    },
+    fast: {
+        d1|d2: timerList,
+        ...
+    }
+}
+*/
 
 client.on('ready', () => {
 	console.log('Oracle is waking up...');
@@ -169,6 +186,7 @@ client.on('message', message => {
 		questTable = {};
 		loadQuests();
 		cache = {};
+        dvboxCache = {};
 		message.author.send("Cache cleared. Information given should now reflect the most recent wiki changes.");
 		return;
 	}
@@ -506,18 +524,104 @@ client.on('message', message => {
 			if (!dragonList.includes(dragon)) message.channel.send("Unrecognized dragon name \"" + dragon + "\" (did you spell it correctly?)");
 			else message.channel.send('https://dragonvale.fandom.com/wiki/' + dragon.replace(/ /g, "_"));
 		}
-	} else if (cmd === '' || cmd === 'help') {
+	} else if (cmd === 'result') {
+        // d!result <d1>,<d2> <d:hh:mm:ss> [fast]
+        var fast = false, last = args.pop();
+        if (last === 'fast') fast = true;
+        else args.push(last);
+        
+        var times = args.pop().split(":");
+        var days = 0, hrs = 0, mins = 0, secs = 0;
+        if (times.length == 3) {
+            hrs = parseInt(times[0]);
+            mins = parseInt(times[1]);
+            secs = parseInt(times[2]);
+        } else if (times.length == 4) {
+            days = parseInt(times[0]);
+            hrs = parseInt(times[1]);
+            mins = parseInt(times[2]);
+            secs = parseInt(times[3]);
+        } else {
+            message.channel.send("You have provided the timer in an invalid format. Please write the timer as either `d:hh:mm:ss` or `hh:mm:ss`.");
+            return;
+        }
+        if (days == NaN || hrs == NaN || mins == NaN || secs == NaN) {
+            message.channel.send("Your timer could not be parsed. Please write the timer as either `d:hh:mm:ss` or `hh:mm:ss`.");
+            return;
+        }
+        var timer = "";
+        if (days > 0  && hrs > 0) {
+            timer = days + ":" + (hrs > 10 ? hrs : "0" + hrs) + ":";
+        } else if (days > 0) {
+            timer = days + ":00:";
+        } else if (hrs > 0) {
+            timer = hrs + ":";
+        }
+        timer += (mins > 0 ? (mins > 10 ? mins : "0" + mins) : "00") + ":"
+                + (secs > 0 ? (secs > 10 ? secs : "0" + secs) : "00");
+
+        var parents = args.join(" ").split(",");
+        if (parents.length != 2) message.channel.send("You must specify 2 dragons for the parents.");
+        else {
+            var d1 = prettyString(parents[0].trim().split(" "), " ");
+            if (d1.indexOf("Dragon") == -1) d1 += " Dragon";
+            var d2 = prettyString(parents[1].trim().split(" "), " ");
+            if (d2.indexOf("Dragon") == -1) d2 += " Dragon";
+            if (!dragonList.includes(d1)) message.channel.send("Unrecognized dragon name \"" + d1 + "\" (did you spell it correctly?)");
+            else if (!dragonList.includes(d2)) message.channel.send("Unrecognized dragon name \"" + d2 + "\" (did you spell it correctly?)");
+            else {
+                if ((d1 + "|" + d2) in dvboxCache[fast ? "fast" : "normal"]) {
+                    var timerList = dvboxCache[fast ? "fast" : "normal"][d1 + "|" + d2];
+                    var candidates = [];
+                    for (const key in timerList) if (timerList[key] == timer) candidates.push(key);
+                    if (candidates.length > 0) message.channel.send("A timer of " + timer + " when breeding " + d1 + " x " + d2 + " matches: **" + candidates.join("**, **").replace(/_/g, " ") + "**\nNOTE: Some of the listed dragons may not be available at this time. Check the dragonarium to confirm availability.");
+                    else message.channel.send("No matches found for timer " + timer + " when breeding " + d1 + " x " + d2);
+                } else {
+                    var link = "https://dvbox.bin.sh/#";
+                    link += "d1=" + d1.replace(/ /g, "").replace("Dragon", "").toLowerCase();
+                    link += ";d2=" + d2.replace(/ /g, "").replace("Dragon", "").toLowerCase();
+                    if (fast) link += ";fast=1";
+                    link += ";beb=1";
+                    message.channel.send("Working, this will take a moment...");
+                    console.log("Querying dvbox...")
+                    jsdom.JSDOM.fromURL(link, {resources: "usable", runScripts: "dangerously"}).then(dom => {
+                        console.log("dvbox queried successfully");
+                        dom.window.document.addEventListener('DOMContentLoaded', () => {
+                            console.log("Event listener set")
+                            setImmediate(() => {
+                                console.log("Ready to read results");
+                                const $ = cheerio.load(dom.serialize());
+                                var timerList = {};
+                                var candidates = [];
+                                $('#results').children().each((i, elem) => {
+                                    timerList[$(elem).attr('id')] = $(elem).contents().filter(function() {return this.nodeType === 3; }).first().text();
+                                });
+                                for (const key in timerList) {
+                                    if (timerList[key].indexOf("%") != -1) delete timerList[key];
+                                    else if (timerList[key] == timer) candidates.push(key);
+                                }
+                                dvboxCache[fast ? "fast" : "normal"][d1 + "|" + d2] = timerList;
+                                if (candidates.length > 0) message.channel.send("A timer of " + timer + " when breeding " + d1 + " x " + d2 + " matches: **" + candidates.join("**, **").replace(/_/g, " ") + "**\nNOTE: Some of the listed dragons may not be available at this time. Check the dragonarium to confirm availability.");
+                                else message.channel.send("No matches found for timer " + timer + " when breeding " + d1 + " x " + d2);
+                            });
+                        });
+                    });
+                }
+            }
+        }
+    } else if (cmd === '' || cmd === 'help') {
 		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
 
 		const helpMsg = "Command list: (prefix all commands with `" + cmdPrefix + "`)\n"
-				+ "- `quest <quest name>` - get the correct dragon to send on a quest\n"
-				+ "- `breed <dragon name>` - find out how to breed a dragon\n"
+                + "- `breed <dragon name>` - find out how to breed a dragon\n"
 				+ "- `elements <dragon name>` - get the breeding elements (aka hidden elements) of a dragon\n"
 				+ "- `evolve <dragon name>` - find the evolution requirements for a dragon\n"
-				+ "- `rates <dragon name> [number of boosts OR 'rift']` - get the earning rates of a dragon\n"
-				+ "- `timer <dragon name>` - get the breeding times of the dragon\n"
-				+ "- `sandbox <dragon1>,<dragon2> [beb] [fast]` - open the sandbox for the specified breeding combo (alias: `dvbox`)\n"
 				+ "- `image <dragon> <adult/juvenile/baby/egg> [qualifier]` - get a PNG image of the dragon; defaults to adult if no stage specified; valid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch) (aliases: `picture`, `img`, `pic`)\n"
+				+ "- `quest <quest name>` - get the correct dragon to send on a quest\n"
+				+ "- `rates <dragon name> [number of boosts OR 'rift']` - get the earning rates of a dragon\n"
+                + "- `result <dragon1>,<dragon2> <d:hh:mm:ss|hh:mm:ss> [fast]` - given 2 parent dragons and the resulting timer, find the potential dragons that can result from the breed. **Note: this command takes a _long_ time to process results when one of the parents is a pseudo. If breeding with a pseudo, please use `d!dvbox` and check manually instead!**\n"
+				+ "- `sandbox <dragon1>,<dragon2> [beb] [fast]` - open the sandbox for the specified breeding combo (alias: `dvbox`)\n"
+				+ "- `timer <dragon name>` - get the breeding times of the dragon\n"
 				+ "- `wiki <dragon name>` - get the link to a dragon's wiki page\n"
 				+ "- `help` - view this message";
 		message.channel.send(helpMsg);
@@ -633,7 +737,7 @@ readWikiPage = (dragon, $) => {
 	// Breeding combo
 	var breedResponse = $("#Breeding").parent().next().text().trim();
 	if ($(".dragonbox").first().find('tr').eq(14).children('td').first().text().trim() === "EXPIRED") {
-		breedResponse += " *Note: This dragon is not available right now (per the wiki, which may not be fully up to date - check the Dragonarium to double check)!*";
+		breedResponse += " *Note: This dragon is not available right now (per the wiki, which may not be fully up to date - check the Dragonarium to confirm)!*";
 	}
 	cache[dragon]["breedCombo"] = breedResponse;
 	// Elements
