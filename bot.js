@@ -3,6 +3,7 @@ const client = new Discord.Client();
 const https = require('https');
 const cheerio = require('cheerio');
 const jsdom = require('jsdom');
+const { Worker } = require('worker_threads');
 
 const cmdPrefix = 'd!';
 
@@ -149,6 +150,8 @@ dvboxCache: {
     }
 }
 */
+
+const worker = new Worker('./dvboxreader.js');
 
 client.on('ready', () => {
 	console.log('Oracle is waking up...');
@@ -524,7 +527,7 @@ client.on('message', message => {
 			if (!dragonList.includes(dragon)) message.channel.send("Unrecognized dragon name \"" + dragon + "\" (did you spell it correctly?)");
 			else message.channel.send('https://dragonvale.fandom.com/wiki/' + dragon.replace(/ /g, "_"));
 		}
-	} else if (cmd === 'result') {
+	} else if (cmd === 'result' || cmd === 'fakeouts') {
         // d!result <d1>,<d2> <d:hh:mm:ss> [fast]
         var fast = false, last = args.pop();
         if (last === 'fast') fast = true;
@@ -547,6 +550,9 @@ client.on('message', message => {
         }
         if (days == NaN || hrs == NaN || mins == NaN || secs == NaN) {
             message.channel.send("Your timer could not be parsed. Please write the timer as either `d:hh:mm:ss` or `hh:mm:ss`.");
+            return;
+        } else if (days == 0 && hrs == 0 && mins < 10) {
+            message.channel.send("I do not process timers below 10 minutes. Please try a different query.");
             return;
         }
         var timer = "";
@@ -583,29 +589,26 @@ client.on('message', message => {
                     if (fast) link += ";fast=1";
                     link += ";beb=1";
                     message.channel.send("Working, this will take a moment...");
-                    console.log("Querying dvbox...")
-                    jsdom.JSDOM.fromURL(link, {resources: "usable", runScripts: "dangerously"}).then(dom => {
-                        console.log("dvbox queried successfully");
-                        dom.window.document.addEventListener('DOMContentLoaded', () => {
-                            console.log("Event listener set")
-                            setImmediate(() => {
-                                console.log("Ready to read results");
-                                const $ = cheerio.load(dom.serialize());
-                                var timerList = {};
-                                var candidates = [];
-                                $('#results').children().each((i, elem) => {
-                                    timerList[$(elem).attr('id')] = $(elem).contents().filter(function() {return this.nodeType === 3; }).first().text();
-                                });
-                                for (const key in timerList) {
-                                    if (timerList[key].indexOf("%") != -1) delete timerList[key];
-                                    else if (timerList[key] == timer) candidates.push(key);
-                                }
-                                dvboxCache[fast ? "fast" : "normal"][d1 + "|" + d2] = timerList;
-                                if (candidates.length > 0) message.channel.send("A timer of " + timer + " when breeding " + d1 + " x " + d2 + " matches: **" + candidates.join("**, **").replace(/_/g, " ") + "**\nNOTE: Some of the listed dragons may not be available at this time. Check the dragonarium to confirm availability.");
-                                else message.channel.send("No matches found for timer " + timer + " when breeding " + d1 + " x " + d2);
-                            });
-                        });
+                    
+                    /*
+                    response: {
+                        timerList: {},
+                        message: string
+                    }
+                    */
+                    worker.once('message', timerList => {
+                        dvboxCache[fast ? "fast" : "normal"][d1 + "|" + d2] = timerList;
+                        
+                        var candidates = [];
+                        
+                        for (const key in timerList) {
+                            if (timerList[key].indexOf("%") != -1) delete timerList[key];
+                            else if (timerList[key] == timer) candidates.push(key);
+                        }
+                        if (candidates.length > 0) message.reply("A timer of " + timer + " when breeding " + d1 + " x " + d2 + " matches: **" + candidates.join("**, **").replace(/_/g, " ") + "**\nNOTE: Some of the listed dragons may not be available at this time. Check the dragonarium to confirm availability.");
+                        else message.reply("No matches found for timer " + timer + " when breeding " + d1 + " x " + d2);
                     });
+                    worker.postMessage(link);
                 }
             }
         }
@@ -619,7 +622,7 @@ client.on('message', message => {
 				+ "- `image <dragon> <adult/juvenile/baby/egg> [qualifier]` - get a PNG image of the dragon; defaults to adult if no stage specified; valid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch) (aliases: `picture`, `img`, `pic`)\n"
 				+ "- `quest <quest name>` - get the correct dragon to send on a quest\n"
 				+ "- `rates <dragon name> [number of boosts OR 'rift']` - get the earning rates of a dragon\n"
-                + "- `result <dragon1>,<dragon2> <d:hh:mm:ss|hh:mm:ss> [fast]` - given 2 parent dragons and the resulting timer, find the potential dragons that can result from the breed. **Note: this command takes a _long_ time to process results when one of the parents is a pseudo. If breeding with a pseudo, please use `d!dvbox` and check manually instead!**\n"
+                + "- `result <dragon1>,<dragon2> <d:hh:mm:ss|hh:mm:ss> [fast]` - given 2 parent dragons and the resulting timer, find the potential dragons that can result from the breed. *Note: this command takes a _long_ time to process results when one of the parents is a pseudo. In this case, the bot will ping you when it's finished processing.* (alias: `fakeouts`)\n"
 				+ "- `sandbox <dragon1>,<dragon2> [beb] [fast]` - open the sandbox for the specified breeding combo (alias: `dvbox`)\n"
 				+ "- `timer <dragon name>` - get the breeding times of the dragon\n"
 				+ "- `wiki <dragon name>` - get the link to a dragon's wiki page\n"
@@ -888,3 +891,4 @@ readWikiPage = (dragon, $) => {
 		}
 	}
 }
+
