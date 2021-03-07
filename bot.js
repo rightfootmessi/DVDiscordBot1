@@ -8,7 +8,7 @@ const fs = require('fs');
 
 const cmdPrefix = 'd!';
 
-var primaries, evolutions, enhanced, dayNight, dragonList, fullData;
+var primaries, evolutions, enhanced, dayNight, hiding, dragonList, fullData;
 var questTable = {};
 var questsLoaded = false;
 
@@ -28,7 +28,7 @@ cache: {
 		},
 		timer: string,
 		pictures: {
-			options: [normal/day, night, organic, conjured, enhanced, nightEnhanced, charlatan, scourge, barbarous, macabre],
+			options: [normal/day, night, organic, conjured, enhanced, nightEnhanced, charlatan, scourge, barbarous, macabre, hiding],
 			normal: {
 				adult: link,
 				juvenile: link,
@@ -73,6 +73,7 @@ client.on('ready', () => {
     evolutions = data.evolutions;
     enhanced = data.enhanced;
     dayNight = data.dayNight;
+    hiding = data.hiding;
     dragonList = data.dragonList;
 	loadQuests();
 });
@@ -347,7 +348,7 @@ client.on('message', message => {
             return;
         }
 
-		const qualifiers = ["normal", "day", "night", "organic", "conjured", "enhanced", "nightenhanced", "charlatan", "scourge", "barbarous", "macabre"];
+		const qualifiers = ["normal", "day", "night", "organic", "conjured", "enhanced", "nightenhanced", "charlatan", "scourge", "barbarous", "macabre", "hiding"];
 		const ages = ["elder", "adult", "juvenile", "baby", "egg"];
 		var qualifier = args.pop();
 		if (!qualifiers.includes(qualifier) || args.length == 0) {
@@ -406,7 +407,7 @@ client.on('message', message => {
 								imgLink = cache[dragon]["pictures"]["normal"]["adult"];
 						}
 					} else {
-						if (!cache[dragon]["pictures"][qualifier]) message.channel.send(dragon + " does not have a(n) " + qualifier + " form!\nValid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch)");
+						if (!cache[dragon]["pictures"][qualifier]) message.channel.send(dragon + " does not have a(n) " + qualifier + " form!\nValid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding`");
 						else imgLink = cache[dragon]["pictures"][qualifier];
 					}
 				}
@@ -466,7 +467,7 @@ client.on('message', message => {
 										imgLink = cache[dragon]["pictures"]["normal"]["adult"];
 								}
 							} else {
-								if (!cache[dragon]["pictures"][qualifier]) message.channel.send(dragon + " does not have a(n) " + qualifier + " form!\nValid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch)");
+								if (!cache[dragon]["pictures"][qualifier]) message.channel.send(dragon + " does not have a(n) " + qualifier + " form!\nValid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding`");
 								else imgLink = cache[dragon]["pictures"][qualifier];
 							}
 						}
@@ -589,11 +590,11 @@ client.on('message', message => {
 	} else if (cmd === 'mod' && hasModAccess(message)) {
         if (args.length == 0) {
             const helpMsg = "Mod command list: (prefix all commands with `" + cmdPrefix + "mod`)\n"
-                    + "- `viewlist [primaries/evolutions/enhanced/dayNight]` - sends my stored list of dragons to your DMs; optionally specify a flag to only be sent dragons matching that flag, otherwise I send the whole list (warning: it's long)\n"
+                    + "- `viewlist [primaries/evolutions/enhanced/dayNight/hiding]` - sends my stored list of dragons to your DMs; optionally specify a flag to only be sent dragons matching that flag, otherwise I send the whole list (warning: it's long)\n"
                     + "- `add <dragon>` - add dragon to dragon list\n"
                     + "- `remove <dragon>` - remove dragon from list\n"
-                    + "- `flag <dragon> <primaries/evolutions/enhanced/dayNight>` - add the specified flag to the dragon\n"
-                    + "- `unflag <dragon> <primaries/evolutions/enhanced/dayNight>` - remove the specified flag from the dragon\n"
+                    + "- `flag <dragon> <primaries/evolutions/enhanced/dayNight/hiding>` - add the specified flag to the dragon\n"
+                    + "- `unflag <dragon> <primaries/evolutions/enhanced/dayNight/hiding>` - remove the specified flag from the dragon\n"
                     + "- `clearcache` - clear the bot's cache (useful after updating the wiki)";
             message.channel.send(helpMsg);
         } else {
@@ -697,6 +698,14 @@ client.on('message', message => {
                         dayNight.push(dragon);
                         dayNight.sort();
                         break;
+                    case "hiding":
+                        if (hiding.includes(dragon)) {
+                            message.channel.send(hiding + " already has this flag.");
+                            return;
+                        }
+                        hiding.push(dragon);
+                        hiding.sort();
+                        break;
                     default:
                         message.channel.send("Unrecognized flag. Valid flags: `primaries`, `evolutions`, `enhanced`, `dayNight`");
                         return;
@@ -750,6 +759,13 @@ client.on('message', message => {
                             return;
                         }
                         dayNight.splice(dayNight.indexOf(dragon), 1);
+                        break;
+                    case "hiding":
+                        if (!hiding.includes(dragon)) {
+                            message.channel.send(dragon + " already does not have this flag.");
+                            return;
+                        }
+                        hiding.splice(hiding.indexOf(dragon), 1);
                         break;
                     default:
                         message.channel.send("Unrecognized flag. Valid flags: `primaries`, `evolutions`, `enhanced`, `dayNight`");
@@ -860,7 +876,7 @@ cache: {
 		},
 		timer: string,
 		pictures: {
-			options: [normal/day, night, organic, conjured, enhanced, nightEnhanced, charlatan, scourge, barbarous, macabre],
+			options: [normal/day, night, organic, conjured, enhanced, nightEnhanced, charlatan, scourge, barbarous, macabre, hiding],
 			normal: {
 				adult: link,
 				juvenile: link,
@@ -1038,5 +1054,6 @@ readWikiPage = (dragon, $) => {
 			cache[dragon]["pictures"]["night"]["baby"] = $("[alt='" + dragonNoSpace + "BabyNight.png']").first().attr('data-src');
 		}
 	}
+    if (hiding.includes(dragon)) cache[dragon]["pictures"]["hiding"] = $("[alt='" + dragonNoSpace + "Hiding.png']").first().attr('data-src');
 }
 
