@@ -600,7 +600,7 @@ client.on('message', message => {
         } else {
             const modCmd = args.shift();
             if (modCmd === 'viewlist') {
-                var tempList = (args == "primaries") ? [...primaries] : (args == "evolutions") ? [...evolutions] : (args == "enhanced") ? [...enhanced] : (args == "daynight") ? [...dayNight] : [...dragonList];
+                var tempList = (args == "primaries") ? [...primaries] : (args == "evolutions") ? [...evolutions] : (args == "enhanced") ? [...enhanced] : (args == "daynight") ? [...dayNight] : (args == "hiding") ? [...hiding] : [...dragonList];
                 var msg = "";
                 while (tempList.length > 0) {
                     if (msg.length + tempList[0].length > 2000) {
