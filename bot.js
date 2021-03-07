@@ -83,7 +83,7 @@ client.on('message', message => {
 	const args = message.content.toLowerCase().replace(/\s{2,}/g, ' ').slice(cmdPrefix.length).trim().split(" ");
 	const cmd = args.shift().toLowerCase();
 
-	if (!['lodestoned', 'smoulderbrushed', 'smoulderbushed'].includes(cmd)) {
+	if (!['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'mod'].includes(cmd)) {
 		// (DragonVale server only) prevent non-meme commands from being executed outside #bot-spam
 		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
 	}
@@ -586,7 +586,7 @@ client.on('message', message => {
 				+ "- `wiki <dragon name>` - get the link to a dragon's wiki page\n"
 				+ "- `help` - view this message";
 		message.channel.send(helpMsg);
-	} else if (cmd === 'mod' && hasModAccess(message.member)) {
+	} else if (cmd === 'mod' && hasModAccess(message)) {
         if (args.length == 0) {
             const helpMsg = "Mod command list: (prefix all commands with `" + cmdPrefix + "mod `)\n"
                     + "- `viewlist [primaries/evolutions/enhanced/dayNight]` - sends my stored list of dragons to your DMs; optionally specify a flag to only be sent dragons matching that flag, otherwise I send the whole list (warning: it's long)\n"
@@ -772,8 +772,8 @@ client.on('message', message => {
 // Note to self: if running locally, remember to replace the variable with the secret token itself; otherwise, make sure it says process.env.BOT_TOKEN !!!
 client.login(process.env.BOT_TOKEN);
 
-hasModAccess = function(member) {
-    return member.roles.cache.find(r => r.name === "Mod Wizard") || member.id == "295625585299030016";
+hasModAccess = function(message) {
+    return message.member.roles.cache.some(r => r.name === "Mod Wizard") || message.member.id == "295625585299030016";
 }
 
 prettyString = function(words, separator) {
