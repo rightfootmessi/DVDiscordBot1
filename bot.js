@@ -627,7 +627,7 @@ client.on('message', message => {
                 dragonList.sort();
                 fs.writeFile('dragonList.json', JSON.stringify(fullData, null, 4), (err) => {
                     if (err) message.channel.send("An unexpected error occurred and the dragon list could not be updated.");
-                    else message.channel.send(dragon + " was added to the list. If this was a mistake, type `" + prefix + "mod remove " + dragon + "` to remove it.");
+                    else message.channel.send(dragon + " was added to the list. If this was a mistake, type `" + cmdPrefix + "mod remove " + dragon + "` to remove it.");
                 });
             } else if (modCmd === 'remove') {
                 var dragon = prettyString(args, " ");
@@ -646,7 +646,7 @@ client.on('message', message => {
                 fullData.dragonList.splice(fullData.dragonList.indexOf(dragon), 1);
                 fs.writeFile('dragonList.json', JSON.stringify(fullData, null, 4), (err) => {
                     if (err) message.channel.send("An unexpected error occurred and the dragon list could not be updated.");
-                    else message.channel.send(dragon + " was removed from the list. If this was a mistake, type `" + prefix + "mod add " + dragon + "` to re-add it.");
+                    else message.channel.send(dragon + " was removed from the list. If this was a mistake, type `" + cmdPrefix + "mod add " + dragon + "` to re-add it.");
                 });
             } else if (modCmd === 'flag') {
                 var flag = args.pop();
@@ -701,7 +701,7 @@ client.on('message', message => {
                 }
                 fs.writeFile('dragonList.json', JSON.stringify(fullData, null, 4), (err) => {
                     if (err) message.channel.send("An unexpected error occurred and the dragon list could not be updated.");
-                    else message.channel.send(dragon + " was flagged as `" + flag + "`. If this was a mistake, type `" + prefix + "mod unflag " + dragon + " " + flag + "` to remove it.");
+                    else message.channel.send(dragon + " was flagged as `" + flag + "`. If this was a mistake, type `" + cmdPrefix + "mod unflag " + dragon + " " + flag + "` to remove it.");
                 });
             } else if (modCmd === 'unflag') {
                 var flag = args.pop();
@@ -752,7 +752,7 @@ client.on('message', message => {
                 }
                 fs.writeFile('dragonList.json', JSON.stringify(fullData, null, 4), (err) => {
                     if (err) message.channel.send("An unexpected error occurred and the dragon list could not be updated.");
-                    else message.channel.send(dragon + " was unflagged as `" + flag + "`. If this was a mistake, type `" + prefix + "mod unflag " + dragon + " " + flag + "` to remove it.");
+                    else message.channel.send(dragon + " was unflagged as `" + flag + "`. If this was a mistake, type `" + cmdPrefix + "mod unflag " + dragon + " " + flag + "` to remove it.");
                 });
             } else if (modCmd === 'clearcache') {
                 questTable = {};
