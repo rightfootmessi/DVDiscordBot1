@@ -599,7 +599,7 @@ client.on('message', message => {
         } else {
             const modCmd = args.shift();
             if (modCmd === 'viewlist') {
-                var tempList = (args == "primaries") ? [...primaries] : (args == "evolutions") ? [...evolutions] : (args == "enhanced") ? [...enhanced] : (args == "dayNight") ? [...dayNight] : [...dragonList];
+                var tempList = (args == "primaries") ? [...primaries] : (args == "evolutions") ? [...evolutions] : (args == "enhanced") ? [...enhanced] : (args == "daynight") ? [...dayNight] : [...dragonList];
                 var msg = "";
                 while (tempList.length > 0) {
                     if (msg.length + tempList[0].length > 2000) {
@@ -703,7 +703,10 @@ client.on('message', message => {
                 }
                 fs.writeFile('dragonList.json', JSON.stringify(fullData, null, 4), (err) => {
                     if (err) message.channel.send("An unexpected error occurred and the dragon list could not be updated.");
-                    else message.channel.send(dragon + " was flagged as `" + flag + "`. If this was a mistake, type `" + cmdPrefix + "mod unflag " + dragon + " " + flag + "` to remove it.");
+                    else {
+                        message.channel.send(dragon + " was flagged as `" + flag + "`. If this was a mistake, type `" + cmdPrefix + "mod unflag " + dragon + " " + flag + "` to remove it.");
+                        delete cache[dragon];
+                    }
                 });
             } else if (modCmd === 'unflag') {
                 var flag = args.pop();
