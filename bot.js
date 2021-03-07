@@ -4,99 +4,11 @@ const https = require('https');
 const cheerio = require('cheerio');
 const jsdom = require('jsdom');
 const { Worker } = require('worker_threads');
+const fs = require('fs');
 
 const cmdPrefix = 'd!';
 
-const primaries  = ["Plant Dragon", 
-					"Fire Dragon", 
-					"Earth Dragon", 
-					"Cold Dragon", 
-					"Lightning Dragon", 
-					"Water Dragon", 
-					"Air Dragon", 
-					"Metal Dragon", 
-					"Light Dragon", 
-					"Dark Dragon"];
-const evolutions = ["Ghostly Plant Dragon", 
-					"Ghostly Fire Dragon", 
-					"Ghostly Earth Dragon", 
-					"Ghostly Cold Dragon", 
-					"Corrupticorn Dragon",
-					"Wrath Dragon",
-					"Porcelain Dragon",
-					"Avarice Dragon",
-					"Burglehoo Dragon",
-					"Gulletail Dragon",
-					"Jadice Dragon",
-					"Lokilure Dragon",
-					"Libretto Dragon",
-					"Nibwhip Dragon",
-					"Saccharine Dragon",
-					"Sugarplum Dragon",
-					"Trepak Dragon",
-					"Minchi Dragon",
-					"Hedera Dragon",
-					"Glyph Dragon",
-					"Pixie Dragon",
-					"Aubergine Dragon",
-					"Bloatato Dragon",
-					"Curlyleaf Dragon",
-					"Karroot Dragon",
-					"Vidalia Dragon"];
-const enhanced   = ["Armament Dragon",
-					"Bastion Dragon",
-					"Darcowl Dragon",
-					"Dash Dragon",
-					"Dazzle Dragon",
-					"Eldritch Dragon",
-					"Elegant Dragon",
-					"Monte Dragon",
-					"Outrider Dragon",
-					"Psyche Dragon",
-					"Quantum Dragon",
-					"Razzle Dragon",
-					"Riptide Dragon",
-					"Ruckus Dragon",
-					"Sailback Dragon",
-					"Sparkles Dragon",
-					"Toco Dragon",
-					"Vanguard Dragon",
-					"Vibe Dragon"];
-const dayNight   = ["Dawnbringer Dragon",
-					"Dazzle Dragon",
-					"Elegant Dragon",
-					"Iden Dragon",
-					"Kwall Dragon",
-					"Lycan Dragon",
-					"Monte Dragon",
-					"Moriante Dragon",
-					"Nightbloom Dragon",
-					"Razzle Dragon",
-					"Ruckus Dragon",
-					"Sailback Dragon",
-					"Snowball Dragon",
-					"Sunscorch Dragon",
-					"Toco Dragon",
-					"Vibe Dragon",
-					"Wendigo Dragon"];
-const noQuest    = ["Ketu Dragon",
-					"Grace Dragon"];
-var dragonList   = ["Plant Dragon", 
-					"Fire Dragon", 
-					"Earth Dragon", 
-					"Cold Dragon", 
-					"Lightning Dragon", 
-					"Water Dragon", 
-					"Air Dragon", 
-					"Metal Dragon", 
-					"Light Dragon", 
-					"Dark Dragon", 
-					"Ghostly Plant Dragon", 
-					"Ghostly Fire Dragon", 
-					"Ghostly Earth Dragon", 
-					"Ghostly Cold Dragon", 
-					"Monolith Dragon", 
-					"Snowflake Dragon"];
+var primaries, evolutions, enhanced, dayNight, dragonList, fullData;
 var questTable = {};
 var questsLoaded = false;
 
@@ -155,6 +67,13 @@ const worker = new Worker('./dvboxreader.js');
 
 client.on('ready', () => {
 	console.log('Oracle is waking up...');
+    let data = JSON.parse(fs.readFileSync('dragonList.json'));
+    fullData = data;
+    primaries = data.primaries;
+    evolutions = data.evolutions;
+    enhanced = data.enhanced;
+    dayNight = data.dayNight;
+    dragonList = data.dragonList;
 	loadQuests();
 });
  
@@ -169,39 +88,6 @@ client.on('message', message => {
 		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && message.channel.name != 'bot-spam') return;
 	}
 
-	if (message.channel.type == 'dm' && cmd === 'clearcache') {
-		dragonList   = ["Plant Dragon", 
-						"Fire Dragon", 
-						"Earth Dragon", 
-						"Cold Dragon", 
-						"Lightning Dragon", 
-						"Water Dragon", 
-						"Air Dragon", 
-						"Metal Dragon", 
-						"Light Dragon", 
-						"Dark Dragon", 
-						"Ghostly Plant Dragon", 
-						"Ghostly Fire Dragon", 
-						"Ghostly Earth Dragon", 
-						"Ghostly Cold Dragon", 
-						"Monolith Dragon", 
-						"Snowflake Dragon"];
-		questTable = {};
-		loadQuests();
-		cache = {};
-        dvboxCache = {};
-		message.author.send("Cache cleared. Information given should now reflect the most recent wiki changes.");
-		return;
-	}
-
-	if (args.includes("monolith")) {
-		message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Monolith_Dragon");
-		return;
-	} else if (args.includes("snowflake")) {
-		message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Snowflake_Dragon");
-		return;
-	}
-
 	if (cmd === 'quest') {
 		if (!questsLoaded) message.channel.send("Quests have not been loaded yet!");
 		else {
@@ -214,6 +100,14 @@ client.on('message', message => {
 			}
 		}
 	} else if (cmd === 'breed') {
+        if (args.includes("monolith")) {
+            message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Monolith_Dragon");
+            return;
+        } else if (args.includes("snowflake")) {
+            message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Snowflake_Dragon");
+            return;
+        }
+
 		var dragon = prettyString(args, " ");
 		if (!dragon) message.channel.send("You must specify a dragon!");
 		else {
@@ -228,6 +122,10 @@ client.on('message', message => {
 				var dragon_ = dragon.replace(/ /g, "_");
 				https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
 					console.log("Received " + res.statusCode + " status code for " + dragon + "'s page");
+                    if (res.statusCode == 404) {
+                        message.channel.send("ERROR: " + dragon + "'s wiki page returned a 404 error.");
+                        return;
+                    }
 					var body = [];
 					res.on('data', (chunk) => body.push(chunk)).on('end', () => {
 						const $ = cheerio.load(Buffer.concat(body).toString());
@@ -240,6 +138,14 @@ client.on('message', message => {
 			}
 		}
 	} else if (cmd === 'elements') {
+        if (args.includes("monolith")) {
+            message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Monolith_Dragon");
+            return;
+        } else if (args.includes("snowflake")) {
+            message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Snowflake_Dragon");
+            return;
+        }
+
 		var dragon = prettyString(args, " ");
 		if (!dragon) message.channel.send("You must specify a dragon!");
 		else {
@@ -253,6 +159,10 @@ client.on('message', message => {
 				var dragon_ = dragon.replace(/ /g, "_");
 				https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
 					console.log("Received " + res.statusCode + " status code for " + dragon + "'s page");
+                    if (res.statusCode == 404) {
+                        message.channel.send("ERROR: " + dragon + "'s wiki page returned a 404 error.");
+                        return;
+                    }
 					var body = [];
 					res.on('data', (chunk) => body.push(chunk)).on('end', () => {
 						const $ = cheerio.load(Buffer.concat(body).toString());
@@ -265,6 +175,14 @@ client.on('message', message => {
 			}
 		}
 	} else if (cmd === 'evolve') {
+        if (args.includes("monolith")) {
+            message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Monolith_Dragon");
+            return;
+        } else if (args.includes("snowflake")) {
+            message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Snowflake_Dragon");
+            return;
+        }
+
 		var dragon = prettyString(args, " ");
 		if (!dragon) message.channel.send("You must specify a dragon!");
 		else {
@@ -278,6 +196,10 @@ client.on('message', message => {
 				var dragon_ = dragon.replace(/ /g, "_");
 				https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
 					console.log("Received " + res.statusCode + " status code for " + dragon + "'s page");
+                    if (res.statusCode == 404) {
+                        message.channel.send("ERROR: " + dragon + "'s wiki page returned a 404 error.");
+                        return;
+                    }
 					var body = [];
 					res.on('data', (chunk) => body.push(chunk)).on('end', () => {
 						const $ = cheerio.load(Buffer.concat(body).toString());
@@ -290,6 +212,14 @@ client.on('message', message => {
 			}
 		}
 	} else if (cmd === 'rates') {
+        if (args.includes("monolith")) {
+            message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Monolith_Dragon");
+            return;
+        } else if (args.includes("snowflake")) {
+            message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Snowflake_Dragon");
+            return;
+        }
+
 		var rift = false;
 		var boosts = 0;
 		var age = args.pop();
@@ -317,6 +247,10 @@ client.on('message', message => {
 				var dragon_ = dragon.replace(/ /g, "_");
 				https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
 					console.log("Received " + res.statusCode + " status code for " + dragon + "'s page");
+                    if (res.statusCode == 404) {
+                        message.channel.send("ERROR: " + dragon + "'s wiki page returned a 404 error.");
+                        return;
+                    }
 					var body = [];
 					res.on('data', (chunk) => body.push(chunk)).on('end', () => {
 						const $ = cheerio.load(Buffer.concat(body).toString());
@@ -330,6 +264,14 @@ client.on('message', message => {
 			}
 		}
 	} else if (cmd === 'timer') {
+        if (args.includes("monolith")) {
+            message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Monolith_Dragon");
+            return;
+        } else if (args.includes("snowflake")) {
+            message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Snowflake_Dragon");
+            return;
+        }
+
 		var dragon = prettyString(args, " ");
 		if (!dragon) message.channel.send("You must specify a dragon!");
 		else {
@@ -342,6 +284,10 @@ client.on('message', message => {
 				var dragon_ = dragon.replace(/ /g, "_");
 				https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
 					console.log("Received " + res.statusCode + " status code for " + dragon + "'s page");
+                    if (res.statusCode == 404) {
+                        message.channel.send("ERROR: " + dragon + "'s wiki page returned a 404 error.");
+                        return;
+                    }
 					var body = [];
 					res.on('data', (chunk) => body.push(chunk)).on('end', () => {
 						const $ = cheerio.load(Buffer.concat(body).toString());
@@ -393,6 +339,14 @@ client.on('message', message => {
 			}
 		}
 	} else if (cmd === 'image' || cmd === 'picture' || cmd === 'img' || cmd === 'pic') {
+        if (args.includes("monolith")) {
+            message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Monolith_Dragon");
+            return;
+        } else if (args.includes("snowflake")) {
+            message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Snowflake_Dragon");
+            return;
+        }
+
 		const qualifiers = ["normal", "day", "night", "organic", "conjured", "enhanced", "nightenhanced", "charlatan", "scourge", "barbarous", "macabre"];
 		const ages = ["elder", "adult", "juvenile", "baby", "egg"];
 		var qualifier = args.pop();
@@ -463,6 +417,10 @@ client.on('message', message => {
 				var dragon_ = dragon.replace(/ /g, "_");
 				https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
 					console.log("Received " + res.statusCode + " status code for " + dragon + "'s page");
+                    if (res.statusCode == 404) {
+                        message.channel.send("ERROR: " + dragon + "'s wiki page returned a 404 error.");
+                        return;
+                    }
 					var body = [];
 					res.on('data', (chunk) => body.push(chunk)).on('end', () => {
 						const $ = cheerio.load(Buffer.concat(body).toString());
@@ -628,13 +586,195 @@ client.on('message', message => {
 				+ "- `wiki <dragon name>` - get the link to a dragon's wiki page\n"
 				+ "- `help` - view this message";
 		message.channel.send(helpMsg);
-	} else {
-		message.channel.send("Unknown command. Type `" + cmdPrefix + "help` for a list of commands");
+	} else if (cmd === 'mod' && hasModAccess(message.member)) {
+        if (args.length == 0) {
+            const helpMsg = "Mod command list: (prefix all commands with `" + cmdPrefix + "mod `)\n"
+                    + "- `viewlist [primaries/evolutions/enhanced/dayNight]` - sends my stored list of dragons to your DMs; optionally specify a flag to only be sent dragons matching that flag, otherwise I send the whole list (warning: it's long)\n"
+                    + "- `add <dragon>` - add dragon to dragon list\n"
+                    + "- `remove <dragon>` - remove dragon from list\n"
+                    + "- `flag <dragon> <primaries/evolutions/enhanced/dayNight>` - add the specified flag to the dragon\n"
+                    + "- `unflag <dragon> <primaries/evolutions/enhanced/dayNight>` - remove the specified flag from the dragon\n"
+                    + "- `clearcache` - clear the bot's cache (useful after updating the wiki)";
+            message.channel.send(helpMsg);
+        } else {
+            const modCmd = args.shift();
+            if (modCmd === 'viewlist') {
+                var tempList = (args == "primaries") ? [...primaries] : (args == "evolutions") ? [...evolutions] : (args == "enhanced") ? [...enhanced] : (args == "dayNight") ? [...dayNight] : [...dragonList];
+                var msg = "";
+                while (tempList.length > 0) {
+                    if (msg.length + tempList[0].length > 2000) {
+                        message.author.send(msg);
+                        msg = "";
+                    }
+                    msg += tempList.shift() + "\n";
+                }
+                if (msg.length > 0) message.author.send(msg);
+                message.channel.send("I have sent my list of dragons to your DMs.");
+            } else if (modCmd === 'add') {
+                var dragon = prettyString(args, " ");
+                if (!dragon) {
+                    message.channel.send("You must specify a dragon!");
+                    return;
+                }
+                if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
+                
+                if (dragonList.includes(dragon)) {
+                    message.channel.send(dragon + " is already in my list.");
+                    return;
+                }
+    
+                dragonList.push(dragon);
+                dragonList.sort();
+                fs.writeFile('dragonList.json', JSON.stringify(fullData, null, 4), (err) => {
+                    if (err) message.channel.send("An unexpected error occurred and the dragon list could not be updated.");
+                    else message.channel.send(dragon + " was added to the list. If this was a mistake, type `d%mod remove " + dragon + "` to remove it.");
+                });
+            } else if (modCmd === 'remove') {
+                var dragon = prettyString(args, " ");
+                if (!dragon) {
+                    message.channel.send("You must specify a dragon!");
+                    return;
+                }
+		        if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
+                
+                if (!dragonList.includes(dragon)) {
+                    message.channel.send(dragon + " is already not in my list.");
+                    return;
+                }
+
+                dragonList.splice(dragonList.indexOf(dragon), 1);
+                fullData.dragonList.splice(fullData.dragonList.indexOf(dragon), 1);
+                fs.writeFile('dragonList.json', JSON.stringify(fullData, null, 4), (err) => {
+                    if (err) message.channel.send("An unexpected error occurred and the dragon list could not be updated.");
+                    else message.channel.send(dragon + " was removed from the list. If this was a mistake, type `d%mod add " + dragon + "` to re-add it.");
+                });
+            } else if (modCmd === 'flag') {
+                var flag = args.pop();
+                var dragon = prettyString(args, " ");
+                if (!dragon) {
+                    message.channel.send("You must specify a dragon!");
+                    return;
+                }
+		        if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
+                
+                if (!dragonList.includes(dragon)) {
+                    message.channel.send(dragon + " is not in my list.");
+                    return;
+                }
+
+                switch (flag) {
+                    case "primaries":
+                        if (primaries.includes(dragon)) {
+                            message.channel.send(dragon + " already has this flag.");
+                            return;
+                        }
+                        primaries.push(dragon);
+                        primaries.sort();
+                        break;
+                    case "evolutions":
+                        if (evolutions.includes(dragon)) {
+                            message.channel.send(dragon + " already has this flag.");
+                            return;
+                        }
+                        evolutions.push(dragon);
+                        evolutions.sort();
+                        break;
+                    case "enhanced":
+                        if (enhanced.includes(dragon)) {
+                            message.channel.send(dragon + " already has this flag.");
+                            return;
+                        }
+                        enhanced.push(dragon);
+                        enhanced.sort();
+                        break;
+                    case "dayNight":
+                        if (dayNight.includes(dragon)) {
+                            message.channel.send(dragon + " already has this flag.");
+                            return;
+                        }
+                        dayNight.push(dragon);
+                        dayNight.sort();
+                        break;
+                    default:
+                        message.channel.send("Unrecognized flag. Valid flags: `primaries`, `evolutions`, `enhanced`, `dayNight`");
+                        return;
+                }
+                fs.writeFile('dragonList.json', JSON.stringify(fullData, null, 4), (err) => {
+                    if (err) message.channel.send("An unexpected error occurred and the dragon list could not be updated.");
+                    else message.channel.send(dragon + " was flagged as `" + flag + "`. If this was a mistake, type `d%mod unflag " + dragon + " " + flag + "` to remove it.");
+                });
+            } else if (modCmd === 'unflag') {
+                var flag = args.pop();
+                var dragon = prettyString(args, " ");
+                if (!dragon) {
+                    message.channel.send("You must specify a dragon!");
+                    return;
+                }
+		        if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
+                
+                if (!dragonList.includes(dragon)) {
+                    message.channel.send(dragon + " is not in my list.");
+                    return;
+                }
+
+                switch (flag) {
+                    case "primaries":
+                        if (!primaries.includes(dragon)) {
+                            message.channel.send(dragon + " already does not have this flag.");
+                            return;
+                        }
+                        primaries.splice(primaries.indexOf(dragon), 1);
+                        break;
+                    case "evolutions":
+                        if (!evolutions.includes(dragon)) {
+                            message.channel.send(dragon + " already does not have this flag.");
+                            return;
+                        }
+                        evolutions.splice(evolutions.indexOf(dragon), 1);
+                        break;
+                    case "enhanced":
+                        if (!enhanced.includes(dragon)) {
+                            message.channel.send(dragon + " already does not have this flag.");
+                            return;
+                        }
+                        enhanced.splice(enhanced.indexOf(dragon), 1);
+                        break;
+                    case "dayNight":
+                        if (!dayNight.includes(dragon)) {
+                            message.channel.send(dragon + " already does not have this flag.");
+                            return;
+                        }
+                        dayNight.splice(dayNight.indexOf(dragon), 1);
+                        break;
+                    default:
+                        message.channel.send("Unrecognized flag. Valid flags: `primaries`, `evolutions`, `enhanced`, `dayNight`");
+                        return;
+                }
+                fs.writeFile('dragonList.json', JSON.stringify(fullData, null, 4), (err) => {
+                    if (err) message.channel.send("An unexpected error occurred and the dragon list could not be updated.");
+                    else message.channel.send(dragon + " was unflagged as `" + flag + "`. If this was a mistake, type `d%mod unflag " + dragon + " " + flag + "` to remove it.");
+                });
+            } else if (modCmd === 'clearcache') {
+                questTable = {};
+                loadQuests();
+                cache = {};
+                dvboxCache = {};
+                message.channel.send("Cache cleared. Information given should now reflect the most recent wiki changes.");
+            } else {
+                message.channel.send("Unknown mod command. Type `" + cmdPrefix + "mod` for a list of mod commands.")
+            }
+        }
+    } else {
+		message.channel.send("Unknown command. Type `" + cmdPrefix + "help` for a list of commands.");
 	}
 });
 
 // Note to self: if running locally, remember to replace the variable with the secret token itself; otherwise, make sure it says process.env.BOT_TOKEN !!!
 client.login(process.env.BOT_TOKEN);
+
+hasModAccess = function(member) {
+    return member.roles.cache.find(r => r.name === "Mod Wizard") || member.id == "295625585299030016";
+}
 
 prettyString = function(words, separator) {
 	if (words.length == 0) return false;
@@ -684,13 +824,13 @@ loadQuests = () => {
 					var qName = $(elem).children('td').eq(0).text().trim().toLowerCase();
 					var qDragon = $(elem).children('td').eq(2).text().trim();
 					questTable[qName] = qDragon;
-					dragonList.push(qDragon);
+					//dragonList.push(qDragon);
 					numLoaded++;
 				}
 			});
 			console.log(numLoaded + " quests loaded!");
 			questsLoaded = true;
-			dragonList = dragonList.concat(noQuest);
+			//dragonList = dragonList.concat(noQuest);
 		}).on('error', (e) => {
 			console.error("An error occurred, quests could not be loaded.\nFull error:\n" + e);
 		});
