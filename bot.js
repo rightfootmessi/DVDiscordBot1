@@ -348,7 +348,7 @@ client.on('message', message => {
             return;
         }
 
-		const qualifiers = ["normal", "day", "night", "organic", "conjured", "enhanced", "nightenhanced", "charlatan", "scourge", "barbarous", "macabre", "hiding", "summer", "autumn", "winter", "spring"];
+		const qualifiers = ["normal", "day", "night", "organic", "conjured", "enhanced", "nightenhanced", "charlatan", "scourge", "barbarous", "macabre", "hiding", "summer", "autumn", "winter", "spring", "snowball"];
 		const ages = ["elder", "adult", "juvenile", "baby", "egg"];
 		var qualifier = args.pop();
 		if (!qualifiers.includes(qualifier) || args.length == 0) {
@@ -425,7 +425,7 @@ client.on('message', message => {
 								imgLink = cache[dragon]["pictures"]["normal"]["adult"];
 						}
 					} else {
-						if (!cache[dragon]["pictures"][qualifier]) message.channel.send(dragon + " does not have a(n) " + qualifier + " form!\nValid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding`, `summer`/`autumn`/`winter`/`spring` (seasonal)");
+						if (!cache[dragon]["pictures"][qualifier]) message.channel.send(dragon + " does not have a(n) " + qualifier + " form!\nValid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding`, `summer`/`autumn`/`winter`/`spring` (seasonal), `snowman` (snowball)");
 						else imgLink = cache[dragon]["pictures"][qualifier];
 					}
 				}
@@ -503,7 +503,7 @@ client.on('message', message => {
 										imgLink = cache[dragon]["pictures"]["normal"]["adult"];
 								}
 							} else {
-								if (!cache[dragon]["pictures"][qualifier]) message.channel.send(dragon + " does not have a(n) " + qualifier + " form!\nValid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding, `summer`/`autumn`/`winter`/`spring` (seasonal)");
+								if (!cache[dragon]["pictures"][qualifier]) message.channel.send(dragon + " does not have a(n) " + qualifier + " form!\nValid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding, `summer`/`autumn`/`winter`/`spring` (seasonal), `snowman` (snowball)");
 								else imgLink = cache[dragon]["pictures"][qualifier];
 							}
 						}
@@ -612,7 +612,7 @@ client.on('message', message => {
                 + "- `breed <dragon name>` - find out how to breed a dragon\n"
 				+ "- `elements <dragon name>` - get the breeding elements (aka hidden elements) of a dragon\n"
 				+ "- `evolve <dragon name>` - find the evolution requirements for a dragon\n"
-				+ "- `image <dragon> <adult/juvenile/baby/egg> [qualifier]` - get a PNG image of the dragon; defaults to adult if no stage specified; valid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding`, `summer`/`autumn`/`winter`/`spring` (seasonal) (aliases: `picture`, `img`, `pic`)\n"
+				+ "- `image <dragon> <adult/juvenile/baby/egg> [qualifier]` - get a PNG image of the dragon; defaults to adult if no stage specified; valid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding`, `summer`/`autumn`/`winter`/`spring` (seasonal), `snowman` (snowball) (aliases: `picture`, `img`, `pic`)\n"
 				+ "- `quest <quest name>` - get the correct dragon to send on a quest\n"
 				+ "- `rates <dragon name> [number of boosts OR 'rift']` - get the earning rates of a dragon\n"
                 + "- `result <dragon1>,<dragon2> <d:hh:mm:ss|hh:mm:ss> [fast]` - given 2 parent dragons and the resulting timer, find the potential dragons that can result from the breed. *Note: this command takes a _long_ time to process results when one of the parents is a pseudo. In this case, the bot will ping you when it's finished processing.* (alias: `fakeouts`)\n"
@@ -831,7 +831,7 @@ client.on('message', message => {
 client.login(process.env.BOT_TOKEN);
 
 hasModAccess = function(message) {
-    return (message.guild.name == 'DragonVale' && message.member.roles.cache.some(r => r.name === "Mod Wizard")) || message.member.id == "295625585299030016";
+    return (message.guild.id == "233370210617262080" && message.member.roles.cache.some(r => r.name === "Mod Wizard")) || message.member.id == "295625585299030016";
 }
 
 prettyString = function(words, separator) {
@@ -1094,9 +1094,9 @@ readWikiPage = (dragon, $) => {
         cache[dragon]["pictures"]["autumn"] = {};
         cache[dragon]["pictures"]["winter"] = {};
         cache[dragon]["pictures"]["spring"] = {};
-        cache[dragon]["pictures"]["summer"]["adult"] = $("[alt='Summer" + dragonNoSpace + "Adult.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["summer"]["juvenile"] = $("[alt='Summer" + dragonNoSpace + "Juvenile.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["summer"]["baby"] = $("[alt='Summer" + dragonNoSpace + "Baby.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["summer"]["adult"] = $("[alt='Summer" + dragonNoSpace + "Adult.png']").first().attr('src');
+        cache[dragon]["pictures"]["summer"]["juvenile"] = $("[alt='Summer" + dragonNoSpace + "Juvenile.png']").first().attr('src');
+        cache[dragon]["pictures"]["summer"]["baby"] = $("[alt='Summer" + dragonNoSpace + "Baby.png']").first().attr('src');
         cache[dragon]["pictures"]["autumn"]["adult"] = $("[alt='Autumn" + dragonNoSpace + "Adult.png']").first().attr('data-src');
         cache[dragon]["pictures"]["autumn"]["juvenile"] = $("[alt='Autumn" + dragonNoSpace + "Juvenile.png']").first().attr('data-src');
         cache[dragon]["pictures"]["autumn"]["baby"] = $("[alt='Autumn" + dragonNoSpace + "Baby.png']").first().attr('data-src');
@@ -1106,6 +1106,8 @@ readWikiPage = (dragon, $) => {
         cache[dragon]["pictures"]["spring"]["adult"] = $("[alt='Spring" + dragonNoSpace + "Adult.png']").first().attr('data-src');
         cache[dragon]["pictures"]["spring"]["juvenile"] = $("[alt='Spring" + dragonNoSpace + "Juvenile.png']").first().attr('data-src');
         cache[dragon]["pictures"]["spring"]["baby"] = $("[alt='Spring" + dragonNoSpace + "Baby.png']").first().attr('data-src');
+    } else if (dragon == "Snowball Dragon") {
+        cache[dragon]["pictures"]["snowman"] = $("[alt='SnowballDragonSnowman.png']").first().attr('data-src');
     }
 }
 
