@@ -28,7 +28,7 @@ cache: {
 		},
 		timer: string,
 		pictures: {
-			options: [normal/day, night, organic, conjured, enhanced, nightEnhanced, charlatan, scourge, barbarous, macabre, hiding],
+			options: [normal/day, night, organic, conjured, enhanced, nightEnhanced, charlatan, scourge, barbarous, macabre, hiding, summer, winter, autumn, spring],
 			normal: {
 				adult: link,
 				juvenile: link,
@@ -102,10 +102,10 @@ client.on('message', message => {
 		}
 	} else if (cmd === 'breed') {
         if (args.includes("monolith")) {
-            message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Monolith_Dragon");
+            message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: <https://dragonvale.fandom.com/wiki/Monolith_Dragon>");
             return;
         } else if (args.includes("snowflake")) {
-            message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Snowflake_Dragon");
+            message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: <https://dragonvale.fandom.com/wiki/Snowflake_Dragon>");
             return;
         }
 
@@ -140,10 +140,10 @@ client.on('message', message => {
 		}
 	} else if (cmd === 'elements') {
         if (args.includes("monolith")) {
-            message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Monolith_Dragon");
+            message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: <https://dragonvale.fandom.com/wiki/Monolith_Dragon>");
             return;
         } else if (args.includes("snowflake")) {
-            message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Snowflake_Dragon");
+            message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: <https://dragonvale.fandom.com/wiki/Snowflake_Dragon>");
             return;
         }
 
@@ -177,10 +177,10 @@ client.on('message', message => {
 		}
 	} else if (cmd === 'evolve') {
         if (args.includes("monolith")) {
-            message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Monolith_Dragon");
+            message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: <https://dragonvale.fandom.com/wiki/Monolith_Dragon>");
             return;
         } else if (args.includes("snowflake")) {
-            message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Snowflake_Dragon");
+            message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: <https://dragonvale.fandom.com/wiki/Snowflake_Dragon>");
             return;
         }
 
@@ -214,10 +214,10 @@ client.on('message', message => {
 		}
 	} else if (cmd === 'rates') {
         if (args.includes("monolith")) {
-            message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Monolith_Dragon");
+            message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: <https://dragonvale.fandom.com/wiki/Monolith_Dragon>");
             return;
         } else if (args.includes("snowflake")) {
-            message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Snowflake_Dragon");
+            message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: <https://dragonvale.fandom.com/wiki/Snowflake_Dragon>");
             return;
         }
 
@@ -266,10 +266,10 @@ client.on('message', message => {
 		}
 	} else if (cmd === 'timer') {
         if (args.includes("monolith")) {
-            message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Monolith_Dragon");
+            message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: <https://dragonvale.fandom.com/wiki/Monolith_Dragon>");
             return;
         } else if (args.includes("snowflake")) {
-            message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Snowflake_Dragon");
+            message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: <https://dragonvale.fandom.com/wiki/Snowflake_Dragon>");
             return;
         }
 
@@ -341,14 +341,14 @@ client.on('message', message => {
 		}
 	} else if (cmd === 'image' || cmd === 'picture' || cmd === 'img' || cmd === 'pic') {
         if (args.includes("monolith")) {
-            message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Monolith_Dragon");
+            message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: <https://dragonvale.fandom.com/wiki/Monolith_Dragon>");
             return;
         } else if (args.includes("snowflake")) {
-            message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: https://dragonvale.fandom.com/wiki/Snowflake_Dragon");
+            message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: <https://dragonvale.fandom.com/wiki/Snowflake_Dragon>");
             return;
         }
 
-		const qualifiers = ["normal", "day", "night", "organic", "conjured", "enhanced", "nightenhanced", "charlatan", "scourge", "barbarous", "macabre", "hiding"];
+		const qualifiers = ["normal", "day", "night", "organic", "conjured", "enhanced", "nightenhanced", "charlatan", "scourge", "barbarous", "macabre", "hiding", "summer", "autumn", "winter", "spring"];
 		const ages = ["elder", "adult", "juvenile", "baby", "egg"];
 		var qualifier = args.pop();
 		if (!qualifiers.includes(qualifier) || args.length == 0) {
@@ -368,7 +368,25 @@ client.on('message', message => {
 			else if (dragon in cache) {
 				var imgLink;
 				if (age == 'egg') imgLink = cache[dragon]["pictures"]["egg"];
-				else if (qualifier == 'night') {
+                else if (dragon == "Seasonal Dragon") {
+                    if (qualifier == "normal") message.channel.send("Please specify a season for the " + dragon + "!");
+                    else if (!["summer", "autumn", "winter", "spring"].includes(qualifier)) message.channel.send(qualifier + " is not a valid season!");
+                    else {
+						switch (age) {
+							case 'adult':
+								imgLink = cache[dragon]["pictures"][qualifier]["adult"];
+								break;
+							case 'juvenile':
+								imgLink = cache[dragon]["pictures"][qualifier]["juvenile"];
+								break;
+							case 'baby':
+								imgLink = cache[dragon]["pictures"][qualifier]["baby"];
+								break;
+							default:
+								imgLink = cache[dragon]["pictures"][qualifier]["adult"];
+						}
+					}
+                } else if (qualifier == 'night') {
 					if (!dayNight.includes(dragon)) message.channel.send(dragon + " does not have a night form!");
 					else {
 						switch (age) {
@@ -407,11 +425,11 @@ client.on('message', message => {
 								imgLink = cache[dragon]["pictures"]["normal"]["adult"];
 						}
 					} else {
-						if (!cache[dragon]["pictures"][qualifier]) message.channel.send(dragon + " does not have a(n) " + qualifier + " form!\nValid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding`");
+						if (!cache[dragon]["pictures"][qualifier]) message.channel.send(dragon + " does not have a(n) " + qualifier + " form!\nValid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding`, `summer`/`autumn`/`winter`/`spring` (seasonal)");
 						else imgLink = cache[dragon]["pictures"][qualifier];
 					}
 				}
-				message.channel.send(imgLink ? imgLink : "Sorry, I couldn't find the image you were looking for! Here's the wiki page to retrieve it yourself: " + 'https://dragonvale.fandom.com/wiki/' + dragon.replace(/ /g, "_")).catch(error => {
+				message.channel.send(imgLink ? imgLink : "Sorry, I couldn't find the image you were looking for! Here's the wiki page to retrieve it yourself: <" + 'https://dragonvale.fandom.com/wiki/' + dragon.replace(/ /g, "_") + ">").catch(error => {
 					message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
 				});
 			} else {
@@ -428,7 +446,25 @@ client.on('message', message => {
 						readWikiPage(dragon, $);
 						var imgLink;
 						if (age == 'egg') imgLink = cache[dragon]["pictures"]["egg"];
-						else if (qualifier == 'night') {
+						else if (dragon == "Seasonal Dragon") {
+                            if (qualifier == "normal") message.channel.send("Please specify a season for the " + dragon + "!");
+                            else if (!["summer", "autumn", "winter", "spring"].includes(qualifier)) message.channel.send(qualifier + " is not a valid season!");
+                            else {
+                                switch (age) {
+                                    case 'adult':
+                                        imgLink = cache[dragon]["pictures"][qualifier]["adult"];
+                                        break;
+                                    case 'juvenile':
+                                        imgLink = cache[dragon]["pictures"][qualifier]["juvenile"];
+                                        break;
+                                    case 'baby':
+                                        imgLink = cache[dragon]["pictures"][qualifier]["baby"];
+                                        break;
+                                    default:
+                                        imgLink = cache[dragon]["pictures"][qualifier]["adult"];
+                                }
+                            }
+                        } else if (qualifier == 'night') {
 							if (!dayNight.includes(dragon)) message.channel.send(dragon + " does not have a night form!");
 							else {
 								switch (age) {
@@ -467,11 +503,11 @@ client.on('message', message => {
 										imgLink = cache[dragon]["pictures"]["normal"]["adult"];
 								}
 							} else {
-								if (!cache[dragon]["pictures"][qualifier]) message.channel.send(dragon + " does not have a(n) " + qualifier + " form!\nValid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding`");
+								if (!cache[dragon]["pictures"][qualifier]) message.channel.send(dragon + " does not have a(n) " + qualifier + " form!\nValid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding, `summer`/`autumn`/`winter`/`spring` (seasonal)");
 								else imgLink = cache[dragon]["pictures"][qualifier];
 							}
 						}
-						message.channel.send(imgLink ? imgLink : "Sorry, I couldn't find the image you were looking for! Here's the wiki page to retrieve it yourself: " + 'https://dragonvale.fandom.com/wiki/' + dragon.replace(/ /g, "_")).catch(error => {
+						message.channel.send(imgLink ? imgLink : "Sorry, I couldn't find the image you were looking for! Here's the wiki page to retrieve it yourself: <" + 'https://dragonvale.fandom.com/wiki/' + dragon.replace(/ /g, "_") + ">").catch(error => {
 							message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
 						});
 					});
@@ -576,7 +612,7 @@ client.on('message', message => {
                 + "- `breed <dragon name>` - find out how to breed a dragon\n"
 				+ "- `elements <dragon name>` - get the breeding elements (aka hidden elements) of a dragon\n"
 				+ "- `evolve <dragon name>` - find the evolution requirements for a dragon\n"
-				+ "- `image <dragon> <adult/juvenile/baby/egg> [qualifier]` - get a PNG image of the dragon; defaults to adult if no stage specified; valid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding` (aliases: `picture`, `img`, `pic`)\n"
+				+ "- `image <dragon> <adult/juvenile/baby/egg> [qualifier]` - get a PNG image of the dragon; defaults to adult if no stage specified; valid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding`, `summer`/`autumn`/`winter`/`spring` (seasonal) (aliases: `picture`, `img`, `pic`)\n"
 				+ "- `quest <quest name>` - get the correct dragon to send on a quest\n"
 				+ "- `rates <dragon name> [number of boosts OR 'rift']` - get the earning rates of a dragon\n"
                 + "- `result <dragon1>,<dragon2> <d:hh:mm:ss|hh:mm:ss> [fast]` - given 2 parent dragons and the resulting timer, find the potential dragons that can result from the breed. *Note: this command takes a _long_ time to process results when one of the parents is a pseudo. In this case, the bot will ping you when it's finished processing.* (alias: `fakeouts`)\n"
@@ -795,7 +831,7 @@ client.on('message', message => {
 client.login(process.env.BOT_TOKEN);
 
 hasModAccess = function(message) {
-    return message.member.roles.cache.some(r => r.name === "Mod Wizard") || message.member.id == "295625585299030016";
+    return (message.guild.name == 'DragonVale' && message.member.roles.cache.some(r => r.name === "Mod Wizard")) || message.member.id == "295625585299030016";
 }
 
 prettyString = function(words, separator) {
@@ -874,7 +910,7 @@ cache: {
 		},
 		timer: string,
 		pictures: {
-			options: [normal/day, night, organic, conjured, enhanced, nightEnhanced, charlatan, scourge, barbarous, macabre, hiding],
+			options: [normal/day, night, organic, conjured, enhanced, nightEnhanced, charlatan, scourge, barbarous, macabre, hiding, summer, autumn, winter, spring],
 			normal: {
 				adult: link,
 				juvenile: link,
@@ -1053,5 +1089,23 @@ readWikiPage = (dragon, $) => {
 		}
 	}
     if (hiding.includes(dragon)) cache[dragon]["pictures"]["hiding"] = $("[alt='" + dragonNoSpace + "Hiding.png']").first().attr('data-src');
+    if (dragon == "Seasonal Dragon") {
+        cache[dragon]["pictures"]["summer"] = {};
+        cache[dragon]["pictures"]["autumn"] = {};
+        cache[dragon]["pictures"]["winter"] = {};
+        cache[dragon]["pictures"]["spring"] = {};
+        cache[dragon]["pictures"]["summer"]["adult"] = $("[alt='Summer" + dragonNoSpace + "Adult.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["summer"]["juvenile"] = $("[alt='Summer" + dragonNoSpace + "Juvenile.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["summer"]["baby"] = $("[alt='Summer" + dragonNoSpace + "Baby.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["autumn"]["adult"] = $("[alt='Autumn" + dragonNoSpace + "Adult.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["autumn"]["juvenile"] = $("[alt='Autumn" + dragonNoSpace + "Juvenile.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["autumn"]["baby"] = $("[alt='Autumn" + dragonNoSpace + "Baby.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["winter"]["adult"] = $("[alt='Winter" + dragonNoSpace + "Adult.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["winter"]["juvenile"] = $("[alt='Winter" + dragonNoSpace + "Juvenile.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["winter"]["baby"] = $("[alt='Winter" + dragonNoSpace + "Baby.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["spring"]["adult"] = $("[alt='Spring" + dragonNoSpace + "Adult.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["spring"]["juvenile"] = $("[alt='Spring" + dragonNoSpace + "Juvenile.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["spring"]["baby"] = $("[alt='Spring" + dragonNoSpace + "Baby.png']").first().attr('data-src');
+    }
 }
 
