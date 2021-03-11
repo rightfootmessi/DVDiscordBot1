@@ -524,8 +524,9 @@ client.on('message', message => {
 		}
 	} else if (cmd === 'result' || cmd === 'fakeouts') {
         // d!result <d1>,<d2> <d:hh:mm:ss> [fast]
-        var fast = false, last = args.pop();
+        var fast = false, runic = false, last = args.pop();
         if (last === 'fast') fast = true;
+        else if (last === 'runic') runic = true;
         else args.push(last);
         
         var times = args.pop().split(":");
@@ -543,6 +544,23 @@ client.on('message', message => {
             message.channel.send("You have provided the timer in an invalid format. Please write the timer as either `d:hh:mm:ss` or `hh:mm:ss`.");
             return;
         }
+        if (runic) {
+            secs *= 4;
+            mins *= 4;
+            if (secs >= 60) {
+                mins += Math.floor(secs / 60);
+                secs %= 60;
+            }
+            hrs *= 4;
+            if (mins >= 60) {
+                hrs += Math.floor(mins / 60);
+                mins %= 60;
+            }
+            if (hrs >= 24) {
+                days = Math.floor(hrs / 24);
+                hrs %= 24;
+            }
+        }
         if (days == NaN || hrs == NaN || mins == NaN || secs == NaN) {
             message.channel.send("Your timer could not be parsed. Please write the timer as either `d:hh:mm:ss` or `hh:mm:ss`.");
             return;
@@ -552,14 +570,14 @@ client.on('message', message => {
         }
         var timer = "";
         if (days > 0  && hrs > 0) {
-            timer = days + ":" + (hrs > 10 ? hrs : "0" + hrs) + ":";
+            timer = days + ":" + (hrs >= 10 ? hrs : "0" + hrs) + ":";
         } else if (days > 0) {
             timer = days + ":00:";
         } else if (hrs > 0) {
             timer = hrs + ":";
         }
-        timer += (mins > 0 ? (mins > 10 ? mins : "0" + mins) : "00") + ":"
-                + (secs > 0 ? (secs > 10 ? secs : "0" + secs) : "00");
+        timer += (mins > 0 ? (mins >= 10 ? mins : "0" + mins) : "00") + ":"
+                + (secs > 0 ? (secs >= 10 ? secs : "0" + secs) : "00");
 
         var parents = args.join(" ").split(",");
         if (parents.length != 2) message.channel.send("You must specify 2 dragons for the parents.");
@@ -575,15 +593,15 @@ client.on('message', message => {
                     var timerList = dvboxCache[fast ? "fast" : "normal"][d1 + "|" + d2];
                     var candidates = [];
                     for (const key in timerList) if (timerList[key] == timer) candidates.push(key);
-                    if (candidates.length > 0) message.channel.send("A timer of " + timer + " when breeding " + d1 + " x " + d2 + " matches: **" + candidates.join("**, **").replace(/_/g, " ") + "**\nNOTE: Some of the listed dragons may not be available at this time. Check the dragonarium to confirm availability.");
-                    else message.channel.send("No matches found for timer " + timer + " when breeding " + d1 + " x " + d2);
+                    if (candidates.length > 0) message.channel.send("A timer of " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2 + " matches: **" + candidates.join("**, **").replace(/_/g, " ") + "**\nNOTE: Some of the listed dragons may not be available at this time. Check the dragonarium to confirm availability.");
+                    else message.channel.send("No matches found for timer " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2);
                 } else {
                     var link = "https://dvbox.bin.sh/#";
                     link += "d1=" + d1.replace(/ /g, "").replace("Dragon", "").toLowerCase();
                     link += ";d2=" + d2.replace(/ /g, "").replace("Dragon", "").toLowerCase();
                     if (fast) link += ";fast=1";
                     link += ";beb=1";
-                    message.channel.send("Working, this will take a moment...");
+                    message.channel.send("Working, this may take a few minutes. I will ping you when I'm done...");
                     
                     /*
                     response: {
@@ -600,8 +618,8 @@ client.on('message', message => {
                             if (timerList[key].indexOf("%") != -1) delete timerList[key];
                             else if (timerList[key] == timer) candidates.push(key);
                         }
-                        if (candidates.length > 0) message.reply("A timer of " + timer + " when breeding " + d1 + " x " + d2 + " matches: **" + candidates.join("**, **").replace(/_/g, " ") + "**\nNOTE: Some of the listed dragons may not be available at this time. Check the dragonarium to confirm availability.");
-                        else message.reply("No matches found for timer " + timer + " when breeding " + d1 + " x " + d2);
+                        if (candidates.length > 0) message.reply("A timer of " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2 + " matches: **" + candidates.join("**, **").replace(/_/g, " ") + "**\nNOTE: Some of the listed dragons may not be available at this time. Check the dragonarium to confirm availability.");
+                        else message.reply("No matches found for timer " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2);
                     });
                     worker.postMessage(link);
                 }
@@ -615,7 +633,7 @@ client.on('message', message => {
 				+ "- `image <dragon> <adult/juvenile/baby/egg> [qualifier]` - get a PNG image of the dragon; defaults to adult if no stage specified; valid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding`, `summer`/`autumn`/`winter`/`spring` (seasonal), `snowman` (snowball) (aliases: `picture`, `img`, `pic`)\n"
 				+ "- `quest <quest name>` - get the correct dragon to send on a quest\n"
 				+ "- `rates <dragon name> [number of boosts OR 'rift']` - get the earning rates of a dragon\n"
-                + "- `result <dragon1>,<dragon2> <d:hh:mm:ss|hh:mm:ss> [fast]` - given 2 parent dragons and the resulting timer, find the potential dragons that can result from the breed. *Note: this command takes a _long_ time to process results when one of the parents is a pseudo. In this case, the bot will ping you when it's finished processing.* (alias: `fakeouts`)\n"
+                + "- `result <dragon1>,<dragon2> <d:hh:mm:ss|hh:mm:ss> [fast/runic]` - given 2 parent dragons and the resulting timer, find the potential dragons that can result from the breed. *Note: this command takes a _long_ time to process results when one of the parents is a pseudo. In this case, the bot will ping you when it's finished processing.* (alias: `fakeouts`)\n"
 				+ "- `sandbox <dragon1>,<dragon2> [beb] [fast]` - open the sandbox for the specified breeding combo (alias: `dvbox`)\n"
 				+ "- `timer <dragon name>` - get the breeding times of the dragon\n"
 				+ "- `wiki <dragon name>` - get the link to a dragon's wiki page\n"
