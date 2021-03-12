@@ -830,7 +830,10 @@ client.on('message', message => {
                 questTable = {};
                 loadQuests();
                 cache = {};
-                dvboxCache = {};
+                dvboxCache = {
+                    normal: {},
+                    fast: {}
+                };
                 message.channel.send("Cache cleared. Information given should now reflect the most recent wiki changes.");
             } else if (modCmd === 'dljson') {
                 message.author.send("Here is my current `dragonList.json` file.", {files: ["./dragonList.json"]});
@@ -863,7 +866,10 @@ client.on('message', message => {
                                         hiding = newJson.hiding;
                                         dragonList = newJson.dragonList;
                                         cache = {};
-                                        dvboxCache = {};
+                                        dvboxCache = {
+                                            normal: {},
+                                            fast: {}
+                                        };
                                         message.channel.send("Successfully read new dragon list! Cache has been automatically cleared.");
                                     }
                                     fs.unlink("./temp.json", () => {console.log("Temp file deleted.")});
