@@ -602,13 +602,6 @@ client.on('message', message => {
                     if (fast) link += ";fast=1";
                     link += ";beb=1";
                     message.channel.send("Working, this may take a few minutes. I will ping you when I'm done...");
-                    
-                    /*
-                    response: {
-                        timerList: {},
-                        message: string
-                    }
-                    */
                     worker.once('message', timerList => {
                         dvboxCache[fast ? "fast" : "normal"][d1 + "|" + d2] = timerList;
                         
@@ -640,6 +633,7 @@ client.on('message', message => {
 				+ "- `help` - view this message";
 		message.channel.send(helpMsg);
 	} else if (cmd === 'mod' && hasModAccess(message)) {
+        console.log(message.author.tag + " ran mod cmd " + message.content.toLowerCase());
         if (args.length == 0) {
             const helpMsg = "Mod command list: (prefix all commands with `" + cmdPrefix + "mod`)\n"
                     + "- `viewlist [primaries/evolutions/enhanced/dayNight/hiding]` - sends my stored list of dragons to your DMs; optionally specify a flag to only be sent dragons matching that flag, otherwise I send the whole list (warning: it's long)\n"
@@ -647,7 +641,9 @@ client.on('message', message => {
                     + "- `remove <dragon>` - remove dragon from list\n"
                     + "- `flag <dragon> <primaries/evolutions/enhanced/dayNight/hiding>` - add the specified flag to the dragon\n"
                     + "- `unflag <dragon> <primaries/evolutions/enhanced/dayNight/hiding>` - remove the specified flag from the dragon\n"
-                    + "- `clearcache` - clear the bot's cache (useful after updating the wiki)";
+                    + "- `clearcache` - clear the bot's cache (useful after updating the wiki)\n"
+                    + "- `dljson` - sends a downloadable copy of my dragon list as a json file\n"
+                    + "- `uljson` - upload a new dragon list json file for me to use (note: the file's name *must* be `dragonList.json`!)";
             message.channel.send(helpMsg);
         } else {
             const modCmd = args.shift();
@@ -836,8 +832,48 @@ client.on('message', message => {
                 cache = {};
                 dvboxCache = {};
                 message.channel.send("Cache cleared. Information given should now reflect the most recent wiki changes.");
+            } else if (modCmd === 'dljson') {
+                message.author.send("Here is my current `dragonList.json` file.", {files: ["./dragonList.json"]});
+            } else if (modCmd === 'uljson') {
+                let file = message.attachments.first();
+                if (!file) message.channel.send("You must upload a file!");
+                else if (file.name != "dragonList.json") message.channel.send("Invalid file name! The file's name *must* be `dragonList.json`.");
+                else {
+                    var tempFile = fs.createWriteStream("./temp.json");
+                    require('https').get(file.url, (res) => {
+                        res.pipe(tempFile);
+                        tempFile.on('finish', () => {
+                            tempFile.close(() => {
+                                fs.readFile("./temp.json", (err, data) => {
+                                    let newJson = JSON.parse(data.toString());
+                                    if (!newJson.dragonList || !newJson.primaries || !newJson.evolutions || !newJson.enhanced || !newJson.dayNight || !newJson.hiding) {
+                                        message.channel.send("You are missing one or more arrays in your JSON file.\nYour file must have the following arrays:\n"
+                                                + "- `dragonList` (containing all dragons)\n"
+                                                + "- `primaries` (containing all primary dragons)\n"
+                                                + "- `evolutions` (containing all evolved dragons)\n"
+                                                + "- `enhanced` (containing all dragons with enhancements)\n"
+                                                + "- `dayNight` (containing all dragons with day/night forms)\n"
+                                                + "- `hiding` (containing all dragons with hiding animations)");
+                                    } else {
+                                        fullData = newJson;
+                                        primaries = newJson.primaries;
+                                        evolutions = newJson.evolutions;
+                                        enhanced = newJson.enhanced;
+                                        dayNight = newJson.dayNight;
+                                        hiding = newJson.hiding;
+                                        dragonList = newJson.dragonList;
+                                        cache = {};
+                                        dvboxCache = {};
+                                        message.channel.send("Successfully read new dragon list! Cache has been automatically cleared.");
+                                    }
+                                    fs.unlink("./temp.json", () => {console.log("Temp file deleted.")});
+                                });
+                            });
+                        });
+                    });
+                }
             } else {
-                message.channel.send("Unknown mod command. Type `" + cmdPrefix + "mod` for a list of mod commands.")
+                message.channel.send("Unknown mod command. Type `" + cmdPrefix + "mod` for a list of mod commands.");
             }
         }
     } else {
