@@ -556,7 +556,7 @@ client.on('message', message => {
                 hrs += Math.floor(mins / 60);
                 mins %= 60;
             }
-            if (hrs >= 24) {
+            if (hrs > 24 || (hrs == 24 && mins > 0))  {
                 days = Math.floor(hrs / 24);
                 hrs %= 24;
             }
