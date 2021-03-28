@@ -81,7 +81,7 @@ client.on('ready', () => {
 client.on('message', message => {
 	if (!message.content.toLowerCase().startsWith(cmdPrefix) || message.author.bot) return;
 
-	const args = message.content.toLowerCase().replace(/\s{2,}/g, ' ').slice(cmdPrefix.length).trim().split(" ");
+	const args = message.content.toLowerCase().replace(/\s{2,}/g, ' ').replace(/@/g, '').slice(cmdPrefix.length).trim().split(" ");
 	const cmd = args.shift().toLowerCase();
 
 	if (!['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'mod'].includes(cmd)) {

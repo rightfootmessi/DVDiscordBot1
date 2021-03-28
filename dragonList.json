@@ -291,6 +291,7 @@
         "Knarr Dragon",
         "Krampus Dragon",
         "Kringle Dragon",
+        "Kroki Dragon",
         "Kwall Dragon",
         "Labradorite Dragon",
         "Lace Dragon",
@@ -361,6 +362,7 @@
         "Murano Dragon",
         "Muse Dragon",
         "Mylio Dragon",
+        "Narcis Dragon",
         "Nebula Dragon",
         "Nectar Dragon",
         "Neoteric Dragon",
@@ -624,7 +626,8 @@
         "Yeti Dragon",
         "Yolkwing Dragon",
         "Yule Dragon",
-        "Zaffer Dragon"
+        "Zaffer Dragon",
+        "Zombie Dragon"
     ],
     "primaries": [
         "Air Dragon",
