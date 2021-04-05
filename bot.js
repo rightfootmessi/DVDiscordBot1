@@ -603,6 +603,7 @@ client.on('message', message => {
                     link += ";beb=1";
                     message.channel.send("Working, this may take a few minutes. I will ping you when I'm done...");
                     worker.once('message', timerList => {
+                        console.log("Displaying results of query: " + link);
                         dvboxCache[fast ? "fast" : "normal"][d1 + "|" + d2] = timerList;
                         
                         var candidates = [];
