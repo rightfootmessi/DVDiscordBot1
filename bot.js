@@ -2,7 +2,6 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const https = require('https');
 const cheerio = require('cheerio');
-const jsdom = require('jsdom');
 const { Worker } = require('worker_threads');
 const fs = require('fs');
 
@@ -596,12 +595,12 @@ client.on('message', message => {
                     if (candidates.length > 0) message.channel.send("A timer of " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2 + " matches: **" + candidates.join("**, **").replace(/_/g, " ") + "**\nNOTE: Some of the listed dragons may not be available at this time. Check the dragonarium to confirm availability.");
                     else message.channel.send("No matches found for timer " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2);
                 } else {
-                    var link = "https://dvbox.bin.sh/#";
+                    var link = d1.replace(/ /g, "_") + "|" + d2.replace(/ /g, "_") + "|";
+                    link += "https://dvbox.bin.sh/#";
                     link += "d1=" + d1.replace(/ /g, "").replace("Dragon", "").toLowerCase();
                     link += ";d2=" + d2.replace(/ /g, "").replace("Dragon", "").toLowerCase();
                     if (fast) link += ";fast=1";
                     link += ";beb=1";
-                    message.channel.send("Working, this may take a few minutes. I will ping you when I'm done...");
                     worker.once('message', timerList => {
                         console.log("Displaying results of query: " + link);
                         dvboxCache[fast ? "fast" : "normal"][d1 + "|" + d2] = timerList;
@@ -612,8 +611,8 @@ client.on('message', message => {
                             if (timerList[key].indexOf("%") != -1) delete timerList[key];
                             else if (timerList[key] == timer) candidates.push(key);
                         }
-                        if (candidates.length > 0) message.reply("A timer of " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2 + " matches: **" + candidates.join("**, **").replace(/_/g, " ") + "**\nNOTE: Some of the listed dragons may not be available at this time. Check the dragonarium to confirm availability.");
-                        else message.reply("No matches found for timer " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2);
+                        if (candidates.length > 0) message.channel.send("A timer of " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2 + " matches: **" + candidates.join("**, **").replace(/_/g, " ") + "**\nNOTE: Some of the listed dragons may not be available at this time. Check the dragonarium to confirm availability.");
+                        else message.channel.send("No matches found for timer " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2);
                     });
                     worker.postMessage(link);
                 }
