@@ -43,17 +43,32 @@ var epic_list = [
     'snowflake', 'sun', 'surface', 'treasure'
 ];
 var rift_list = ['rift'];
-var gem_list = ['gemstone', 'crystalline'];
 
 var breed_list = element_list.concat(epic_list, rift_list);
-var concat_list = breed_list.concat(gem_list);
 
 function is_base_element(tag) {
     return (element_list.indexOf(tag) > -1);
 }
+
 function is_breed_element(tag) {
     return (breed_list.indexOf(tag) > -1);
 }
+
+var opposite = {
+    'plant': 'metal',
+    'fire': 'cold',
+    'earth': 'air',
+    'lightning': 'water',
+    'light': 'dark'
+};
+Object.keys(opposite).forEach(function (key) {
+    opposite[opposite[key]] = key;
+});
+
+function is_opposite(e1, e2) {
+    return def_and_eq(opposite[e1], e2);
+}
+
 function def_and_eq(a, b) {
     return (a && b && (a == b));
 }
@@ -261,7 +276,7 @@ function sort_by_time(list) {
 function fmt_dhms(t) {
     if (t > 0 && t < 60) {
         var text = sprintf('%d sec', Math.floor(t + 0.5));
-        
+
         return text;
     } else {
         var d; if (t > 86400) {

@@ -4,6 +4,7 @@ const https = require('https');
 const cheerio = require('cheerio');
 const { Worker } = require('worker_threads');
 const fs = require('fs');
+const sprintf = require('sprintf-js').sprintf;
 
 const cmdPrefix = 'd!';
 
@@ -543,40 +544,13 @@ client.on('message', message => {
             message.channel.send("You have provided the timer in an invalid format. Please write the timer as either `d:hh:mm:ss` or `hh:mm:ss`.");
             return;
         }
-        if (runic) {
-            secs *= 4;
-            mins *= 4;
-            if (secs >= 60) {
-                mins += Math.floor(secs / 60);
-                secs %= 60;
-            }
-            hrs *= 4;
-            if (mins >= 60) {
-                hrs += Math.floor(mins / 60);
-                mins %= 60;
-            }
-            if (hrs > 24 || (hrs == 24 && mins > 0))  {
-                days = Math.floor(hrs / 24);
-                hrs %= 24;
-            }
-        }
         if (days == NaN || hrs == NaN || mins == NaN || secs == NaN) {
             message.channel.send("Your timer could not be parsed. Please write the timer as either `d:hh:mm:ss` or `hh:mm:ss`.");
             return;
-        } else if (days == 0 && hrs == 0 && mins < 10) {
-            message.channel.send("I do not process timers below 10 minutes. Please try a different query.");
-            return;
         }
-        var timer = "";
-        if (days > 0  && hrs > 0) {
-            timer = days + ":" + (hrs >= 10 ? hrs : "0" + hrs) + ":";
-        } else if (days > 0) {
-            timer = days + ":00:";
-        } else if (hrs > 0) {
-            timer = hrs + ":";
-        }
-        timer += (mins > 0 ? (mins >= 10 ? mins : "0" + mins) : "00") + ":"
-                + (secs > 0 ? (secs >= 10 ? secs : "0" + secs) : "00");
+        var timeInt = secs + (60 * mins) + (3600 * hrs) + (86400 * days);
+        if (runic) timeInt *= 4;
+        var timer = fmt_dhms(timeInt);
 
         var parents = args.join(" ").split(",");
         if (parents.length != 2) message.channel.send("You must specify 2 dragons for the parents.");
@@ -890,6 +864,29 @@ client.on('message', message => {
 // Note to self: if running locally, remember to replace the variable with the secret token itself; otherwise, make sure it says process.env.BOT_TOKEN !!!
 client.login(process.env.BOT_TOKEN);
 
+function fmt_dhms(t) {
+    if (t > 0 && t < 60) {
+        var text = sprintf('%d sec', Math.floor(t + 0.5));
+        
+        return text;
+    } else {
+        var d; if (t > 86400) {
+            d = Math.floor(t / 86400); t = (t % 86400);
+        }
+        var h = Math.floor(t / 3600); t = (t % 3600);
+        var m = Math.floor(t / 60); t = (t % 60);
+        var s = Math.floor(t);
+
+        if (d) {
+            return sprintf('%d:%02d:%02d:%02d', d, h, m, s);
+        } else if (h) {
+            return sprintf('%d:%02d:%02d', h, m, s);
+        } else {
+            return sprintf('%d:%02d', m, s);
+        }
+    }
+}
+
 hasModAccess = function(message) {
     return (message.guild.id == "233370210617262080" && message.member.roles.cache.some(r => r.name === "Mod Wizard")) || message.member.id == "295625585299030016";
 }
@@ -1170,4 +1167,3 @@ readWikiPage = (dragon, $) => {
         cache[dragon]["pictures"]["snowman"] = $("[alt='SnowballDragonSnowman.png']").first().attr('data-src');
     }
 }
-
