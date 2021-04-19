@@ -523,6 +523,10 @@ client.on('message', message => {
 			else message.channel.send('https://dragonvale.fandom.com/wiki/' + dragon.replace(/ /g, "_"));
 		}
 	} else if (cmd === 'result' || cmd === 'fakeouts') {
+        if (args.includes("monolith") || args.includes("snowflake")) {
+            message.channel.send("I am currently having issues handling queries involving monolith/snowflake dragons. Please be patient while Messi investigates this bug; in the meantime you may go to https://dvbox.bin.sh/ and manually enter your query.");
+            return;
+        }
         // d!result <d1>,<d2> <d:hh:mm:ss> [fast]
         var fast = false, runic = false, last = args.pop();
         if (last === 'fast') fast = true;
