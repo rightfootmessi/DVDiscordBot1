@@ -8,7 +8,7 @@ const sprintf = require('sprintf-js').sprintf;
 
 const cmdPrefix = 'd!';
 
-var primaries, evolutions, enhanced, dayNight, hiding, dragonList, fullData;
+var primaries, evolutions, enhanced, dayNight, hiding, elders, dragonList, fullData;
 var questTable = {};
 var questsLoaded = false;
 
@@ -74,6 +74,7 @@ client.on('ready', () => {
     enhanced = data.enhanced;
     dayNight = data.dayNight;
     hiding = data.hiding;
+    elders = data.elders;
     dragonList = data.dragonList;
 	loadQuests();
 });
@@ -568,6 +569,12 @@ client.on('message', message => {
             else {
                 if ((d1 + "|" + d2) in dvboxCache[fast ? "fast" : "normal"]) {
                     var timerList = dvboxCache[fast ? "fast" : "normal"][d1 + "|" + d2];
+                        
+                    if (timerList.error) {
+                        message.channel.send(d1 + " and " + d2 + " cannot be bred together. Please try a different query.");
+                        return;
+                    }
+
                     var candidates = [];
                     for (const key in timerList) if (timerList[key] == timer) candidates.push(key);
                     if (candidates.length > 0) message.channel.send("A timer of " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2 + " matches: **" + candidates.join("**, **").replace(/_/g, " ") + "**\nNOTE: Some of the listed dragons may not be available at this time. Check the dragonarium to confirm availability.");
@@ -582,6 +589,11 @@ client.on('message', message => {
                     worker.once('message', timerList => {
                         console.log("Displaying results of query: " + link);
                         dvboxCache[fast ? "fast" : "normal"][d1 + "|" + d2] = timerList;
+
+                        if (timerList.error) {
+                            message.channel.send(d1 + " and " + d2 + " cannot be bred together. Please try a different query.");
+                            return;
+                        }
                         
                         var candidates = [];
                         
@@ -1048,11 +1060,11 @@ readWikiPage = (dragon, $) => {
 			var title = $("#Earning_Rates").length ? $("#Earning_Rates") : $("#Earning_Rate");
 			title.parent().next().next().children().first().children().eq(1).children().each((i, elem) => {
 				let num = Math.ceil(parseInt($(elem).text().trim()) * Math.pow(1.3, boosts));
-				rates[i] = (num < 1500) ? num : "~1500";
+				rates[i] = (!isNaN(num)) ? ((num < 1500) ? num : "~1500") : "---";
 			});
 			title.parent().next().next().children().first().children().eq(3).children().each((i, elem) => {
 				let num = Math.ceil(parseInt($(elem).text().trim()) * Math.pow(1.3, boosts));
-				rates[i+10] = (num < 1500) ? num : "~1500";
+				rates[i+10] = (!isNaN(num)) ? ((num < 1500) ? num : "~1500") : "---";
 			});
 			var table = "```| Lvl : DC/min | Lvl : DC/min |"
 					+ "\n|-----:--------|-----:--------|";
@@ -1122,7 +1134,10 @@ readWikiPage = (dragon, $) => {
 	cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='" + dragonNoSpace + "Juvenile.png']").first().attr('src');
 	cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='" + dragonNoSpace + "Baby.png']").first().attr('src');
 	cache[dragon]["pictures"]["egg"] = $("[alt='" + dragonNoSpace + "Egg.png']").first().attr('data-src');
-	if (isPrimary(dragon)) cache[dragon]["pictures"]["normal"]["elder"] = $("[alt='" + dragonNoSpace + "Elder.png']").first().attr('src');
+	if (elders.includes(dragon)) {
+        cache[dragon]["pictures"]["normal"]["elder"] = $("[alt='" + dragonNoSpace + "Elder.png']").first().attr('src');
+        cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='" + dragonNoSpace + "Baby.png']").first().attr('data-src');
+    }
 	if (enhanced.includes(dragon)) {
 		if (dragon == "Eldritch Dragon") {
 			cache[dragon]["pictures"]["barbarous"] = $("[alt='EldritchDragonAdultBarbarous.png']").first().attr('data-src');
@@ -1170,4 +1185,5 @@ readWikiPage = (dragon, $) => {
     } else if (dragon == "Snowball Dragon") {
         cache[dragon]["pictures"]["snowman"] = $("[alt='SnowballDragonSnowman.png']").first().attr('data-src');
     }
+    console.log(JSON.stringify(cache[dragon]["pictures"], 4));
 }

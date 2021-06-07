@@ -21,12 +21,17 @@ parentPort.on('message', data => {
     const fast = link.search('fast') != -1 ? true : false;
 
     var timerList = {};
-    var list = sort_by_time(breed_calc(d1, d2, true));
-    for (let i in list) {
-        var dragon = dragons_[list[i]];
-        timerList[dragon.name + " Dragon"] = fmt_dhms(fast ? 0.8 * dragon.time : dragon.time);
+    var results = breed_calc(d1, d2, true);
+    if (results) {
+        var list = sort_by_time(results);
+        for (let i in list) {
+            var dragon = dragons_[list[i]];
+            timerList[dragon.name + " Dragon"] = fmt_dhms(fast ? 0.8 * dragon.time : dragon.time);
+        }
+        parentPort.postMessage(timerList);
+    } else {
+        parentPort.postMessage({error: true});
     }
-    parentPort.postMessage(timerList);
 });
 
 /*****************************************************************
