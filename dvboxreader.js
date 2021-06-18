@@ -109,9 +109,9 @@ function breed_query(d1, d2, beb) {
         'beb': beb,
         'tags': { 'any dragons': 1 }
     };
+    if (!query['d1'] || !query['d2']) return false;
     ['d1', 'd2'].forEach(function (key) {
         var tags;
-        if (!query[key]) return false;
         if (query[key]['tags']) {
             tags = query[key]['tags'];
         } else {
