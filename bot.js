@@ -633,7 +633,8 @@ client.on('message', message => {
                     + "- `unflag <dragon> <primaries/evolutions/enhanced/dayNight/hiding>` - remove the specified flag from the dragon\n"
                     + "- `clearcache` - clear the bot's cache (useful after updating the wiki)\n"
                     + "- `dljson` - sends a downloadable copy of my dragon list as a json file\n"
-                    + "- `uljson` - upload a new dragon list json file for me to use (note: the file's name *must* be `dragonList.json`!)";
+                    + "- `uljson` - upload a new dragon list json file for me to use (note: the file's name *must* be `dragonList.json`!)\n"
+                    + "- `purge <# of messages>` - clears the specified number of most recent messages from the channel it's used in";
             message.channel.send(helpMsg);
         } else {
             const modCmd = args.shift();
@@ -868,10 +869,55 @@ client.on('message', message => {
                         });
                     });
                 }
+            } else if (modCmd === 'purge') {
+                if (message.guild.id != '233370210617262080') { // DV guild id = '233370210617262080' | ZBMC guild id = '290552335611068427'
+                    message.channel.send("This command can only be used in the DragonVale Discord server.");
+                    return;
+                }
+                if (args.length == 0) message.channel.send("Please specify the number of messages to purge.");
+                else {
+                    let num = parseInt(args.shift());
+                    if (isNaN(num) || num <= 0) message.channel.send("The value specified must be a number, and greater than zero.");
+                    else {
+                        num = Math.min(num, 100);
+                        //message.channel.send("Eventually, I'll purge " + num + " messages...");
+                        message.channel.messages.fetch({ limit: (num + 1) }).then(messages => {
+                            console.log(`Received ${messages.size} messages`);
+                            //Iterate through the messages here with the variable "messages".
+                            const botLogCh = message.guild.channels.cache.get('306854862539325450'); // DV #bot_log id = '306854862539325450' | ZBMC #staff-zone id = '291749695175393284'
+                            botLogCh.send("**" + message.author.tag + " purged " + num + " messages in <#" + message.channel.id + ">:**");
+                            messages.forEach(msgToDelete => {
+                                if (!msgToDelete.content.startsWith(cmdPrefix + "mod purge")) {
+                                    /*var outputStr = "**Content:** " + msgToDelete.content
+                                            + "\n\n**Attachments:** " + msgToDelete.attachments.size;
+                                    msgToDelete.attachments.forEach(attachment => outputStr += "\n" + attachment.url + " (Attachment ID: " + attachment.id + ")");*/
+                                    botLogCh.send(makePurgeEmbed(msgToDelete));
+                                }
+                                msgToDelete.delete({reason: `Purged by ${message.author.tag}`});
+                            });
+                        })
+                    }
+                }
+            } else if (modCmd === 'spamtest') {
+                const oracleTestCh = message.guild.channels.cache.get('818011940160405534');
+                const dv_smug = client.emojis.cache.get('854908017349623850');
+                for (i = 1; i <= 250; i++) {
+                    oracleTestCh.send(i + ` ${dv_smug}`);
+                } 
             } else {
                 message.channel.send("Unknown mod command. Type `" + cmdPrefix + "mod` for a list of mod commands.");
             }
         }
+    } else if (cmd === 'msg' && message.member.id == "295625585299030016") {
+        let serverId = args.shift();
+        serverId = (serverId.toLowerCase() == 'dv') ? '233370210617262080' : serverId;
+        let server = client.guilds.cache.get(serverId);
+        if (server) {
+            let channel = server.channels.cache.get(args.shift());
+            if (channel) {
+                channel.send(args.join(" "));
+            } else message.channel.send("Channel not found in server " + server.name);
+        } else message.channel.send("Server not found");
     } else {
 		message.channel.send("Unknown command. Type `" + cmdPrefix + "help` for a list of commands.");
 	}
@@ -936,6 +982,22 @@ getSpacing = function(baseLength, int) {
 
 isEpic = function(element) {
 	return !["Plant", "Fire", "Earth", "Cold", "Lightning", "Water", "Air", "Metal", "Light", "Dark", "Rift"].includes(element);
+}
+
+makePurgeEmbed = function(message) {
+    const embed = new Discord.MessageEmbed()
+            .setColor("#ff0000")
+            .setAuthor(message.author.tag, message.author.avatarURL())
+            .setDescription(message.content)
+            .setTimestamp()
+            .setFooter(`Message ID: ${message.id} | User ID: ${message.author.id}`);
+    
+    var i = 0;
+    message.attachments.forEach(attachment => {
+        embed.addField(`Attachment ${++i}`, attachment.url + " (Attachment ID: " + attachment.id + ")");
+    });
+
+    return embed;
 }
 
 loadQuests = () => {
@@ -1185,5 +1247,4 @@ readWikiPage = (dragon, $) => {
     } else if (dragon == "Snowball Dragon") {
         cache[dragon]["pictures"]["snowman"] = $("[alt='SnowballDragonSnowman.png']").first().attr('data-src');
     }
-    console.log(JSON.stringify(cache[dragon]["pictures"], 4));
 }

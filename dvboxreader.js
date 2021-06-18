@@ -80,6 +80,7 @@ function def_and_eq(a, b) {
 
 function breed_calc(d1, d2, beb) {
     var query = breed_query(d1, d2, beb);
+    if (!query) return false;
     var list = [];
 
     if (opposite_primary(query)) {
@@ -110,6 +111,7 @@ function breed_query(d1, d2, beb) {
     };
     ['d1', 'd2'].forEach(function (key) {
         var tags;
+        if (!query[key]) return false;
         if (query[key]['tags']) {
             tags = query[key]['tags'];
         } else {
