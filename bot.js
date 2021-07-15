@@ -1009,7 +1009,7 @@ loadQuests = () => {
 		}).on('end', () => {
 			body = Buffer.concat(body).toString();
 			const $ = cheerio.load(body);
-			var questsTableHTML = $('#tabber-9effcf7958cd8e73b6b03de0c8c97743');
+			var questsTableHTML = $('.sortable').first();
 			var entries = questsTableHTML.find('tbody').first();
 			var numLoaded = 0;
 			entries.children('tr').each((i, elem) => {
