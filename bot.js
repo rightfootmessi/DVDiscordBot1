@@ -1077,14 +1077,19 @@ readWikiPage = (dragon, $) => {
 	}
 	cache[dragon]["breedCombo"] = breedResponse;
 	// Elements
-	var elems = [];
+    var elems = [];
+    $(".dragonbox").first().find('tr').eq(8).children().eq(1).children().each((i, elem) => {
+        elems.push($(elem).attr('title').split(" ")[0]);
+    });
+	var hiddenElems = [];
 	$(".dragonbox").first().find('tr').eq(17).children('td').first().children().each((i, elem) => {
 		var imgName = $(elem).children().first().attr('data-image-name');
 		if (!imgName.includes("Iconb")) {
-			elems.push(imgName.split(" ")[1].replace(".png", ""));
+			hiddenElems.push(imgName.split(" ")[1].replace(".png", ""));
 		}
 	});
-	var elemsResponse = (elems.length == 10) ? dragon + " adds all 10 elements when breeding (often called a *pseudo*)." : (elems.length > 0) ? dragon + " adds the " + prettyString(elems, ", ") + " elements when breeding." : "Error: The wiki is missing the breeding elements of the " + dragon;
+	var elemsResponse = dragon + " has the " + prettyString(elems, ", ") + " elements on its profile.\n";
+    elemsResponse += (hiddenElems.length == 10) ? dragon + " adds all 10 elements when breeding (often called a *pseudo*)." : (hiddenElems.length > 0) ? dragon + " adds the " + prettyString(hiddenElems, ", ") + " elements when breeding." : "Error: The wiki is missing the breeding elements of the " + dragon;
 	cache[dragon]["elements"] = elemsResponse;
 	// Evolve
 	var curr = $("#Obtaining").parent();
