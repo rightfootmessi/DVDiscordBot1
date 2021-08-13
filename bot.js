@@ -77,18 +77,45 @@ client.on('ready', () => {
     elders = data.elders;
     dragonList = data.dragonList;
 	loadQuests();
+    readMonolithWikiPage();
+    readSnowflakeWikiPage();
 });
  
 client.on('message', message => {
 	if (!message.content.toLowerCase().startsWith(cmdPrefix) || message.author.bot) return;
 
-	const args = message.content.toLowerCase().replace(/\s{2,}/g, ' ').replace(/@/g, '').slice(cmdPrefix.length).trim().split(" ");
+	var args = message.content.replace(/\s{2,}/g, ' ').replace(/@/g, '').slice(cmdPrefix.length).trim().split(" ");
 	const cmd = args.shift().toLowerCase();
+
+    if (cmd === 'msg' && message.member.id == "295625585299030016") {
+        let serverId = args.shift();
+        serverId = (serverId.toLowerCase() == 'dv') ? '233370210617262080' : serverId;
+        let server = client.guilds.cache.get(serverId);
+        if (server) {
+            let channel = server.channels.cache.get(args.shift());
+            if (channel) {
+                channel.send(args.join(" "));
+            } else message.channel.send("Channel not found in server " + server.name);
+        } else message.channel.send("Server not found");
+        return;
+    } else for (i in args) args[i] = args[i].toLowerCase();
 
 	if (!['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'mod'].includes(cmd)) {
 		// (DragonVale server only) prevent non-meme commands from being executed outside #bot-commands
 		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && (message.channel.name != 'bot-commands' && message.channel.name != 'oracle-test')) return;
 	}
+
+    if (args.includes("monolith") && cmd != 'result' && cmd != 'fakeouts') {
+        if (isNaN(args[args.indexOf("monolith") + 1])) {
+            message.channel.send("Your query contains a monolith dragon, but you did not specify which. Please re-enter the query using `Monolith #`, where `#` is replaced by the number of the monolith dragon.");
+            return;
+        }
+    } else if (args.includes("snowflake") && cmd != 'result' && cmd != 'fakeouts') {
+        if (isNaN(args[args.indexOf("snowflake") + 1])) {
+            message.channel.send("Your query contains a snowflake dragon, but you did not specify which. Please re-enter the query using `Snowflake #`, where `#` is replaced by the number of the snowflake dragon.");
+            return;
+        }
+    }
 
 	if (cmd === 'quest') {
 		if (!questsLoaded) message.channel.send("Quests have not been loaded yet!");
@@ -102,14 +129,6 @@ client.on('message', message => {
 			}
 		}
 	} else if (cmd === 'breed') {
-        if (args.includes("monolith")) {
-            message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: <https://dragonvale.fandom.com/wiki/Monolith_Dragon>");
-            return;
-        } else if (args.includes("snowflake")) {
-            message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: <https://dragonvale.fandom.com/wiki/Snowflake_Dragon>");
-            return;
-        }
-
 		var dragon = prettyString(args, " ");
 		if (!dragon) message.channel.send("You must specify a dragon!");
 		else {
@@ -140,14 +159,6 @@ client.on('message', message => {
 			}
 		}
 	} else if (cmd === 'elements') {
-        if (args.includes("monolith")) {
-            message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: <https://dragonvale.fandom.com/wiki/Monolith_Dragon>");
-            return;
-        } else if (args.includes("snowflake")) {
-            message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: <https://dragonvale.fandom.com/wiki/Snowflake_Dragon>");
-            return;
-        }
-
 		var dragon = prettyString(args, " ");
 		if (!dragon) message.channel.send("You must specify a dragon!");
 		else {
@@ -177,14 +188,6 @@ client.on('message', message => {
 			}
 		}
 	} else if (cmd === 'evolve') {
-        if (args.includes("monolith")) {
-            message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: <https://dragonvale.fandom.com/wiki/Monolith_Dragon>");
-            return;
-        } else if (args.includes("snowflake")) {
-            message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: <https://dragonvale.fandom.com/wiki/Snowflake_Dragon>");
-            return;
-        }
-
 		var dragon = prettyString(args, " ");
 		if (!dragon) message.channel.send("You must specify a dragon!");
 		else {
@@ -214,25 +217,23 @@ client.on('message', message => {
 			}
 		}
 	} else if (cmd === 'rates') {
-        if (args.includes("monolith")) {
-            message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: <https://dragonvale.fandom.com/wiki/Monolith_Dragon>");
-            return;
-        } else if (args.includes("snowflake")) {
-            message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: <https://dragonvale.fandom.com/wiki/Snowflake_Dragon>");
-            return;
-        }
-
 		var rift = false;
 		var boosts = 0;
-		var age = args.pop();
-		if (age == 'rift') rift = true;
-		else if (!isNaN(parseInt(age))) {
-			boosts = parseInt(age);
+		var last = args.pop();
+		if (last == 'rift') rift = true;
+		else if (!isNaN(parseInt(last))) {
+			boosts = parseInt(last);
+            // make sure is not a monolith/snowflake identifier first
+            let nextLast = args[args.length - 1];
+            if (nextLast == 'monolith' || nextLast == 'snowflake') {
+                boosts = 0;
+                args.push(last);
+            }
 			if (boosts < 0 || !Number.isInteger(boosts)) {
 				message.channel.send("The number of boosts must be an integer greater than 0.");
 				return;
 			}
-		} else args.push(age);
+		} else args.push(last);
 		var dragon = prettyString(args, " ");
 		if (!dragon) message.channel.send("You must specify a dragon!");
 		else {
@@ -266,14 +267,6 @@ client.on('message', message => {
 			}
 		}
 	} else if (cmd === 'timer') {
-        if (args.includes("monolith")) {
-            message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: <https://dragonvale.fandom.com/wiki/Monolith_Dragon>");
-            return;
-        } else if (args.includes("snowflake")) {
-            message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: <https://dragonvale.fandom.com/wiki/Snowflake_Dragon>");
-            return;
-        }
-
 		var dragon = prettyString(args, " ");
 		if (!dragon) message.channel.send("You must specify a dragon!");
 		else {
@@ -328,7 +321,8 @@ client.on('message', message => {
 				if (d1.indexOf("Dragon") == -1) d1 += " Dragon";
 				var d2 = prettyString(parents[1].trim().split(" "), " ");
 				if (d2.indexOf("Dragon") == -1) d2 += " Dragon";
-				if (!dragonList.includes(d1)) message.channel.send("Unrecognized dragon name \"" + d1 + "\" (did you spell it correctly?)");
+                if (d1.includes('Monolith') || d1.includes('Snowflake') || d2.includes('Monolith') || d2.includes('Snowflake')) message.channel.send("It looks like you're trying to breed with a Monolith and/or Snowflake. Unfortunately you will have to manually enter your query at https://dvbox.bin.sh/, as there is no way to specify the number of the dragon in the URL. Sorry!");
+				else if (!dragonList.includes(d1)) message.channel.send("Unrecognized dragon name \"" + d1 + "\" (did you spell it correctly?)");
 				else if (!dragonList.includes(d2)) message.channel.send("Unrecognized dragon name \"" + d2 + "\" (did you spell it correctly?)");
 				else {
 					var imgLink = "https://dvbox.bin.sh/#";
@@ -341,15 +335,7 @@ client.on('message', message => {
 			}
 		}
 	} else if (cmd === 'image' || cmd === 'picture' || cmd === 'img' || cmd === 'pic') {
-        if (args.includes("monolith")) {
-            message.channel.send("I am currently unable to provide information for Monolith Dragons, but I can link you to their wiki page: <https://dragonvale.fandom.com/wiki/Monolith_Dragon>");
-            return;
-        } else if (args.includes("snowflake")) {
-            message.channel.send("I am currently unable to provide information for Snowflake Dragons, but I can link you to their wiki page: <https://dragonvale.fandom.com/wiki/Snowflake_Dragon>");
-            return;
-        }
-
-		const qualifiers = ["normal", "day", "night", "organic", "conjured", "enhanced", "nightenhanced", "charlatan", "scourge", "barbarous", "macabre", "hiding", "summer", "autumn", "winter", "spring", "snowman"];
+		const qualifiers = ["normal", "day", "night", "organic", "conjured", "enhanced", "nightenhanced", "charlatan", "scourge", "barbarous", "macabre", "hiding", "summer", "autumn", "winter", "spring", "snowman", "wrapped", "bush"];
 		const ages = ["elder", "adult", "juvenile", "baby", "egg"];
 		var qualifier = args.pop();
 		if (!qualifiers.includes(qualifier) || args.length == 0) {
@@ -426,7 +412,7 @@ client.on('message', message => {
 								imgLink = cache[dragon]["pictures"]["normal"]["adult"];
 						}
 					} else {
-						if (!cache[dragon]["pictures"][qualifier]) message.channel.send(dragon + " does not have a(n) " + qualifier + " form!\nValid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding`, `summer`/`autumn`/`winter`/`spring` (seasonal), `snowman` (snowball)");
+						if (!cache[dragon]["pictures"][qualifier]) message.channel.send(dragon + " does not have a(n) " + qualifier + " form!\nValid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding`, `summer`/`autumn`/`winter`/`spring` (seasonal), `snowman` (snowball), `wrapped` (giddle), `bush` (dargon)");
 						else imgLink = cache[dragon]["pictures"][qualifier];
 					}
 				}
@@ -504,7 +490,7 @@ client.on('message', message => {
 										imgLink = cache[dragon]["pictures"]["normal"]["adult"];
 								}
 							} else {
-								if (!cache[dragon]["pictures"][qualifier]) message.channel.send(dragon + " does not have a(n) " + qualifier + " form!\nValid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding, `summer`/`autumn`/`winter`/`spring` (seasonal), `snowman` (snowball)");
+								if (!cache[dragon]["pictures"][qualifier]) message.channel.send(dragon + " does not have a(n) " + qualifier + " form!\nValid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding, `summer`/`autumn`/`winter`/`spring` (seasonal), `snowman` (snowball), `wrapped` (giddle), `bush` (dargon)");
 								else imgLink = cache[dragon]["pictures"][qualifier];
 							}
 						}
@@ -521,13 +507,9 @@ client.on('message', message => {
 		else {
 			if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
 			if (!dragonList.includes(dragon)) message.channel.send("Unrecognized dragon name \"" + dragon + "\" (did you spell it correctly?)");
-			else message.channel.send('https://dragonvale.fandom.com/wiki/' + dragon.replace(/ /g, "_"));
+			else message.channel.send('https://dragonvale.fandom.com/wiki/' + dragon.replace(/\s\d/, "").replace(/ /g, "_"));
 		}
 	} else if (cmd === 'result' || cmd === 'fakeouts') {
-        if (args.includes("monolith") || args.includes("snowflake")) {
-            message.channel.send("I am currently having issues handling queries involving monolith/snowflake dragons. Please be patient while Messi investigates this bug; in the meantime you may go to https://dvbox.bin.sh/ and manually enter your query.");
-            return;
-        }
         // d!result <d1>,<d2> <d:hh:mm:ss> [fast]
         var fast = false, runic = false, last = args.pop();
         if (last === 'fast') fast = true;
@@ -549,7 +531,7 @@ client.on('message', message => {
             message.channel.send("You have provided the timer in an invalid format. Please write the timer as either `d:hh:mm:ss` or `hh:mm:ss`.");
             return;
         }
-        if (days == NaN || hrs == NaN || mins == NaN || secs == NaN) {
+        if (isNaN(days) || isNaN(hrs) || isNaN(mins) || isNaN(secs)) {
             message.channel.send("Your timer could not be parsed. Please write the timer as either `d:hh:mm:ss` or `hh:mm:ss`.");
             return;
         }
@@ -564,9 +546,15 @@ client.on('message', message => {
             if (d1.indexOf("Dragon") == -1) d1 += " Dragon";
             var d2 = prettyString(parents[1].trim().split(" "), " ");
             if (d2.indexOf("Dragon") == -1) d2 += " Dragon";
-            if (!dragonList.includes(d1)) message.channel.send("Unrecognized dragon name \"" + d1 + "\" (did you spell it correctly?)");
-            else if (!dragonList.includes(d2)) message.channel.send("Unrecognized dragon name \"" + d2 + "\" (did you spell it correctly?)");
-            else {
+            if (!dragonList.includes(d1)) {
+                if (d1 == 'Monolith Dragon') message.channel.send("Your query contains a monolith dragon, but you did not specify which. Please re-enter the query using `Monolith #`, where `#` is replaced by the number of the monolith dragon.");
+                else if (d1 == 'Snowflake Dragon') message.channel.send("Your query contains a snowflake dragon, but you did not specify which. Please re-enter the query using `Snowflake #`, where `#` is replaced by the number of the snowflake dragon.");
+                else message.channel.send("Unrecognized dragon name \"" + d1 + "\" (did you spell it correctly?)");
+            } else if (!dragonList.includes(d2)) {
+                if (d2 == 'Monolith Dragon') message.channel.send("Your query contains a monolith dragon, but you did not specify which. Please re-enter the query using `Monolith #`, where `#` is replaced by the number of the monolith dragon.");
+                else if (d2 == 'Snowflake Dragon') message.channel.send("Your query contains a snowflake dragon, but you did not specify which. Please re-enter the query using `Snowflake #`, where `#` is replaced by the number of the snowflake dragon.");
+                else message.channel.send("Unrecognized dragon name \"" + d2 + "\" (did you spell it correctly?)");
+            } else {
                 if ((d1 + "|" + d2) in dvboxCache[fast ? "fast" : "normal"]) {
                     var timerList = dvboxCache[fast ? "fast" : "normal"][d1 + "|" + d2];
                         
@@ -613,7 +601,7 @@ client.on('message', message => {
                 + "- `breed <dragon name>` - find out how to breed a dragon\n"
 				+ "- `elements <dragon name>` - get the breeding elements (aka hidden elements) of a dragon\n"
 				+ "- `evolve <dragon name>` - find the evolution requirements for a dragon\n"
-				+ "- `image <dragon> <adult/juvenile/baby/egg> [qualifier]` - get a PNG image of the dragon; defaults to adult if no stage specified; valid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding`, `summer`/`autumn`/`winter`/`spring` (seasonal), `snowman` (snowball) (aliases: `picture`, `img`, `pic`)\n"
+				+ "- `image <dragon> <adult/juvenile/baby/egg> [qualifier]` - get a PNG image of the dragon; defaults to adult if no stage specified; valid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding`, `summer`/`autumn`/`winter`/`spring` (seasonal), `snowman` (snowball), `wrapped` (giddle), `bush` (dargon) (aliases: `picture`, `img`, `pic`)\n"
 				+ "- `quest <quest name>` - get the correct dragon to send on a quest\n"
 				+ "- `rates <dragon name> [number of boosts OR 'rift']` - get the earning rates of a dragon\n"
                 + "- `result <dragon1>,<dragon2> <d:hh:mm:ss|hh:mm:ss> [fast/runic]` - given 2 parent dragons and the resulting timer, find the potential dragons that can result from the breed. *Note: this command takes a _long_ time to process results when one of the parents is a pseudo. In this case, the bot will ping you when it's finished processing.* (alias: `fakeouts`)\n"
@@ -825,6 +813,8 @@ client.on('message', message => {
                     normal: {},
                     fast: {}
                 };
+                readMonolithWikiPage();
+                readSnowflakeWikiPage();
                 message.channel.send("Cache cleared. Information given should now reflect the most recent wiki changes.");
             } else if (modCmd === 'dljson') {
                 message.author.send("Here is my current `dragonList.json` file.", {files: ["./dragonList.json"]});
@@ -908,16 +898,6 @@ client.on('message', message => {
                 message.channel.send("Unknown mod command. Type `" + cmdPrefix + "mod` for a list of mod commands.");
             }
         }
-    } else if (cmd === 'msg' && message.member.id == "295625585299030016") {
-        let serverId = args.shift();
-        serverId = (serverId.toLowerCase() == 'dv') ? '233370210617262080' : serverId;
-        let server = client.guilds.cache.get(serverId);
-        if (server) {
-            let channel = server.channels.cache.get(args.shift());
-            if (channel) {
-                channel.send(args.join(" "));
-            } else message.channel.send("Channel not found in server " + server.name);
-        } else message.channel.send("Server not found");
     } else {
 		message.channel.send("Unknown command. Type `" + cmdPrefix + "help` for a list of commands.");
 	}
@@ -1120,7 +1100,7 @@ readWikiPage = (dragon, $) => {
 				if (isEpic(element)) isEpicDragon = true;
 			}
 		});
-		cache[dragon]["rates"]["isEpic"] = isEpic;
+		cache[dragon]["rates"]["isEpic"] = isEpicDragon;
 
 		for (boosts = 0; boosts <= maxBoosts; boosts++) {
 			var rates = [];
@@ -1251,5 +1231,225 @@ readWikiPage = (dragon, $) => {
         cache[dragon]["pictures"]["spring"]["baby"] = $("[alt='Spring" + dragonNoSpace + "Baby.png']").first().attr('data-src');
     } else if (dragon == "Snowball Dragon") {
         cache[dragon]["pictures"]["snowman"] = $("[alt='SnowballDragonSnowman.png']").first().attr('data-src');
+    } else if (dragon == "Giddle Dragon") {
+        cache[dragon]["pictures"]["wrapped"] = $("[alt='GiddleDragonWrapped.png']").first().attr('data-src');
+    } else if (dragon == "Dargon Dragon") {
+        cache[dragon]["pictures"]["bush"] = $("[alt='DargonDragonAdultBush.png']").first().attr('data-src');
     }
+}
+
+/* cache: {
+    "Monolith # Dragon": {
+        ...
+    },
+    "Snowflake # Dragon": {
+        ...
+    }
+}
+*/
+readMonolithWikiPage = function() {
+    https.get('https://dragonvale.fandom.com/wiki/Monolith_Dragon', (res) => {
+		console.log("Received " + res.statusCode + " status code for monoliths page");
+		var body = [];
+		res.on('data', (chunk) => {
+			body.push(chunk);
+		}).on('end', () => {
+			body = Buffer.concat(body).toString();
+			const $ = cheerio.load(body);
+            
+            // Breeding combo
+            for (let id = 1; id <= 6; id++) {
+                let dragon = "Monolith " + id + " Dragon";
+                var table = $(".dragonbox").eq(id - 1);
+                cache[dragon] = {};
+
+                // Breeding combo
+                cache[dragon]["breedCombo"] = $("#Breeding").parent().next().text().trim();
+
+                // Elements
+                var elems = [];
+                table.find('tr').eq(8).children().eq(1).children().each((j, elem) => {
+                    elems.push($(elem).attr('title').split(" ")[0]);
+                });
+                var hiddenElems = [];
+                table.find('tr').eq(17).children('td').first().children().each((j, elem) => {
+                    var imgName = $(elem).children().first().attr('data-image-name');
+                    if (!imgName.includes("Iconb")) {
+                        hiddenElems.push(imgName.split(" ")[1].replace(".png", ""));
+                    }
+                });
+                var elemsResponse = dragon + " has the " + prettyString(elems, ", ") + " elements on its profile.\n";
+                elemsResponse += (hiddenElems.length == 10) ? dragon + " adds all 10 elements when breeding (often called a *pseudo*)." : (hiddenElems.length > 0) ? dragon + " adds the " + prettyString(hiddenElems, ", ") + " elements when breeding." : "Error: The wiki is missing the breeding elements of the " + dragon;
+                cache[dragon]["elements"] = elemsResponse;
+
+                // Rates
+                cache[dragon]["rates"] = {};
+                cache[dragon]["rates"]["non-rift"] = {};
+
+                let ratesTable = $("#Earning_Rates").parent().nextAll('table').eq((id <= 2) ? 0 : (id <= 4) ? 1 : id - 3);
+
+                var maxBoosts = table.find('tr').eq(9).children().eq(1).find('img').length - 1;
+                var isEpicDragon = true;
+                cache[dragon]["rates"]["isEpic"] = isEpicDragon;
+
+                for (boosts = 0; boosts <= maxBoosts; boosts++) {
+                    var rates = [];
+                    ratesTable.children().first().children().eq(1).children().each((i, elem) => {
+                        let num = Math.ceil(parseInt($(elem).text().trim()) * Math.pow(1.3, boosts));
+                        rates[i] = (!isNaN(num)) ? ((num < 1500) ? num : "~1500") : "---";
+                    });
+                    ratesTable.children().first().children().eq(3).children().each((i, elem) => {
+                        let num = Math.ceil(parseInt($(elem).text().trim()) * Math.pow(1.3, boosts));
+                        rates[i+10] = (!isNaN(num)) ? ((num < 1500) ? num : "~1500") : "---";
+                    });
+                    var rTable = "```| Lvl : DC/min | Lvl : DC/min |"
+                            + "\n|-----:--------|-----:--------|";
+                    for (i = 0; i < 10; i++) {
+                        var lvlA = i + 1;
+                        var lvlB = i + 11;
+                        result = "\n| " + lvlA + getSpacing(4, lvlA) + ":" + getSpacing(7, rates[i]) + rates[i] + " | " + lvlB + getSpacing(4, lvlB) + ":" + getSpacing(7, rates[i+10]) + rates[i+10] + " |";
+                        rTable += result;
+                    }
+                    cache[dragon]["rates"]["non-rift"][boosts] = "DragonCash earning rates for " + dragon + " (" + boosts + "/" + maxBoosts + " boosts):\n" + rTable + "```"
+                            + (boosts > 0 ? "\nNOTE: Your dragon's profile will likely show a lower number than what's in this table. That number is wrong (this has been experimentally proven). The numbers here are the *actual* earning rates." : "");
+                }
+                var rates = [];
+                for (i = 0; i < 20; i++) {
+                    rates[i] = Math.ceil((i+1) * (isEpicDragon ? 1.5 : 1));
+                }
+                var rTable = "```| Lvl : Eth/hr | Lvl : Eth/hr |"
+                        + "\n|-----:--------|-----:--------|";
+                for (i = 0; i < 10; i++) {
+                    var lvlA = i + 1;
+                    var lvlB = i + 11;
+                    result = "\n| " + lvlA + getSpacing(4, lvlA) + ":" + getSpacing(7, rates[i]) + rates[i] + " | " + lvlB + getSpacing(4, lvlB) + ":" + getSpacing(7, rates[i+10]) + rates[i+10] + " |";
+                    rTable += result;
+                }
+                cache[dragon]["rates"]["rift"] = "Etherium earning rates for " + dragon + ":\n" + rTable + "```";
+
+                cache[dragon]["rates"]["maxBoosts"] = maxBoosts;
+                cache[dragon]["isGemstone"] = false;
+
+                // Timer
+                var regTimer = table.find('tr').eq(5).children().last().text().trim();
+                var upTimer = table.find('tr').eq(6).children().last().text().trim();
+                cache[dragon]["timer"] = "The breeding times of " + dragon + " are **" + regTimer + "** (regular cave) or **" + upTimer + "** (upgraded cave).";
+
+                // Pictures
+                const dragonNoSpace = "MonolithDragon";
+                cache[dragon]["pictures"] = {};
+                cache[dragon]["pictures"]["normal"] = {};
+                cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='" + dragonNoSpace + "Adult" + id + ".png']").first().attr((id == 1) ? 'src' : 'data-src');
+                cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='" + dragonNoSpace + "Juvenile" + id + ".png']").first().attr('data-src');
+                cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='" + dragonNoSpace + "Baby" + id + ".png']").first().attr('data-src');
+                cache[dragon]["pictures"]["egg"] = $("[alt='" + dragonNoSpace + "Egg.png']").first().attr('data-src');
+
+            }
+		}).on('error', (e) => {
+			console.error("An error occurred, monolith dragons info could not be loaded.\nFull error:\n" + e);
+		});
+	});
+}
+readSnowflakeWikiPage = function() {
+    https.get('https://dragonvale.fandom.com/wiki/Snowflake_Dragon', (res) => {
+		console.log("Received " + res.statusCode + " status code for snowflakes page");
+		var body = [];
+		res.on('data', (chunk) => {
+			body.push(chunk);
+		}).on('end', () => {
+			body = Buffer.concat(body).toString();
+			const $ = cheerio.load(body);
+            
+            // Breeding combo
+            for (let id = 1; id <= 6; id++) {
+                let dragon = "Snowflake " + id + " Dragon";
+                var table = $(".dragonbox").eq(id - 1);
+                cache[dragon] = {};
+
+                // Breeding combo
+                cache[dragon]["breedCombo"] = $("#Breeding").parent().next().text().trim();
+
+                // Elements
+                var elems = [];
+                table.find('tr').eq(8).children().eq(1).children().each((j, elem) => {
+                    elems.push($(elem).attr('title').split(" ")[0]);
+                });
+                var hiddenElems = [];
+                table.find('tr').eq(17).children('td').first().children().each((j, elem) => {
+                    var imgName = $(elem).children().first().attr('data-image-name');
+                    if (!imgName.includes("Iconb")) {
+                        hiddenElems.push(imgName.split(" ")[1].replace(".png", ""));
+                    }
+                });
+                var elemsResponse = dragon + " has the " + prettyString(elems, ", ") + " elements on its profile.\n";
+                elemsResponse += (hiddenElems.length == 10) ? dragon + " adds all 10 elements when breeding (often called a *pseudo*)." : (hiddenElems.length > 0) ? dragon + " adds the " + prettyString(hiddenElems, ", ") + " elements when breeding." : "Error: The wiki is missing the breeding elements of the " + dragon;
+                cache[dragon]["elements"] = elemsResponse;
+
+                // Rates
+                cache[dragon]["rates"] = {};
+                cache[dragon]["rates"]["non-rift"] = {};
+
+                let ratesTable = $("#Earning_Rates").parent().nextAll('table').eq((id <= 2) ? 0 : (id <= 4) ? 1 : id - 3);
+
+                var maxBoosts = table.find('tr').eq(9).children().eq(1).find('img').length - 1;
+                var isEpicDragon = true;
+                cache[dragon]["rates"]["isEpic"] = isEpicDragon;
+
+                for (boosts = 0; boosts <= maxBoosts; boosts++) {
+                    var rates = [];
+                    ratesTable.children().first().children().eq(1).children().each((i, elem) => {
+                        let num = Math.ceil(parseInt($(elem).text().trim()) * Math.pow(1.3, boosts));
+                        rates[i] = (!isNaN(num)) ? ((num < 1500) ? num : "~1500") : "---";
+                    });
+                    ratesTable.children().first().children().eq(3).children().each((i, elem) => {
+                        let num = Math.ceil(parseInt($(elem).text().trim()) * Math.pow(1.3, boosts));
+                        rates[i+10] = (!isNaN(num)) ? ((num < 1500) ? num : "~1500") : "---";
+                    });
+                    var rTable = "```| Lvl : DC/min | Lvl : DC/min |"
+                            + "\n|-----:--------|-----:--------|";
+                    for (i = 0; i < 10; i++) {
+                        var lvlA = i + 1;
+                        var lvlB = i + 11;
+                        result = "\n| " + lvlA + getSpacing(4, lvlA) + ":" + getSpacing(7, rates[i]) + rates[i] + " | " + lvlB + getSpacing(4, lvlB) + ":" + getSpacing(7, rates[i+10]) + rates[i+10] + " |";
+                        rTable += result;
+                    }
+                    cache[dragon]["rates"]["non-rift"][boosts] = "DragonCash earning rates for " + dragon + " (" + boosts + "/" + maxBoosts + " boosts):\n" + rTable + "```"
+                            + (boosts > 0 ? "\nNOTE: Your dragon's profile will likely show a lower number than what's in this table. That number is wrong (this has been experimentally proven). The numbers here are the *actual* earning rates." : "");
+                }
+                var rates = [];
+                for (i = 0; i < 20; i++) {
+                    rates[i] = Math.ceil((i+1) * (isEpicDragon ? 1.5 : 1));
+                }
+                var rTable = "```| Lvl : Eth/hr | Lvl : Eth/hr |"
+                        + "\n|-----:--------|-----:--------|";
+                for (i = 0; i < 10; i++) {
+                    var lvlA = i + 1;
+                    var lvlB = i + 11;
+                    result = "\n| " + lvlA + getSpacing(4, lvlA) + ":" + getSpacing(7, rates[i]) + rates[i] + " | " + lvlB + getSpacing(4, lvlB) + ":" + getSpacing(7, rates[i+10]) + rates[i+10] + " |";
+                    rTable += result;
+                }
+                cache[dragon]["rates"]["rift"] = "Etherium earning rates for " + dragon + ":\n" + rTable + "```";
+
+                cache[dragon]["rates"]["maxBoosts"] = maxBoosts;
+                cache[dragon]["isGemstone"] = false;
+
+                // Timer
+                var regTimer = table.find('tr').eq(5).children().last().text().trim();
+                var upTimer = table.find('tr').eq(6).children().last().text().trim();
+                cache[dragon]["timer"] = "The breeding times of " + dragon + " are **" + regTimer + "** (regular cave) or **" + upTimer + "** (upgraded cave).";
+
+                // Pictures
+                const dragonNoSpace = "SnowflakeDragon";
+                cache[dragon]["pictures"] = {};
+                cache[dragon]["pictures"]["normal"] = {};
+                cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='" + dragonNoSpace + "Adult" + id + ".png']").first().attr((id == 1) ? 'src' : 'data-src');
+                cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='" + dragonNoSpace + "Juvenile" + id + ".png']").first().attr('data-src');
+                cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='" + dragonNoSpace + "Baby" + id + ".png']").first().attr('data-src');
+                cache[dragon]["pictures"]["egg"] = $("[alt='" + dragonNoSpace + "Egg.png']").first().attr('data-src');
+
+            }
+		}).on('error', (e) => {
+			console.error("An error occurred, monolith dragons info could not be loaded.\nFull error:\n" + e);
+		});
+	});
 }
