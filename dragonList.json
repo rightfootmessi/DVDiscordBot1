@@ -645,6 +645,7 @@
         "Whimsical Dragon",
         "Whirlwind Dragon",
         "Wick Dragon",
+        "Wilderness Dragon",
         "Willow Dragon",
         "Wind Dragon",
         "Winter Dragon",
@@ -745,7 +746,8 @@
         "Sunscorch Dragon",
         "Toco Dragon",
         "Vibe Dragon",
-        "Wendigo Dragon"
+        "Wendigo Dragon",
+        "Wilderness Dragon"
     ],
     "hiding": [
         "Apex Dragon",
