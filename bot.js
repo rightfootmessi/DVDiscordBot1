@@ -118,7 +118,7 @@ client.on('message', message => {
         return;
     } else for (i in args) args[i] = args[i].toLowerCase();
 
-	if (!['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'mod'].includes(cmd)) {
+	if (!['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'pet', 'mod'].includes(cmd)) {
 		// (DragonVale server only) prevent non-meme commands from being executed outside #bot-commands
 		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && (message.channel.id != 626182769256693770 && message.channel.id != 818011940160405534) && message.channel.id != 276384829593878529) return; // bot-commands, oracle-test, mod-chat
 	}
@@ -136,7 +136,8 @@ client.on('message', message => {
     }
 
     if (cmd === 'pet') {
-        message.channel.send(Math.random() < 0.9 ? "thank <:dv_ikastarko:870846746190831677>" : "no u <:dv_ikatastrophe:870846763173552158>");
+        let rand = Math.random();
+        message.channel.send(rand < 0.79 ? "thank <:dv_ikastarko:870846746190831677>" : rand < 0.94 ? "no u <:dv_epochnou:794321854042734602>" : rand < 0.99 ? "fite me <:dv_ikatastrophe:870846763173552158>" : "you thought it was oracle but it was me, ~~dio~~ lodestone! <:dv_lodestoned:894608674390167612>");
         return;
     }
 
