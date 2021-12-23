@@ -22,11 +22,14 @@ parentPort.on('message', data => {
 
     var timerList = {};
     var results = breed_calc(d1, d2, true);
-    if (results) {
+    if (results.noParent) {
+        parentPort.postMessage({noParent: results.noParent});
+    }
+    else if (results) {
         var list = sort_by_time(results);
         for (let i in list) {
             var dragon = dragons_[list[i]];
-            timerList[dragon.name + " Dragon"] = fmt_dhms(fast ? 0.8 * dragon.time : dragon.time);
+            timerList[dragon.name + " Dragon"] = Math.floor(fast ? 0.8 * dragon.time : dragon.time);
         }
         parentPort.postMessage(timerList);
     } else {
@@ -80,11 +83,11 @@ function def_and_eq(a, b) {
 
 function breed_calc(d1, d2, beb) {
     var query = breed_query(d1, d2, beb);
-    if (!query) return false;
+    if (query.notFound) return {noParent: query.notFound};
     var list = [];
 
     if (opposite_primary(query)) {
-        // opposite primaries cannot be bred directly
+        return false;
     } else if (same_primary(query)) {
         list = primary_dragons(query['elements']);
     } else {
@@ -109,7 +112,8 @@ function breed_query(d1, d2, beb) {
         'beb': beb,
         'tags': { 'any dragons': 1 }
     };
-    if (!query['d1'] || !query['d2']) return false;
+    if (!query['d1']) return {notFound: d1};
+    else if (!query['d2']) return {notFound: d2};
     ['d1', 'd2'].forEach(function (key) {
         var tags;
         if (query[key]['tags']) {

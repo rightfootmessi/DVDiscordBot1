@@ -8,6 +8,23 @@ const sprintf = require('sprintf-js').sprintf;
 
 const cmdPrefix = 'd!';
 
+const helpMsg = "Command list: (prefix all commands with `" + cmdPrefix + "`)\n"
+                + "- `breed <dragon>` - find out how to breed a dragon\n"
+				+ "- `elements <dragon>` - get the breeding elements (aka hidden elements) of a dragon\n"
+				+ "- `evolve <dragon>` - find the evolution requirements for a dragon\n"
+                + "- `feed [initial level] <final level> [rift]` - find the number of treats needed to feed a dragon from the initial level (defaults to 1 if not specified) to the final level"
+				+ "- `image <dragon> <adult|juvenile|baby|egg> [qualifier]` - get a PNG image of the dragon; defaults to adult if no stage specified; valid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding`, `summer`/`autumn`/`winter`/`spring` (seasonal), `snowman` (snowball), `wrapped` (giddle), `bush` (dargon) (aliases: `picture`, `img`, `pic`)\n"
+				+ "- `quest <quest>` - get the correct dragon to send on a quest\n"
+				+ "- `rates <dragon> [# of boosts OR 'rift']` - get the earning rates of a dragon\n"
+                + "- `result <dragon1>,<dragon2> <d:hh:mm:ss|hh:mm:ss> [fast|runic]` - given 2 parent dragons and the resulting timer, find the potential dragons that can result from the breed. (aliases: `results`, `fakeouts`)\n"
+				+ "- `sandbox <dragon1>,<dragon2> [beb] [fast]` - open the sandbox for the specified breeding combo (alias: `dvbox`)\n"
+				+ "- `timer <dragon name>` - get the breeding times of the dragon\n"
+                + "- `uses <dragon name>` - get all dragons that include the specified dragon in its breeding combination\n"
+				+ "- `wiki <dragon name>` - get the link to a dragon's wiki page\n"
+				+ "- `help` - view this message";
+
+const riftFeeding = [2500, 6000, 9000, 12000, 20000, 30000, 45000, 70000, 100000, 150000, 250000, 350000, 500000, 800000, 1200000, 1800000, 3000000, 4000000, 6250000, 12500000];
+
 var primaries, evolutions, enhanced, dayNight, hiding, elders, dragonList, fullData;
 var questTable = {};
 var questsLoaded = false;
@@ -27,6 +44,7 @@ cache: {
 			isGemstone: boolean
 		},
 		timer: string,
+        uses: string,
 		pictures: {
 			options: [normal/day, night, organic, conjured, enhanced, nightEnhanced, charlatan, scourge, barbarous, macabre, hiding, summer, winter, autumn, spring],
 			normal: {
@@ -220,7 +238,16 @@ client.on('message', message => {
 		var rift = false;
 		var boosts = 0;
 		var last = args.pop();
-		if (last == 'rift') rift = true;
+		if (last == 'rift') {
+            var nextLast = args.pop();
+            if (dragonList.includes(prettyString([nextLast, last], " ") + " Dragon")) {
+                args.push(nextLast);
+                args.push(last);
+            } else {
+                args.push(nextLast);
+                rift = true;
+            }
+        }
 		else if (!isNaN(parseInt(last))) {
 			boosts = parseInt(last);
             // make sure is not a monolith/snowflake identifier first
@@ -294,7 +321,64 @@ client.on('message', message => {
 				});
 			}
 		}
-	} else if (cmd === 'lodestoned') {
+	} else if (cmd === 'uses') {
+        var dragon = prettyString(args, " ");
+		if (!dragon) message.channel.send("You must specify a dragon!");
+		else {
+			if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
+			if (!dragonList.includes(dragon)) message.channel.send("Unrecognized dragon name \"" + dragon + "\" (did you spell it correctly?)");
+			else if (dragon in cache) message.channel.send(cache[dragon]["uses"]).catch(error => {
+				message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+			});
+			else {
+				var dragon_ = dragon.replace(/ /g, "_");
+				https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
+					console.log("Received " + res.statusCode + " status code for " + dragon + "'s page");
+                    if (res.statusCode == 404) {
+                        message.channel.send("ERROR: " + dragon + "'s wiki page returned a 404 error.");
+                        return;
+                    }
+					var body = [];
+					res.on('data', (chunk) => body.push(chunk)).on('end', () => {
+						const $ = cheerio.load(Buffer.concat(body).toString());
+						readWikiPage(dragon, $);
+						message.channel.send(cache[dragon]["uses"]).catch(error => {
+							message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+						});
+					});
+				});
+			}
+		}
+    } else if (cmd === 'feed') {
+        if (args.length > 3) {
+            message.channel.send("Invalid command format. Please provide the starting level and ending level (and add 'rift' if you are feeding a rift dragon).");
+            return;
+        }
+        let lastArg = args.pop();
+        let rift = false;
+        if (lastArg == 'rift') rift = true;
+        else args.push(lastArg);
+        let level2 = parseInt(args.pop());
+        if (!Number.isInteger(level2) || level2 < 2 || level2 > 21) {
+            message.channel.send("Please specify an integer between 2 and 21 for the dragon's final level.");
+            return;
+        }
+        let level1 = parseInt(args.pop());
+        if (!level1) level1 = 1;
+        else if (!Number.isInteger(level1) || level1 < 1 || level1 > 20) {
+            message.channel.send("Please specify an integer between 1 and 20 for the dragon's initial level.");
+            return;
+        }
+        if (level1 >= level2) {
+            message.channel.send("The initial level needs to be below the final level.");
+            return;
+        }
+        let treatsNeeded = 0;
+        for (i = level1; i < level2; i++) {
+            treatsNeeded += 4 * (rift ? riftFeeding[i-1] : 5 * Math.pow(2, i-1));
+        }
+        message.channel.send(`A total of **${treatsNeeded.toLocaleString()} treats** are required to feed a${rift ? " rift" : ""} dragon from level ${level1} to ${level2}.`);
+    } else if (cmd === 'lodestoned') {
 		message.channel.send("", {files: ["https://i.imgur.com/2NBePN9.jpg"]});
 	} else if (cmd === 'smoulderbrushed' || cmd === 'smoulderbushed') {
 		message.channel.send("I just got a freaking Smoulderbush for the 30 day event gift. Is this a sick joke...? I didn't spend 30 days playing this event for a freaking SMOULDERBUSH DRAGON. I'm so mad this isn't even funny.");
@@ -356,8 +440,10 @@ client.on('message', message => {
 				var imgLink;
 				if (age == 'egg') imgLink = cache[dragon]["pictures"]["egg"];
                 else if (dragon == "Seasonal Dragon") {
-                    if (qualifier == "normal") message.channel.send("Please specify a season for the " + dragon + "!");
-                    else if (!["summer", "autumn", "winter", "spring"].includes(qualifier)) message.channel.send(qualifier + " is not a valid season!");
+                    if (qualifier == "normal") {
+                        message.channel.send("Please specify a season for the " + dragon + "!");
+                        return;
+                    } else if (!["summer", "autumn", "winter", "spring"].includes(qualifier)) message.channel.send(qualifier + " is not a valid season!");
                     else {
 						switch (age) {
 							case 'adult':
@@ -509,7 +595,7 @@ client.on('message', message => {
 			if (!dragonList.includes(dragon)) message.channel.send("Unrecognized dragon name \"" + dragon + "\" (did you spell it correctly?)");
 			else message.channel.send('https://dragonvale.fandom.com/wiki/' + dragon.replace(/\s\d/, "").replace(/ /g, "_"));
 		}
-	} else if (cmd === 'result' || cmd === 'fakeouts') {
+	} else if (cmd === 'result' || cmd === 'results' || cmd === 'fakeouts') {
         // d!result <d1>,<d2> <d:hh:mm:ss> [fast]
         var fast = false, runic = false, last = args.pop();
         if (last === 'fast') fast = true;
@@ -563,10 +649,27 @@ client.on('message', message => {
                         return;
                     }
 
-                    var candidates = [];
-                    for (const key in timerList) if (timerList[key] == timer) candidates.push(key);
-                    if (candidates.length > 0) message.channel.send("A timer of " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2 + " matches: **" + candidates.join("**, **").replace(/_/g, " ") + "**\nNOTE: Some of the listed dragons may not be available at this time. Check the dragonarium to confirm availability.");
-                    else message.channel.send("No matches found for timer " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2);
+                    if (timerList.noParent) {
+                        message.channel.send(timerList.noParent + " has not yet been added to DVBox. Please try a different query.");
+                        return;
+                    } else if (timerList.error) {
+                        message.channel.send(d1 + " and " + d2 + " cannot be bred together. Please try a different query.");
+                        return;
+                    }
+                    
+                    var exactMatches = [];
+                    var approxMatches = [];
+                    for (const key in timerList) {
+                        //if (timerList[key].indexOf("%") != -1) delete timerList[key];
+                        if (timerList[key] == timeInt) exactMatches.push(key);
+                        else if (timeInt < timerList[key] && timerList[key] <= timeInt + 120) approxMatches.push(key);
+                    }
+                    var returnMessage = "";
+                    if (exactMatches.length > 0) returnMessage += ("A timer of " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2 + " exactly matches: **" + exactMatches.join("**, **").replace(/_/g, " "));
+                    if (approxMatches.length > 0) returnMessage += (((returnMessage.length == 0) ? "A timer of " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2 + " is *within 2 minutes* of: **" : "\nThis timer is also within 1 minute of: **") + approxMatches.join("**, **").replace(/_/g, " "));
+                    if (returnMessage.length > 0) returnMessage += "**\nNOTE: Some of the listed dragons may not be available at this time. Check the dragonarium to confirm availability.";
+                    else returnMessage = ("No matches found for timer " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2);
+                    message.channel.send(returnMessage);
                 } else {
                     var link = d1.replace(/ /g, "_") + "|" + d2.replace(/ /g, "_") + "|";
                     link += "https://dvbox.bin.sh/#";
@@ -578,37 +681,34 @@ client.on('message', message => {
                         console.log("Displaying results of query: " + link);
                         dvboxCache[fast ? "fast" : "normal"][d1 + "|" + d2] = timerList;
 
-                        if (timerList.error) {
+                        if (timerList.noParent) {
+                            message.channel.send(timerList.noParent + " has not yet been added to DVBox. Please try a different query.");
+                            return;
+                        } else if (timerList.error) {
                             message.channel.send(d1 + " and " + d2 + " cannot be bred together. Please try a different query.");
                             return;
                         }
                         
-                        var candidates = [];
-                        
+                        var exactMatches = [];
+                        var approxMatches = [];
                         for (const key in timerList) {
-                            if (timerList[key].indexOf("%") != -1) delete timerList[key];
-                            else if (timerList[key] == timer) candidates.push(key);
+                            //if (timerList[key].indexOf("%") != -1) delete timerList[key];
+                            if (timerList[key] == timeInt) exactMatches.push(key);
+                            // SCRAP THIS, THE TIMERS ARE RETURNED AS FORMATTED STRINGS NOT INTEGERS
+                            else if (timeInt < timerList[key] && timerList[key] <= timeInt + 120) approxMatches.push(key);
                         }
-                        if (candidates.length > 0) message.channel.send("A timer of " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2 + " matches: **" + candidates.join("**, **").replace(/_/g, " ") + "**\nNOTE: Some of the listed dragons may not be available at this time. Check the dragonarium to confirm availability.");
-                        else message.channel.send("No matches found for timer " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2);
+                        var returnMessage = "";
+                        if (exactMatches.length > 0) returnMessage += ("A timer of " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2 + " exactly matches: **" + exactMatches.join("**, **").replace(/_/g, " "));
+                        if (approxMatches.length > 0) returnMessage += (((returnMessage.length == 0) ? "A timer of " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2 + " is *within 2 minutes* of: **" : "\nThis timer is also within 1 minute of: **") + approxMatches.join("**, **").replace(/_/g, " "));
+                        if (returnMessage.length > 0) returnMessage += "**\nNOTE: Some of the listed dragons may not be available at this time. Check the dragonarium to confirm availability.";
+                        else returnMessage = ("No matches found for timer " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2);
+                        message.channel.send(returnMessage);
                     });
                     worker.postMessage(link);
                 }
             }
         }
-    } else if (cmd === '' || cmd === 'help') {
-		const helpMsg = "Command list: (prefix all commands with `" + cmdPrefix + "`)\n"
-                + "- `breed <dragon name>` - find out how to breed a dragon\n"
-				+ "- `elements <dragon name>` - get the breeding elements (aka hidden elements) of a dragon\n"
-				+ "- `evolve <dragon name>` - find the evolution requirements for a dragon\n"
-				+ "- `image <dragon> <adult/juvenile/baby/egg> [qualifier]` - get a PNG image of the dragon; defaults to adult if no stage specified; valid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding`, `summer`/`autumn`/`winter`/`spring` (seasonal), `snowman` (snowball), `wrapped` (giddle), `bush` (dargon) (aliases: `picture`, `img`, `pic`)\n"
-				+ "- `quest <quest name>` - get the correct dragon to send on a quest\n"
-				+ "- `rates <dragon name> [number of boosts OR 'rift']` - get the earning rates of a dragon\n"
-                + "- `result <dragon1>,<dragon2> <d:hh:mm:ss|hh:mm:ss> [fast/runic]` - given 2 parent dragons and the resulting timer, find the potential dragons that can result from the breed. *Note: this command takes a _long_ time to process results when one of the parents is a pseudo. In this case, the bot will ping you when it's finished processing.* (alias: `fakeouts`)\n"
-				+ "- `sandbox <dragon1>,<dragon2> [beb] [fast]` - open the sandbox for the specified breeding combo (alias: `dvbox`)\n"
-				+ "- `timer <dragon name>` - get the breeding times of the dragon\n"
-				+ "- `wiki <dragon name>` - get the link to a dragon's wiki page\n"
-				+ "- `help` - view this message";
+    } else if (cmd === '' || cmd === 'help') {		
 		message.channel.send(helpMsg);
 	} else if (cmd === 'mod' && hasModAccess(message)) {
         console.log(message.author.tag + " ran mod cmd " + message.content.toLowerCase());
@@ -903,6 +1003,25 @@ client.on('message', message => {
 	}
 });
 
+client.on('messageDelete', message => {
+    if (message.attachments.size > 0) {
+        const botLogCh = message.guild.channels.cache.get('306854862539325450');
+        const embed = new Discord.MessageEmbed()
+                .setColor("#ff0000")
+                .setAuthor(message.author.tag, message.author.avatarURL())
+                .setDescription("Deleted message has attachments")
+                .addField("Message Text", message.content)
+                .setTimestamp()
+                .setFooter(`Message ID: ${message.id} | User ID: ${message.author.id}`);
+    
+        var i = 0;
+        message.attachments.forEach(attachment => {
+            embed.addField(`Attachment ${++i}`, attachment.url + " (Attachment ID: " + attachment.id + ")");
+        });
+        botLogCh.send(embed);
+    }
+});
+
 // Note to self: if running locally, remember to replace the variable with the secret token itself; otherwise, make sure it says process.env.BOT_TOKEN !!!
 client.login(process.env.BOT_TOKEN);
 
@@ -957,7 +1076,7 @@ isEvolution = function(dName) {
 }
 
 getSpacing = function(baseLength, int) {
-	return Array(baseLength - int.toString().length).fill(" ").join("");
+    return Array(baseLength - int.toString().length).fill(" ").join("");
 }
 
 isEpic = function(element) {
@@ -978,6 +1097,16 @@ makePurgeEmbed = function(message) {
     });
 
     return embed;
+}
+
+roundRate = function(rawRate) {
+    if (rawRate <= 200) return rawRate;
+    else if (rawRate <= 900) return Math.ceil(rawRate / 50) * 50;
+    else if (rawRate <= 1000) return 1000;
+    else if (rawRate <= 1200) return 1200;
+    else if (rawRate <= 1500) return 1500;
+    else if (rawRate <= 2000) return 2000;
+    else return 3000;
 }
 
 loadQuests = () => {
@@ -1024,6 +1153,7 @@ cache: {
 			isGemstone: boolean
 		},
 		timer: string,
+        uses: string,
 		pictures: {
 			options: [normal/day, night, organic, conjured, enhanced, nightEnhanced, charlatan, scourge, barbarous, macabre, hiding, summer, autumn, winter, spring],
 			normal: {
@@ -1106,12 +1236,12 @@ readWikiPage = (dragon, $) => {
 			var rates = [];
 			var title = $("#Earning_Rates").length ? $("#Earning_Rates") : $("#Earning_Rate");
 			title.parent().next().next().children().first().children().eq(1).children().each((i, elem) => {
-				let num = Math.ceil(parseInt($(elem).text().trim()) * Math.pow(1.3, boosts));
-				rates[i] = (!isNaN(num)) ? ((num < 1500) ? num : "~1500") : "---";
+				let num = Math.ceil(parseInt($(elem).text().trim()) * (1 + 0.3 * boosts));
+				rates[i] = (!isNaN(num)) ? roundRate(num) : "---";
 			});
 			title.parent().next().next().children().first().children().eq(3).children().each((i, elem) => {
-				let num = Math.ceil(parseInt($(elem).text().trim()) * Math.pow(1.3, boosts));
-				rates[i+10] = (!isNaN(num)) ? ((num < 1500) ? num : "~1500") : "---";
+				let num = Math.ceil(parseInt($(elem).text().trim()) * (1 + 0.3 * boosts));
+				rates[i+10] = (!isNaN(num)) ? roundRate(num) : "---";
 			});
 			var table = "```| Lvl : DC/min | Lvl : DC/min |"
 					+ "\n|-----:--------|-----:--------|";
@@ -1121,8 +1251,12 @@ readWikiPage = (dragon, $) => {
 				result = "\n| " + lvlA + getSpacing(4, lvlA) + ":" + getSpacing(7, rates[i]) + rates[i] + " | " + lvlB + getSpacing(4, lvlB) + ":" + getSpacing(7, rates[i+10]) + rates[i+10] + " |";
 				table += result;
 			}
+            if (elders.includes(dragon)) {
+                let elderRate = roundRate(Math.ceil(parseInt(title.parent().next().next().children().first().children().eq(5).children().first().text().trim()) * (1 + 0.3 * boosts)));
+                table += "\n|              | 21  :" + getSpacing(7, elderRate) + elderRate + " |";
+            }
 			cache[dragon]["rates"]["non-rift"][boosts] = "DragonCash earning rates for " + dragon + " (" + boosts + "/" + maxBoosts + " boosts):\n" + table + "```"
-					+ (boosts > 0 ? "\nNOTE: Your dragon's profile will likely show a lower number than what's in this table. That number is wrong (this has been experimentally proven). The numbers here are the *actual* earning rates." : "");
+					+ "\nNOTE: Your dragon's profile will likely show a lower number than what's in this table. That number is wrong (this has been experimentally proven). The numbers here are the *actual* earning rates.";
 		}
 		var rates = [];
 		for (i = 0; i < 20; i++) {
@@ -1136,7 +1270,9 @@ readWikiPage = (dragon, $) => {
 			result = "\n| " + lvlA + getSpacing(4, lvlA) + ":" + getSpacing(7, rates[i]) + rates[i] + " | " + lvlB + getSpacing(4, lvlB) + ":" + getSpacing(7, rates[i+10]) + rates[i+10] + " |";
 			table += result;
 		}
-		cache[dragon]["rates"]["rift"] = "Etherium earning rates for " + dragon + ":\n" + table + "```";
+        if (elders.includes(dragon)) table += "\n|              | 21  :     21 |";
+
+		cache[dragon]["rates"]["rift"] = (dragon.indexOf("Ghostly") != -1) ? dragon + " does not have etherium earning rates because it cannot exist in the rift." : "Etherium earning rates for " + dragon + ":\n" + table + "```";
 	} else {
 		cache[dragon]["rates"]["isEpic"] = true;
 		var rates = [];
@@ -1174,6 +1310,13 @@ readWikiPage = (dragon, $) => {
 	var regTimer = $(".dragonbox").first().find('tr').eq(5).children().last().text().trim();
 	var upTimer = $(".dragonbox").first().find('tr').eq(6).children().last().text().trim();
 	cache[dragon]["timer"] = "The breeding times of " + dragon + " are **" + regTimer + "** (regular cave) or **" + upTimer + "** (upgraded cave).";
+    // Uses
+    var uses = [];
+    if ($("#Required_Combos").length) {
+        $("#Required_Combos").parent().next().next().children().each((i, elem) => uses.push($(elem).text().trim()));
+        if ($("#Required_Combos").parent().next().next().next().next().prop("tagName") == "UL") $("#Required_Combos").parent().next().next().next().next().children().each((i, elem) => uses.push($(elem).text().trim()));
+    }
+    cache[dragon]["uses"] = (uses.length > 0) ? dragon + " is needed in order to obtain the following dragon(s): **" + uses.join("**, **") + "**" : dragon + " is not needed to obtain any other dragons.";
 	// Pictures
 	const dragonNoSpace = dragon.replace(/ /g, '');
 	cache[dragon]["pictures"]["normal"] = {};
@@ -1217,24 +1360,40 @@ readWikiPage = (dragon, $) => {
         cache[dragon]["pictures"]["autumn"] = {};
         cache[dragon]["pictures"]["winter"] = {};
         cache[dragon]["pictures"]["spring"] = {};
-        cache[dragon]["pictures"]["summer"]["adult"] = $("[alt='Summer" + dragonNoSpace + "Adult.png']").first().attr('src');
-        cache[dragon]["pictures"]["summer"]["juvenile"] = $("[alt='Summer" + dragonNoSpace + "Juvenile.png']").first().attr('src');
-        cache[dragon]["pictures"]["summer"]["baby"] = $("[alt='Summer" + dragonNoSpace + "Baby.png']").first().attr('src');
-        cache[dragon]["pictures"]["autumn"]["adult"] = $("[alt='Autumn" + dragonNoSpace + "Adult.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["autumn"]["juvenile"] = $("[alt='Autumn" + dragonNoSpace + "Juvenile.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["autumn"]["baby"] = $("[alt='Autumn" + dragonNoSpace + "Baby.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["winter"]["adult"] = $("[alt='Winter" + dragonNoSpace + "Adult.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["winter"]["juvenile"] = $("[alt='Winter" + dragonNoSpace + "Juvenile.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["winter"]["baby"] = $("[alt='Winter" + dragonNoSpace + "Baby.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["spring"]["adult"] = $("[alt='Spring" + dragonNoSpace + "Adult.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["spring"]["juvenile"] = $("[alt='Spring" + dragonNoSpace + "Juvenile.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["spring"]["baby"] = $("[alt='Spring" + dragonNoSpace + "Baby.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["summer"]["adult"] = $("[alt='SummerSeasonalDragonAdult.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["summer"]["juvenile"] = $("[alt='SummerSeasonalDragonJuvenile.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["summer"]["baby"] = $("[alt='SummerSeasonalDragonBaby.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["autumn"]["adult"] = $("[alt='AutumnSeasonalDragonAdult.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["autumn"]["juvenile"] = $("[alt='AutumnSeasonalDragonJuvenile.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["autumn"]["baby"] = $("[alt='AutumnSeasonalDragonBaby.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["winter"]["adult"] = $("[alt='WinterSeasonalDragonAdult.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["winter"]["juvenile"] = $("[alt='WinterSeasonalDragonJuvenile.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["winter"]["baby"] = $("[alt='WinterSeasonalDragonBaby.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["spring"]["adult"] = $("[alt='SpringSeasonalDragonAdult.png']").first().attr('src');
+        cache[dragon]["pictures"]["spring"]["juvenile"] = $("[alt='SpringSeasonalDragonJuvenile.png']").first().attr('src');
+        cache[dragon]["pictures"]["spring"]["baby"] = $("[alt='SpringSeasonalDragonBaby.png']").first().attr('src');
     } else if (dragon == "Snowball Dragon") {
         cache[dragon]["pictures"]["snowman"] = $("[alt='SnowballDragonSnowman.png']").first().attr('data-src');
     } else if (dragon == "Giddle Dragon") {
         cache[dragon]["pictures"]["wrapped"] = $("[alt='GiddleDragonWrapped.png']").first().attr('data-src');
     } else if (dragon == "Dargon Dragon") {
         cache[dragon]["pictures"]["bush"] = $("[alt='DargonDragonAdultBush.png']").first().attr('data-src');
+    }
+    // Edge cases for dragons whose images work weirdly
+    if (dragon == "Dark Dragon") {
+        cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='DarkDragonAdultOld.png']").first().attr('src');
+        cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='DarkDragonJuvenileOld.png']").first().attr('src');
+        cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='DarkDragonBabyOld.png']").first().attr('data-src');
+    } else if (dragon == "Flower Dragon") {
+        cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='FlowerDragonAdult.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='FlowerDragonJuvenile.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='FlowerDragonBaby.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["egg"] = $("[alt='FlowerDragonRiftEgg.png']").first().attr('data-src');
+    } else if (dragon == "Meteor Dragon") {
+        cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='MeteorDragonAdult.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='MeteorDragonJuvenile.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='MeteorDragonBaby.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["egg"] = $("[alt='MeteorDragonRiftEgg.png']").first().attr('data-src');
     }
 }
 
@@ -1295,12 +1454,12 @@ readMonolithWikiPage = function() {
                 for (boosts = 0; boosts <= maxBoosts; boosts++) {
                     var rates = [];
                     ratesTable.children().first().children().eq(1).children().each((i, elem) => {
-                        let num = Math.ceil(parseInt($(elem).text().trim()) * Math.pow(1.3, boosts));
-                        rates[i] = (!isNaN(num)) ? ((num < 1500) ? num : "~1500") : "---";
+                        let num = Math.ceil(parseInt($(elem).text().trim()) * (1 + 0.3 * boosts));
+                        rates[i] = (!isNaN(num)) ? roundRate(num) : "---";
                     });
                     ratesTable.children().first().children().eq(3).children().each((i, elem) => {
-                        let num = Math.ceil(parseInt($(elem).text().trim()) * Math.pow(1.3, boosts));
-                        rates[i+10] = (!isNaN(num)) ? ((num < 1500) ? num : "~1500") : "---";
+                        let num = Math.ceil(parseInt($(elem).text().trim()) * (1 + 0.3 * boosts));
+                        rates[i+10] = (!isNaN(num)) ? roundRate(num) : "---";
                     });
                     var rTable = "```| Lvl : DC/min | Lvl : DC/min |"
                             + "\n|-----:--------|-----:--------|";
@@ -1311,7 +1470,7 @@ readMonolithWikiPage = function() {
                         rTable += result;
                     }
                     cache[dragon]["rates"]["non-rift"][boosts] = "DragonCash earning rates for " + dragon + " (" + boosts + "/" + maxBoosts + " boosts):\n" + rTable + "```"
-                            + (boosts > 0 ? "\nNOTE: Your dragon's profile will likely show a lower number than what's in this table. That number is wrong (this has been experimentally proven). The numbers here are the *actual* earning rates." : "");
+                            + "\nNOTE: Your dragon's profile will likely show a lower number than what's in this table. That number is wrong (this has been experimentally proven). The numbers here are the *actual* earning rates.";
                 }
                 var rates = [];
                 for (i = 0; i < 20; i++) {
@@ -1334,6 +1493,14 @@ readMonolithWikiPage = function() {
                 var regTimer = table.find('tr').eq(5).children().last().text().trim();
                 var upTimer = table.find('tr').eq(6).children().last().text().trim();
                 cache[dragon]["timer"] = "The breeding times of " + dragon + " are **" + regTimer + "** (regular cave) or **" + upTimer + "** (upgraded cave).";
+
+                // Uses
+                var uses = [];
+                if ($("#Required_Combos").length) {
+                    $("#Required_Combos").parent().next().next().children().each((k, elem) => uses.push($(elem).text().trim()));
+                    if ($("#Required_Combos").parent().next().next().next().next().prop("tagName") == "UL") $("#Required_Combos").parent().next().next().next().next().children().each((i, elem) => uses.push($(elem).text().trim()));
+                }
+                cache[dragon]["uses"] = (uses.length > 0) ? dragon + " is needed in order to obtain the following dragon(s): **" + uses.join("**, **") + "**" : dragon + " is not needed to obtain any other dragons.";
 
                 // Pictures
                 const dragonNoSpace = "MonolithDragon";
@@ -1361,7 +1528,7 @@ readSnowflakeWikiPage = function() {
 			const $ = cheerio.load(body);
             
             // Breeding combo
-            for (let id = 1; id <= 6; id++) {
+            for (let id = 1; id <= 7; id++) {
                 let dragon = "Snowflake " + id + " Dragon";
                 var table = $(".dragonbox").eq(id - 1);
                 cache[dragon] = {};
@@ -1398,12 +1565,12 @@ readSnowflakeWikiPage = function() {
                 for (boosts = 0; boosts <= maxBoosts; boosts++) {
                     var rates = [];
                     ratesTable.children().first().children().eq(1).children().each((i, elem) => {
-                        let num = Math.ceil(parseInt($(elem).text().trim()) * Math.pow(1.3, boosts));
-                        rates[i] = (!isNaN(num)) ? ((num < 1500) ? num : "~1500") : "---";
+                        let num = Math.ceil(parseInt($(elem).text().trim()) * (1 + 0.3 * boosts));
+                        rates[i] = (!isNaN(num)) ? roundRate(num) : "---";
                     });
                     ratesTable.children().first().children().eq(3).children().each((i, elem) => {
-                        let num = Math.ceil(parseInt($(elem).text().trim()) * Math.pow(1.3, boosts));
-                        rates[i+10] = (!isNaN(num)) ? ((num < 1500) ? num : "~1500") : "---";
+                        let num = Math.ceil(parseInt($(elem).text().trim()) * (1 + 0.3 * boosts));
+                        rates[i+10] = (!isNaN(num)) ? roundRate(num) : "---";
                     });
                     var rTable = "```| Lvl : DC/min | Lvl : DC/min |"
                             + "\n|-----:--------|-----:--------|";
@@ -1414,7 +1581,7 @@ readSnowflakeWikiPage = function() {
                         rTable += result;
                     }
                     cache[dragon]["rates"]["non-rift"][boosts] = "DragonCash earning rates for " + dragon + " (" + boosts + "/" + maxBoosts + " boosts):\n" + rTable + "```"
-                            + (boosts > 0 ? "\nNOTE: Your dragon's profile will likely show a lower number than what's in this table. That number is wrong (this has been experimentally proven). The numbers here are the *actual* earning rates." : "");
+                            + "\nNOTE: Your dragon's profile will likely show a lower number than what's in this table. That number is wrong (this has been experimentally proven). The numbers here are the *actual* earning rates.";
                 }
                 var rates = [];
                 for (i = 0; i < 20; i++) {
@@ -1438,6 +1605,14 @@ readSnowflakeWikiPage = function() {
                 var upTimer = table.find('tr').eq(6).children().last().text().trim();
                 cache[dragon]["timer"] = "The breeding times of " + dragon + " are **" + regTimer + "** (regular cave) or **" + upTimer + "** (upgraded cave).";
 
+                // Uses
+                var uses = [];
+                if ($("#Required_Combos").length) {
+                    $("#Required_Combos").parent().next().next().children().each((k, elem) => uses.push($(elem).text().trim()));
+                    if ($("#Required_Combos").parent().next().next().next().next().prop("tagName") == "UL") $("#Required_Combos").parent().next().next().next().next().children().each((i, elem) => uses.push($(elem).text().trim()));
+                }
+                cache[dragon]["uses"] = (uses.length > 0) ? dragon + " is needed in order to obtain the following dragon(s): **" + uses.join("**, **") + "**" : dragon + " is not needed to obtain any other dragons.";
+
                 // Pictures
                 const dragonNoSpace = "SnowflakeDragon";
                 cache[dragon]["pictures"] = {};
@@ -1449,7 +1624,7 @@ readSnowflakeWikiPage = function() {
 
             }
 		}).on('error', (e) => {
-			console.error("An error occurred, monolith dragons info could not be loaded.\nFull error:\n" + e);
+			console.error("An error occurred, snowflake dragons info could not be loaded.\nFull error:\n" + e);
 		});
 	});
 }
