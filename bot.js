@@ -120,7 +120,7 @@ client.on('message', message => {
 
 	if (!['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'mod'].includes(cmd)) {
 		// (DragonVale server only) prevent non-meme commands from being executed outside #bot-commands
-		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && (message.channel.name != 'bot-commands' && message.channel.name != 'oracle-test')) return;
+		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && (message.channel.id != 626182769256693770 && message.channel.id != 818011940160405534) && message.channel.id != 276384829593878529) return; // bot-commands, oracle-test, mod-chat
 	}
 
     if (args.includes("monolith") && !(cmd === 'result' || cmd === 'fakeouts') && !(cmd === 'sandbox' || cmd === 'dvbox')) {
@@ -133,6 +133,11 @@ client.on('message', message => {
             message.channel.send("Your query contains a snowflake dragon, but you did not specify which. Please re-enter the query using `Snowflake #`, where `#` is replaced by the number of the snowflake dragon.");
             return;
         }
+    }
+
+    if (cmd === 'pet') {
+        message.channel.send(Math.random() < 0.9 ? "thank <:dv_ikastarko:870846746190831677>" : "no u <:dv_ikatastrophe:870846763173552158>");
+        return;
     }
 
 	if (cmd === 'quest') {
@@ -662,13 +667,13 @@ client.on('message', message => {
                     for (const key in timerList) {
                         //if (timerList[key].indexOf("%") != -1) delete timerList[key];
                         if (timerList[key] == timeInt) exactMatches.push(key);
-                        else if (timeInt < timerList[key] && timerList[key] <= timeInt + 120) approxMatches.push(key);
+                        else if (timeInt < timerList[key] && timerList[key] <= timeInt + (runic ? 480 : 120)) approxMatches.push(key);
                     }
                     var returnMessage = "";
-                    if (exactMatches.length > 0) returnMessage += ("A timer of " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2 + " exactly matches: **" + exactMatches.join("**, **").replace(/_/g, " "));
+                    if (exactMatches.length > 0) returnMessage += ("A timer of " + (runic ? times.join(":") + " in runic caves" : timer) + " when breeding " + d1 + " x " + d2 + " exactly matches: **" + exactMatches.join("**, **").replace(/_/g, " "));
                     if (approxMatches.length > 0) returnMessage += (((returnMessage.length == 0) ? "A timer of " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2 + " is *within 2 minutes* of: **" : "\nThis timer is also within 1 minute of: **") + approxMatches.join("**, **").replace(/_/g, " "));
                     if (returnMessage.length > 0) returnMessage += "**\nNOTE: Some of the listed dragons may not be available at this time. Check the dragonarium to confirm availability.";
-                    else returnMessage = ("No matches found for timer " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2);
+                    else returnMessage = ("No matches found for timer " + (runic ? times.join(":") + " in runic caves" : timer) + " when breeding " + d1 + " x " + d2);
                     message.channel.send(returnMessage);
                 } else {
                     var link = d1.replace(/ /g, "_") + "|" + d2.replace(/ /g, "_") + "|";
@@ -695,13 +700,13 @@ client.on('message', message => {
                             //if (timerList[key].indexOf("%") != -1) delete timerList[key];
                             if (timerList[key] == timeInt) exactMatches.push(key);
                             // SCRAP THIS, THE TIMERS ARE RETURNED AS FORMATTED STRINGS NOT INTEGERS
-                            else if (timeInt < timerList[key] && timerList[key] <= timeInt + 120) approxMatches.push(key);
+                            else if (timeInt < timerList[key] && timerList[key] <= timeInt + (runic ? 480 : 120)) approxMatches.push(key);
                         }
                         var returnMessage = "";
-                        if (exactMatches.length > 0) returnMessage += ("A timer of " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2 + " exactly matches: **" + exactMatches.join("**, **").replace(/_/g, " "));
-                        if (approxMatches.length > 0) returnMessage += (((returnMessage.length == 0) ? "A timer of " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2 + " is *within 2 minutes* of: **" : "\nThis timer is also within 1 minute of: **") + approxMatches.join("**, **").replace(/_/g, " "));
+                        if (exactMatches.length > 0) returnMessage += ("A timer of " + (runic ? times.join(":") + " in runic caves" : timer) + " when breeding " + d1 + " x " + d2 + " exactly matches: **" + exactMatches.join("**, **").replace(/_/g, " "));
+                        if (approxMatches.length > 0) returnMessage += (((returnMessage.length == 0) ? "A timer of " + (runic ? times.join(":") + " in runic caves" : timer) + " when breeding " + d1 + " x " + d2 + " is *within 2 minutes* of: **" : "\nThis timer is also within 1 minute of: **") + approxMatches.join("**, **").replace(/_/g, " "));
                         if (returnMessage.length > 0) returnMessage += "**\nNOTE: Some of the listed dragons may not be available at this time. Check the dragonarium to confirm availability.";
-                        else returnMessage = ("No matches found for timer " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2);
+                        else returnMessage = ("No matches found for timer " + (runic ? times.join(":") + " in runic caves" : timer) + " when breeding " + d1 + " x " + d2);
                         message.channel.send(returnMessage);
                     });
                     worker.postMessage(link);
