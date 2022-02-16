@@ -5,6 +5,8 @@ const cheerio = require('cheerio');
 const { Worker } = require('worker_threads');
 const fs = require('fs');
 const sprintf = require('sprintf-js').sprintf;
+const Mee6LevelsApi = require("mee6-levels-api");
+const process = require('process');
 
 const cmdPrefix = 'd!';
 
@@ -97,10 +99,29 @@ client.on('ready', () => {
 	loadQuests();
     readMonolithWikiPage();
     readSnowflakeWikiPage();
+
+    /*let guildId = "233370210617262080";
+    Mee6LevelsApi.getLeaderboard(guildId).then(leaderboard => {
+        // do something with leaderboard
+        console.log(`${leaderboard.length} members ranked on the leaderboard.`);
+        for (i = 0; i < 1; i++) console.log(JSON.stringify(leaderboard[i], 4));
+    });*/
 });
  
 client.on('message', message => {
 	if (!message.content.toLowerCase().startsWith(cmdPrefix) || message.author.bot) return;
+
+    // Temp MEMORY LOGGING
+    const formatMemoryUsage = (data) => `${Math.round(data / 1024 / 1024 * 100) / 100} MB`
+    const memoryData = process.memoryUsage();
+    const memoryUsage = {
+                    rss: `${formatMemoryUsage(memoryData.rss)} -> Resident Set Size - total memory allocated for the process execution`,
+                    heapTotal: `${formatMemoryUsage(memoryData.heapTotal)} -> total size of the allocated heap`,
+                    heapUsed: `${formatMemoryUsage(memoryData.heapUsed)} -> actual memory used during the execution`,
+                    external: `${formatMemoryUsage(memoryData.external)} -> V8 external memory`,
+    };
+    client.guilds.cache.get('290552335611068427').channels.cache.get('295966335710527490').send("```" + JSON.stringify(memoryUsage, null, 4) + "```");
+    // Delete mem logging when done
 
 	var args = message.content.replace(/\s{2,}/g, ' ').replace(/@/g, '').slice(cmdPrefix.length).trim().split(" ");
 	const cmd = args.shift().toLowerCase();
@@ -110,10 +131,11 @@ client.on('message', message => {
         serverId = (serverId.toLowerCase() == 'dv') ? '233370210617262080' : serverId;
         let server = client.guilds.cache.get(serverId);
         if (server) {
-            let channel = server.channels.cache.get(args.shift());
+            let cName = args.shift(); console.log(cName);
+            let channel = server.channels.cache.find(c => c.name.toLowerCase() === cName);
             if (channel) {
                 channel.send(args.join(" "));
-            } else message.channel.send("Channel not found in server " + server.name);
+            } else message.channel.send(`Channel ${cName} not found in server ${server.name}`);
         } else message.channel.send("Server not found");
         return;
     } else for (i in args) args[i] = args[i].toLowerCase();
@@ -148,8 +170,8 @@ client.on('message', message => {
 			if (!questname) message.channel.send("You must give me a quest name to look for!");
 			else {
 				let dragon = questTable[questname.toLowerCase()];
-				if (dragon) message.channel.send("Use a(n) **" + dragon + "** to complete the quest \"" + questname + "\"");
-				else message.channel.send("\"" + questname + "\" is not a recognized quest name (did you type it correctly?)");
+				if (dragon) message.channel.send(`Use a(n) **${dragon}** to complete the quest "${questname}"`);
+				else message.channel.send(`"${questname}" is not a recognized quest name (did you type it correctly?)`);
 			}
 		}
 	} else if (cmd === 'breed') {
@@ -157,9 +179,9 @@ client.on('message', message => {
 		if (!dragon) message.channel.send("You must specify a dragon!");
 		else {
 			if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
-			if (!dragonList.includes(dragon)) message.channel.send("Unrecognized dragon name \"" + dragon + "\" (did you spell it correctly?)");
-			else if (isPrimary(dragon)) message.channel.send(dragon + " is a primary dragon, just breed two of them together to get more...");
-			else if (isEvolution(dragon)) message.channel.send(dragon + " is an evolved dragon, you must breed two of them together to get more. To find out how to evolve this dragon, type `d!evolve " + dragon + "`");
+			if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
+			else if (isPrimary(dragon)) message.channel.send(`${dragon} is a primary dragon, just breed two of them together to get more...`);
+			else if (isEvolution(dragon)) message.channel.send(`${dragon} is an evolved dragon, you must breed two of them together to get more. To find out how to evolve this dragon, type \`d!evolve ${dragon}\``);
 			else if (dragon in cache) message.channel.send(cache[dragon]["breedCombo"]).catch(error => {
 				message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
 			});
