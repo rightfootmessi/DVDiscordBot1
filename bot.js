@@ -6,7 +6,6 @@ const { Worker } = require('worker_threads');
 const fs = require('fs');
 const sprintf = require('sprintf-js').sprintf;
 const Mee6LevelsApi = require("mee6-levels-api");
-const process = require('process');
 
 const cmdPrefix = 'd!';
 
@@ -110,18 +109,6 @@ client.on('ready', () => {
  
 client.on('message', message => {
 	if (!message.content.toLowerCase().startsWith(cmdPrefix) || message.author.bot) return;
-
-    // Temp MEMORY LOGGING
-    const formatMemoryUsage = (data) => `${Math.round(data / 1024 / 1024 * 100) / 100} MB`
-    const memoryData = process.memoryUsage();
-    const memoryUsage = {
-                    rss: `${formatMemoryUsage(memoryData.rss)} -> Resident Set Size - total memory allocated for the process execution`,
-                    heapTotal: `${formatMemoryUsage(memoryData.heapTotal)} -> total size of the allocated heap`,
-                    heapUsed: `${formatMemoryUsage(memoryData.heapUsed)} -> actual memory used during the execution`,
-                    external: `${formatMemoryUsage(memoryData.external)} -> V8 external memory`,
-    };
-    client.guilds.cache.get('290552335611068427').channels.cache.get('295966335710527490').send("```" + JSON.stringify(memoryUsage, null, 4) + "```");
-    // Delete mem logging when done
 
 	var args = message.content.replace(/\s{2,}/g, ' ').replace(/@/g, '').slice(cmdPrefix.length).trim().split(" ");
 	const cmd = args.shift().toLowerCase();
