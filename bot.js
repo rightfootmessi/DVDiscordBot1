@@ -106,9 +106,37 @@ client.on('ready', () => {
         for (i = 0; i < 1; i++) console.log(JSON.stringify(leaderboard[i], 4));
     });*/
 });
+
+function sleep(ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+}
+
+var petCooldown = 0;
  
-client.on('message', message => {
+client.on('message', async (message) => {
 	if (!message.content.toLowerCase().startsWith(cmdPrefix) || message.author.bot) return;
+
+    // BEGIN APRIL FOOLS CODE (UNCOMMENT IT ON APRIL 1ST, then reduce odds to 0.01 afterward)
+    /*
+    if (Math.random() < 0.50) {
+        let funnyGifs = [
+            'https://media.discordapp.net/attachments/626181797696503818/808742119874625598/minilodestonedpost.gif',
+            'https://cdn.discordapp.com/attachments/559733837643382794/791547901884891176/magik.gif',
+            'https://media.discordapp.net/attachments/626182840517918760/790679132472082505/16085829679271248247819423568955.gif',
+            'https://media.discordapp.net/attachments/626181797696503818/756238462058758154/PartyDragon4.gif',
+            'https://media.discordapp.net/attachments/626181797696503818/856995787661639730/image0.gif',
+            'https://cdn.discordapp.com/attachments/818011940160405534/958918376837767188/jammyjam.gif'
+        ];
+        message.channel.send(funnyGifs[Math.floor(Math.random() * funnyGifs.length)]);
+        await sleep(3000);
+        let emote = ['<:dv_owobowos:803676880850780160>', '<:dv_ikastarko:870846746190831677>', '<:dv_loveheart:722966875952382002>'][Math.floor(Math.random() * 3)];
+        message.channel.send(`April fools! Sorry about that friend ${emote}`);
+        await sleep(500);
+    }
+    */
+    // END APRIL FOOLS CODE
 
 	var args = message.content.replace(/\s{2,}/g, ' ').replace(/@/g, '').slice(cmdPrefix.length).trim().split(" ");
 	const cmd = args.shift().toLowerCase();
@@ -145,8 +173,22 @@ client.on('message', message => {
     }
 
     if (cmd === 'pet') {
-        let rand = Math.random();
-        message.channel.send(rand < 0.79 ? "thank <:dv_ikastarko:870846746190831677>" : rand < 0.94 ? "no u <:dv_epochnou:794321854042734602>" : rand < 0.99 ? "fite me <:dv_ikatastrophe:870846763173552158>" : "you thought it was oracle but it was me, ~~dio~~ lodestone! <:dv_lodestoned:894608674390167612>");
+        pet = function() {            
+            let rand = Math.random();
+            message.channel.send(rand < 0.79 ? "thank <:dv_ikastarko:870846746190831677>" : rand < 0.94 ? "no u <:dv_epochnou:794321854042734602>" : rand < 0.99 ? "fite me <:dv_ikatastrophe:870846763173552158>" : "you thought it was oracle but it was me, ~~dio~~ lodestone! <:dv_lodestoned:894608674390167612>");
+            if (rand >= 0.99) {
+                message.guild.channels.cache.get('626180297993748499').send(`${message.member.displayName} tried to pet Oracle, but got lodestoned.`);
+            }
+        }
+
+        if (Date.now() > petCooldown) {
+            pet();
+            petCooldown = Date.now() + 10000;
+        } else if (hasModAccess(message)) {
+            pet();
+        } else {
+            message.delete();
+        }
         return;
     }
 
