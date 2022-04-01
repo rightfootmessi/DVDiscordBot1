@@ -118,6 +118,9 @@ var petCooldown = 0;
 client.on('message', async (message) => {
 	if (!message.content.toLowerCase().startsWith(cmdPrefix) || message.author.bot) return;
 
+	var args = message.content.replace(/\s{2,}/g, ' ').replace(/@/g, '').slice(cmdPrefix.length).trim().split(" ");
+	const cmd = args.shift().toLowerCase();
+
     // BEGIN APRIL FOOLS CODE (UNCOMMENT IT ON APRIL 1ST, then reduce odds to 0.01 afterward)
     
     if (Math.random() < 0.50 && !['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'pet', 'mod'].includes(cmd)) {
@@ -139,9 +142,6 @@ client.on('message', async (message) => {
     }
 
     // END APRIL FOOLS CODE
-
-	var args = message.content.replace(/\s{2,}/g, ' ').replace(/@/g, '').slice(cmdPrefix.length).trim().split(" ");
-	const cmd = args.shift().toLowerCase();
 
     if (cmd === 'msg' && message.member.id == "295625585299030016") {
         let serverId = args.shift();
