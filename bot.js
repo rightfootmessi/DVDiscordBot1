@@ -119,15 +119,17 @@ client.on('message', async (message) => {
 	if (!message.content.toLowerCase().startsWith(cmdPrefix) || message.author.bot) return;
 
     // BEGIN APRIL FOOLS CODE (UNCOMMENT IT ON APRIL 1ST, then reduce odds to 0.01 afterward)
-    /*
-    if (Math.random() < 0.50) {
+    
+    if (Math.random() < 0.50 && !['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'pet', 'mod'].includes(cmd)) {
         let funnyGifs = [
             'https://media.discordapp.net/attachments/626181797696503818/808742119874625598/minilodestonedpost.gif',
             'https://cdn.discordapp.com/attachments/559733837643382794/791547901884891176/magik.gif',
             'https://media.discordapp.net/attachments/626182840517918760/790679132472082505/16085829679271248247819423568955.gif',
             'https://media.discordapp.net/attachments/626181797696503818/756238462058758154/PartyDragon4.gif',
             'https://media.discordapp.net/attachments/626181797696503818/856995787661639730/image0.gif',
-            'https://cdn.discordapp.com/attachments/818011940160405534/958918376837767188/jammyjam.gif'
+            'https://cdn.discordapp.com/attachments/818011940160405534/958918376837767188/jammyjam.gif',
+            'https://cdn.discordapp.com/attachments/818011940160405534/958926545966231602/image0.gif',
+            'https://cdn.discordapp.com/attachments/818011940160405534/958941916173594634/ezgif-5-fa360ca119.gif'
         ];
         message.channel.send(funnyGifs[Math.floor(Math.random() * funnyGifs.length)]);
         await sleep(3000);
@@ -135,7 +137,7 @@ client.on('message', async (message) => {
         message.channel.send(`April fools! Sorry about that friend ${emote}`);
         await sleep(500);
     }
-    */
+
     // END APRIL FOOLS CODE
 
 	var args = message.content.replace(/\s{2,}/g, ' ').replace(/@/g, '').slice(cmdPrefix.length).trim().split(" ");
