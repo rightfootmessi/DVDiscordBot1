@@ -2,19 +2,19 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const https = require('https');
 const cheerio = require('cheerio');
-const { Worker } = require('worker_threads');
+const { Worker, resourceLimits } = require('worker_threads');
 const fs = require('fs');
 const sprintf = require('sprintf-js').sprintf;
 const Mee6LevelsApi = require("mee6-levels-api");
 
 const cmdPrefix = 'd!';
 
-const helpMsg = "Command list: (prefix all commands with `" + cmdPrefix + "`)\n"
+const helpMsg = `Command list: (prefix all commands with \`${cmdPrefix}\`)\n`
                 + "- `breed <dragon>` - find out how to breed a dragon\n"
 				+ "- `elements <dragon>` - get the breeding elements (aka hidden elements) of a dragon\n"
 				+ "- `evolve <dragon>` - find the evolution requirements for a dragon\n"
                 + "- `feed [initial level] <final level> [rift]` - find the number of treats needed to feed a dragon from the initial level (defaults to 1 if not specified) to the final level"
-				+ "- `image <dragon> <adult|juvenile|baby|egg> [qualifier]` - get a PNG image of the dragon; defaults to adult if no stage specified; valid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding`, `summer`/`autumn`/`winter`/`spring` (seasonal), `snowman` (snowball), `wrapped` (giddle), `bush` (dargon) (aliases: `picture`, `img`, `pic`)\n"
+				+ "- `image <dragon> <adult|juvenile|baby|egg> [qualifier]` - get a PNG image of the dragon; defaults to adult if no stage specified; valid qualifiers can be listed using `d!image flags`  (aliases: `picture`, `img`, `pic`)\n"
 				+ "- `quest <quest>` - get the correct dragon to send on a quest\n"
 				+ "- `rates <dragon> [# of boosts OR 'rift']` - get the earning rates of a dragon\n"
                 + "- `result <dragon1>,<dragon2> <d:hh:mm:ss|hh:mm:ss> [fast|runic]` - given 2 parent dragons and the resulting timer, find the potential dragons that can result from the breed. (aliases: `results`, `fakeouts`)\n"
@@ -137,7 +137,7 @@ client.on('message', async (message) => {
         message.channel.send(funnyGifs[Math.floor(Math.random() * funnyGifs.length)]);
         await sleep(3000);
         let emote = ['<:dv_owobowos:803676880850780160>', '<:dv_ikastarko:870846746190831677>', '<:dv_loveheart:722966875952382002>'][Math.floor(Math.random() * 3)];
-        message.channel.send(`April fools! Sorry about that friend ${emote}`);
+        message.channel.send(`Just kidding! Sorry about that friend ${emote}`);
         await sleep(500);
     }
 
@@ -162,7 +162,7 @@ client.on('message', async (message) => {
 		if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && (message.channel.id != 626182769256693770 && message.channel.id != 818011940160405534) && message.channel.id != 276384829593878529) return; // bot-commands, oracle-test, mod-chat
 	}
 
-    if (args.includes("monolith") && !(cmd === 'result' || cmd === 'fakeouts') && !(cmd === 'sandbox' || cmd === 'dvbox')) {
+    if (args.includes("monolith") && !(cmd === 'result' || cmd === 'results' || cmd === 'fakeouts') && !(cmd === 'sandbox' || cmd === 'dvbox')) {
         if (isNaN(args[args.indexOf("monolith") + 1])) {
             message.channel.send("Your query contains a monolith dragon, but you did not specify which. Please re-enter the query using `Monolith #`, where `#` is replaced by the number of the monolith dragon.");
             return;
@@ -213,90 +213,52 @@ client.on('message', async (message) => {
 			if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
 			else if (isPrimary(dragon)) message.channel.send(`${dragon} is a primary dragon, just breed two of them together to get more...`);
 			else if (isEvolution(dragon)) message.channel.send(`${dragon} is an evolved dragon, you must breed two of them together to get more. To find out how to evolve this dragon, type \`d!evolve ${dragon}\``);
-			else if (dragon in cache) message.channel.send(cache[dragon]["breedCombo"]).catch(error => {
-				message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-			});
 			else {
-				var dragon_ = dragon.replace(/ /g, "_");
-				https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
-					console.log("Received " + res.statusCode + " status code for " + dragon + "'s page");
-                    if (res.statusCode == 404) {
-                        message.channel.send("ERROR: " + dragon + "'s wiki page returned a 404 error.");
-                        return;
-                    }
-					var body = [];
-					res.on('data', (chunk) => body.push(chunk)).on('end', () => {
-						const $ = cheerio.load(Buffer.concat(body).toString());
-						readWikiPage(dragon, $);
-						message.channel.send(cache[dragon]["breedCombo"]).catch(error => {
-							message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-						});
-					});
-				});
-			}
+                questMsg = () => message.channel.send(cache[dragon]["breedCombo"]).catch(error => {
+                    message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+                });
+
+                if (dragon in cache) questMsg();
+                else fetchFromWiki(dragon, message, questMsg);
+            }
 		}
 	} else if (cmd === 'elements') {
 		var dragon = prettyString(args, " ");
 		if (!dragon) message.channel.send("You must specify a dragon!");
 		else {
 			if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
-			if (!dragonList.includes(dragon)) message.channel.send("Unrecognized dragon name \"" + dragon + "\" (did you spell it correctly?)");
+			if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
 			else if (isPrimary(dragon)) message.channel.send(dragon + " is a primary dragon, its only element is in its name...");
-			else if (dragon in cache) message.channel.send(cache[dragon]["elements"]).catch(error => {
-				message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-			});
 			else {
-				var dragon_ = dragon.replace(/ /g, "_");
-				https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
-					console.log("Received " + res.statusCode + " status code for " + dragon + "'s page");
-                    if (res.statusCode == 404) {
-                        message.channel.send("ERROR: " + dragon + "'s wiki page returned a 404 error.");
-                        return;
-                    }
-					var body = [];
-					res.on('data', (chunk) => body.push(chunk)).on('end', () => {
-						const $ = cheerio.load(Buffer.concat(body).toString());
-						readWikiPage(dragon, $);
-						message.channel.send(cache[dragon]["elements"]).catch(error => {
-							message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-						});
-					});
-				});
-			}
+                elementsMsg = () => message.channel.send(cache[dragon]["elements"]).catch(error => {
+                    message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+                });
+                
+                if (dragon in cache) elementsMsg();
+                else fetchFromWiki(dragon, message, elementsMsg);
+            }
 		}
 	} else if (cmd === 'evolve') {
 		var dragon = prettyString(args, " ");
 		if (!dragon) message.channel.send("You must specify a dragon!");
 		else {
 			if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
-			if (!dragonList.includes(dragon)) message.channel.send("Unrecognized dragon name \"" + dragon + "\" (did you spell it correctly?)");
+			if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
 			else if (!isEvolution(dragon)) message.channel.send(dragon + " is not obtained through evolution.");
-			else if (dragon in cache) message.channel.send(cache[dragon]["evolve"]).catch(error => {
-				message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-			});
-			else {
-				var dragon_ = dragon.replace(/ /g, "_");
-				https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
-					console.log("Received " + res.statusCode + " status code for " + dragon + "'s page");
-                    if (res.statusCode == 404) {
-                        message.channel.send("ERROR: " + dragon + "'s wiki page returned a 404 error.");
-                        return;
-                    }
-					var body = [];
-					res.on('data', (chunk) => body.push(chunk)).on('end', () => {
-						const $ = cheerio.load(Buffer.concat(body).toString());
-						readWikiPage(dragon, $);
-						message.channel.send(cache[dragon]["evolve"]).catch(error => {
-							message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-						});
-					});
-				});
-			}
+            else {
+                evolveMsg = () => message.channel.send(cache[dragon]["evolve"]).catch(error => {
+                    message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+                });
+                
+                if (dragon in cache) evolveMsg();
+                else fetchFromWiki(dragon, message, evolveMsg);
+            }
 		}
 	} else if (cmd === 'rates') {
 		var rift = false;
 		var boosts = 0;
 		var last = args.pop();
+        // edge case: check if user is seeking DC rates of a rift primary
 		if (last == 'rift') {
             var nextLast = args.pop();
             if (dragonList.includes(prettyString([nextLast, last], " ") + " Dragon")) {
@@ -324,89 +286,50 @@ client.on('message', async (message) => {
 		if (!dragon) message.channel.send("You must specify a dragon!");
 		else {
 			if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
-			if (!dragonList.includes(dragon)) message.channel.send("Unrecognized dragon name \"" + dragon + "\" (did you spell it correctly?)");
-			else if (dragon in cache) {
-				if (!rift) message.channel.send(cache[dragon]["rates"]["non-rift"][Math.min(boosts, cache[dragon]["rates"]["maxBoosts"])]).catch(error => {
-					message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-				});
-				else message.channel.send(cache[dragon]["rates"]["rift"]).catch(error => {
-					message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-				});
-			} else {
-				var dragon_ = dragon.replace(/ /g, "_");
-				https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
-					console.log("Received " + res.statusCode + " status code for " + dragon + "'s page");
-                    if (res.statusCode == 404) {
-                        message.channel.send("ERROR: " + dragon + "'s wiki page returned a 404 error.");
-                        return;
-                    }
-					var body = [];
-					res.on('data', (chunk) => body.push(chunk)).on('end', () => {
-						const $ = cheerio.load(Buffer.concat(body).toString());
-						readWikiPage(dragon, $);
-						if (!rift) message.channel.send(cache[dragon]["rates"]["non-rift"][Math.min(boosts, cache[dragon]["rates"]["maxBoosts"])]);
-						else message.channel.send(cache[dragon]["rates"]["rift"]).catch(error => {
-							message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-						});
-					});
-				});
-			}
+			if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
+            else {
+                ratesMsg = () => {
+                    if (!rift) message.channel.send(cache[dragon]["rates"]["non-rift"][Math.min(boosts, cache[dragon]["rates"]["maxBoosts"])]).catch(error => {
+                        message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+                    });
+                    else message.channel.send(cache[dragon]["rates"]["rift"]).catch(error => {
+                        message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+                    });
+                }
+
+                if (dragon in cache) ratesMsg();
+                else fetchFromWiki(dragon, message, ratesMsg);
+            }
 		}
 	} else if (cmd === 'timer') {
 		var dragon = prettyString(args, " ");
 		if (!dragon) message.channel.send("You must specify a dragon!");
 		else {
 			if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
-			if (!dragonList.includes(dragon)) message.channel.send("Unrecognized dragon name \"" + dragon + "\" (did you spell it correctly?)");
-			else if (dragon in cache) message.channel.send(cache[dragon]["timer"]).catch(error => {
-				message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-			});
-			else {
-				var dragon_ = dragon.replace(/ /g, "_");
-				https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
-					console.log("Received " + res.statusCode + " status code for " + dragon + "'s page");
-                    if (res.statusCode == 404) {
-                        message.channel.send("ERROR: " + dragon + "'s wiki page returned a 404 error.");
-                        return;
-                    }
-					var body = [];
-					res.on('data', (chunk) => body.push(chunk)).on('end', () => {
-						const $ = cheerio.load(Buffer.concat(body).toString());
-						readWikiPage(dragon, $);
-						message.channel.send(cache[dragon]["timer"]).catch(error => {
-							message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-						});
-					});
-				});
-			}
+			if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
+            else {
+                timerMsg = () => message.channel.send(cache[dragon]["timer"]).catch(error => {
+                    message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+                });
+                
+                if (dragon in cache) timerMsg();
+                else fetchFromWiki(dragon, message, timerMsg);
+            }
 		}
 	} else if (cmd === 'uses') {
         var dragon = prettyString(args, " ");
 		if (!dragon) message.channel.send("You must specify a dragon!");
 		else {
 			if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
-			if (!dragonList.includes(dragon)) message.channel.send("Unrecognized dragon name \"" + dragon + "\" (did you spell it correctly?)");
-			else if (dragon in cache) message.channel.send(cache[dragon]["uses"]).catch(error => {
-				message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-			});
-			else {
-				var dragon_ = dragon.replace(/ /g, "_");
-				https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
-					console.log("Received " + res.statusCode + " status code for " + dragon + "'s page");
-                    if (res.statusCode == 404) {
-                        message.channel.send("ERROR: " + dragon + "'s wiki page returned a 404 error.");
-                        return;
-                    }
-					var body = [];
-					res.on('data', (chunk) => body.push(chunk)).on('end', () => {
-						const $ = cheerio.load(Buffer.concat(body).toString());
-						readWikiPage(dragon, $);
-						message.channel.send(cache[dragon]["uses"]).catch(error => {
-							message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-						});
-					});
-				});
-			}
+			if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
+            else {
+                usesMsg = () => message.channel.send(cache[dragon]["uses"]).catch(error => {
+                    message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+                });
+                
+                if (dragon in cache) usesMsg();
+                else fetchFromWiki(dragon, message, usesMsg);
+            }
 		}
     } else if (cmd === 'feed') {
         if (args.length > 3) {
@@ -442,21 +365,13 @@ client.on('message', async (message) => {
 	} else if (cmd === 'smoulderbrushed' || cmd === 'smoulderbushed') {
 		message.channel.send("I just got a freaking Smoulderbush for the 30 day event gift. Is this a sick joke...? I didn't spend 30 days playing this event for a freaking SMOULDERBUSH DRAGON. I'm so mad this isn't even funny.");
 	} else if (cmd === 'sandbox' || cmd === 'dvbox') {
-		if (args.length == 0) message.channel.send("The DragonVale Sandbox (or dvbox, for short) can be found at https://dvbox.bin.sh/\n\nNote: dvbox is fanmade. As such, it may not be entirely up-to-date. In addition, the breeding odds are not accurate and should not be trusted.");
+		if (args.length == 0) message.channel.send("The DragonVale Sandbox (or dvbox, for short) can be found at https://dvbox.bin.sh/ \n\nNote: dvbox is fanmade. As such, it may not be entirely up-to-date. In addition, the breeding odds are not accurate and should not be trusted.");
 		else {
-			var beb = false, fast = false, age = args.pop();
-			if (age === 'fast') {
-				fast = true;
-				age = args.pop();
-				if (age === 'beb') beb = true;
-				else args.push(age);
-			} else if (age === 'beb') {
-				beb = true;
-				age = args.pop();
-				if (age === 'fast') fast = true;
-				else args.push(age);
-			}
-			else args.push(age);
+			let fast = args.slice(-2).includes('fast');
+            let beb = args.slice(-2).includes('beb');
+            if (fast) args.splice(args.indexOf('fast'), 1);
+            if (beb) args.splice(args.indexOf('beb'), 1);
+            
 			var parents = args.join(" ").split(",");
 			if (parents.length != 2) message.channel.send("You must specify 2 dragons for the parents.");
 			else {
@@ -465,22 +380,28 @@ client.on('message', async (message) => {
 				var d2 = prettyString(parents[1].trim().split(" "), " ");
 				if (d2.indexOf("Dragon") == -1) d2 += " Dragon";
                 if (d1.includes('Monolith') || d1.includes('Snowflake') || d2.includes('Monolith') || d2.includes('Snowflake')) message.channel.send("It looks like you're trying to breed with a Monolith and/or Snowflake. Unfortunately you will have to manually enter your query at https://dvbox.bin.sh/, as there is no way to specify the number of the dragon in the URL. Sorry!");
-				else if (!dragonList.includes(d1)) message.channel.send("Unrecognized dragon name \"" + d1 + "\" (did you spell it correctly?)");
-				else if (!dragonList.includes(d2)) message.channel.send("Unrecognized dragon name \"" + d2 + "\" (did you spell it correctly?)");
+				else if (!dragonList.includes(d1)) message.channel.send(`Unrecognized dragon name "${d1}" (did you spell it correctly?)`);
+				else if (!dragonList.includes(d2)) message.channel.send(`Unrecognized dragon name "${d2}" (did you spell it correctly?)`);
 				else {
 					var imgLink = "https://dvbox.bin.sh/#";
 					imgLink += "d1=" + d1.replace(/ /g, "").replace("Dragon", "").toLowerCase();
 					imgLink += ";d2=" + d2.replace(/ /g, "").replace("Dragon", "").toLowerCase();
 					if (beb) imgLink += ";beb=1";
 					if (fast) imgLink += ";fast=1";
-					message.channel.send("See the breeding results of " + d1 + " x " + d2 + " at: " + imgLink);
+					message.channel.send(`See the breeding results of ${d1} x ${d2} at: ${imgLink}`);
 				}
 			}
 		}
 	} else if (cmd === 'image' || cmd === 'picture' || cmd === 'img' || cmd === 'pic') {
 		const qualifiers = ["normal", "day", "night", "organic", "conjured", "enhanced", "nightenhanced", "charlatan", "scourge", "barbarous", "macabre", "hiding", "summer", "autumn", "winter", "spring", "snowman", "wrapped", "bush"];
 		const ages = ["elder", "adult", "juvenile", "baby", "egg"];
-		var qualifier = args.pop();
+		
+        if (args[0] == 'flags') {
+            message.channel.send("All currently available image flags (note that no flags are applicable to every dragon): `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding`, `summer`/`autumn`/`winter`/`spring` (seasonal), `snowman` (snowball), `wrapped` (giddle), `bush` (dargon)");
+            return;
+        }
+
+        var qualifier = args.pop();
 		if (!qualifiers.includes(qualifier) || args.length == 0) {
 			args.push(qualifier);
 			qualifier = "normal";
@@ -494,164 +415,47 @@ client.on('message', async (message) => {
 		if (!dragon) message.channel.send("You must specify a dragon!");
 		else {
 			if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
-			if (!dragonList.includes(dragon)) message.channel.send("Unrecognized dragon name \"" + dragon + "\" (did you spell it correctly?)");
-			else if (dragon in cache) {
-				var imgLink;
-				if (age == 'egg') imgLink = cache[dragon]["pictures"]["egg"];
-                else if (dragon == "Seasonal Dragon") {
-                    if (qualifier == "normal") {
-                        message.channel.send("Please specify a season for the " + dragon + "!");
-                        return;
-                    } else if (!["summer", "autumn", "winter", "spring"].includes(qualifier)) message.channel.send(qualifier + " is not a valid season!");
-                    else {
-						switch (age) {
-							case 'adult':
-								imgLink = cache[dragon]["pictures"][qualifier]["adult"];
-								break;
-							case 'juvenile':
-								imgLink = cache[dragon]["pictures"][qualifier]["juvenile"];
-								break;
-							case 'baby':
-								imgLink = cache[dragon]["pictures"][qualifier]["baby"];
-								break;
-							default:
-								imgLink = cache[dragon]["pictures"][qualifier]["adult"];
-						}
-					}
-                } else if (qualifier == 'night') {
-					if (!dayNight.includes(dragon)) message.channel.send(dragon + " does not have a night form!");
-					else {
-						switch (age) {
-							case 'elder':
-								imgLink = cache[dragon]["pictures"]["night"]["elder"];
-								break;
-							case 'adult':
-								imgLink = cache[dragon]["pictures"]["night"]["adult"];
-								break;
-							case 'juvenile':
-								imgLink = cache[dragon]["pictures"]["night"]["juvenile"];
-								break;
-							case 'baby':
-								imgLink = cache[dragon]["pictures"]["night"]["baby"];
-								break;
-							default:
-								imgLink = cache[dragon]["pictures"]["night"]["adult"];
-						}
-					}
-				} else {
-					if (qualifier == 'day' || qualifier == 'normal') {
-						switch (age) {
-							case 'elder':
-								imgLink = cache[dragon]["pictures"]["normal"]["elder"];
-								break;
-							case 'adult':
-								imgLink = cache[dragon]["pictures"]["normal"]["adult"];
-								break;
-							case 'juvenile':
-								imgLink = cache[dragon]["pictures"]["normal"]["juvenile"];
-								break;
-							case 'baby':
-								imgLink = cache[dragon]["pictures"]["normal"]["baby"];
-								break;
-							default:
-								imgLink = cache[dragon]["pictures"]["normal"]["adult"];
-						}
-					} else {
-						if (!cache[dragon]["pictures"][qualifier]) message.channel.send(dragon + " does not have a(n) " + qualifier + " form!\nValid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding`, `summer`/`autumn`/`winter`/`spring` (seasonal), `snowman` (snowball), `wrapped` (giddle), `bush` (dargon)");
-						else imgLink = cache[dragon]["pictures"][qualifier];
-					}
-				}
-				message.channel.send(imgLink ? imgLink : "Sorry, I couldn't find the image you were looking for! Here's the wiki page to retrieve it yourself: <" + 'https://dragonvale.fandom.com/wiki/' + dragon.replace(/ /g, "_") + ">").catch(error => {
-					message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-				});
-			} else {
-				var dragon_ = dragon.replace(/ /g, "_");
-				https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
-					console.log("Received " + res.statusCode + " status code for " + dragon + "'s page");
-                    if (res.statusCode == 404) {
-                        message.channel.send("ERROR: " + dragon + "'s wiki page returned a 404 error.");
-                        return;
+			if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
+            else {
+                imgMsg = () => {
+                    var imgLink;
+                    if (age == 'egg') imgLink = cache[dragon]["pictures"]["egg"];
+                    else if (dragon == "Seasonal Dragon") {
+                        if (qualifier == "normal") {
+                            message.channel.send(`Please specify a season for the ${dragon}!`);
+                            return;
+                        } else if (!["summer", "autumn", "winter", "spring"].includes(qualifier)) message.channel.send(`${qualifier} is not a valid season!`);
+                        else {
+                            imgLink = cache[dragon]["pictures"][qualifier][age != 'elder' ? age : 'adult'];
+                        }
+                    } else if (qualifier == 'night') {
+                        if (!dayNight.includes(dragon)) message.channel.send(dragon + " does not have a night form!");
+                        else {
+                            imgLink = cache[dragon]["pictures"][qualifier][age != 'elder' ? age : 'adult'];
+                        }
+                    } else {
+                        if (qualifier == 'day' || qualifier == 'normal') {
+                            imgLink = cache[dragon]["pictures"][qualifier][age];
+                        } else {
+                            if (!cache[dragon]["pictures"][qualifier]) message.channel.send(dragon + " does not have a(n) " + qualifier + " form!\nValid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding`, `summer`/`autumn`/`winter`/`spring` (seasonal), `snowman` (snowball), `wrapped` (giddle), `bush` (dargon)");
+                            else imgLink = cache[dragon]["pictures"][qualifier];
+                        }
                     }
-					var body = [];
-					res.on('data', (chunk) => body.push(chunk)).on('end', () => {
-						const $ = cheerio.load(Buffer.concat(body).toString());
-						readWikiPage(dragon, $);
-						var imgLink;
-						if (age == 'egg') imgLink = cache[dragon]["pictures"]["egg"];
-						else if (dragon == "Seasonal Dragon") {
-                            if (qualifier == "normal") message.channel.send("Please specify a season for the " + dragon + "!");
-                            else if (!["summer", "autumn", "winter", "spring"].includes(qualifier)) message.channel.send(qualifier + " is not a valid season!");
-                            else {
-                                switch (age) {
-                                    case 'adult':
-                                        imgLink = cache[dragon]["pictures"][qualifier]["adult"];
-                                        break;
-                                    case 'juvenile':
-                                        imgLink = cache[dragon]["pictures"][qualifier]["juvenile"];
-                                        break;
-                                    case 'baby':
-                                        imgLink = cache[dragon]["pictures"][qualifier]["baby"];
-                                        break;
-                                    default:
-                                        imgLink = cache[dragon]["pictures"][qualifier]["adult"];
-                                }
-                            }
-                        } else if (qualifier == 'night') {
-							if (!dayNight.includes(dragon)) message.channel.send(dragon + " does not have a night form!");
-							else {
-								switch (age) {
-									case 'elder':
-										imgLink = cache[dragon]["pictures"]["night"]["elder"];
-										break;
-									case 'adult':
-										imgLink = cache[dragon]["pictures"]["night"]["adult"];
-										break;
-									case 'juvenile':
-										imgLink = cache[dragon]["pictures"]["night"]["juvenile"];
-										break;
-									case 'baby':
-										imgLink = cache[dragon]["pictures"]["night"]["baby"];
-										break;
-									default:
-										imgLink = cache[dragon]["pictures"]["night"]["adult"];
-								}
-							}
-						} else {
-							if (qualifier == 'day' || qualifier == 'normal') {
-								switch (age) {
-									case 'elder':
-										imgLink = cache[dragon]["pictures"]["normal"]["elder"];
-										break;
-									case 'adult':
-										imgLink = cache[dragon]["pictures"]["normal"]["adult"];
-										break;
-									case 'juvenile':
-										imgLink = cache[dragon]["pictures"]["normal"]["juvenile"];
-										break;
-									case 'baby':
-										imgLink = cache[dragon]["pictures"]["normal"]["baby"];
-										break;
-									default:
-										imgLink = cache[dragon]["pictures"]["normal"]["adult"];
-								}
-							} else {
-								if (!cache[dragon]["pictures"][qualifier]) message.channel.send(dragon + " does not have a(n) " + qualifier + " form!\nValid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding, `summer`/`autumn`/`winter`/`spring` (seasonal), `snowman` (snowball), `wrapped` (giddle), `bush` (dargon)");
-								else imgLink = cache[dragon]["pictures"][qualifier];
-							}
-						}
-						message.channel.send(imgLink ? imgLink : "Sorry, I couldn't find the image you were looking for! Here's the wiki page to retrieve it yourself: <" + 'https://dragonvale.fandom.com/wiki/' + dragon.replace(/ /g, "_") + ">").catch(error => {
-							message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-						});
-					});
-				});
-			}
+                    message.channel.send(imgLink ? imgLink : "Sorry, I couldn't find the image you were looking for! Here's the wiki page to retrieve it yourself: <" + 'https://dragonvale.fandom.com/wiki/' + dragon.replace(/ /g, "_") + ">").catch(error => {
+                        message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+                    });
+                }
+                
+                if (dragon in cache) imgMsg();
+                else fetchFromWiki(dragon, message, imgMsg);
+            }
 		}
 	} else if (cmd === 'wiki') {
 		var dragon = prettyString(args, " ");
 		if (!dragon) message.channel.send("You must specify a dragon!");
 		else {
 			if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
-			if (!dragonList.includes(dragon)) message.channel.send("Unrecognized dragon name \"" + dragon + "\" (did you spell it correctly?)");
+			if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
 			else message.channel.send('https://dragonvale.fandom.com/wiki/' + dragon.replace(/\s\d/, "").replace(/ /g, "_"));
 		}
 	} else if (cmd === 'result' || cmd === 'results' || cmd === 'fakeouts') {
@@ -663,25 +467,21 @@ client.on('message', async (message) => {
         
         var times = args.pop().split(":");
         var days = 0, hrs = 0, mins = 0, secs = 0;
-        if (times.length == 3) {
-            hrs = parseInt(times[0]);
-            mins = parseInt(times[1]);
-            secs = parseInt(times[2]);
-        } else if (times.length == 4) {
-            days = parseInt(times[0]);
-            hrs = parseInt(times[1]);
-            mins = parseInt(times[2]);
-            secs = parseInt(times[3]);
-        } else {
+        if (times.length < 3 || times.length > 4) {
             message.channel.send("You have provided the timer in an invalid format. Please write the timer as either `d:hh:mm:ss` or `hh:mm:ss`.");
             return;
+        } else {
+            if (times.length == 4) days = parseInt(times[times.length - 4]);
+            hrs = parseInt(times[times.length - 3]);
+            mins = parseInt(times[times.length - 2]);
+            secs = parseInt(times[times.length - 1]);
         }
+        
         if (isNaN(days) || isNaN(hrs) || isNaN(mins) || isNaN(secs)) {
             message.channel.send("Your timer could not be parsed. Please write the timer as either `d:hh:mm:ss` or `hh:mm:ss`.");
             return;
         }
-        var timeInt = secs + (60 * mins) + (3600 * hrs) + (86400 * days);
-        if (runic) timeInt *= 4;
+        var timeInt = (secs + (60 * mins) + (3600 * hrs) + (86400 * days)) * (runic ? 4 : 1);
         var timer = fmt_dhms(timeInt);
 
         var parents = args.join(" ").split(",");
@@ -694,74 +494,45 @@ client.on('message', async (message) => {
             if (!dragonList.includes(d1)) {
                 if (d1 == 'Monolith Dragon') message.channel.send("Your query contains a monolith dragon, but you did not specify which. Please re-enter the query using `Monolith #`, where `#` is replaced by the number of the monolith dragon.");
                 else if (d1 == 'Snowflake Dragon') message.channel.send("Your query contains a snowflake dragon, but you did not specify which. Please re-enter the query using `Snowflake #`, where `#` is replaced by the number of the snowflake dragon.");
-                else message.channel.send("Unrecognized dragon name \"" + d1 + "\" (did you spell it correctly?)");
+                else message.channel.send(`Unrecognized dragon name "${d1}" (did you spell it correctly?)`);
             } else if (!dragonList.includes(d2)) {
                 if (d2 == 'Monolith Dragon') message.channel.send("Your query contains a monolith dragon, but you did not specify which. Please re-enter the query using `Monolith #`, where `#` is replaced by the number of the monolith dragon.");
                 else if (d2 == 'Snowflake Dragon') message.channel.send("Your query contains a snowflake dragon, but you did not specify which. Please re-enter the query using `Snowflake #`, where `#` is replaced by the number of the snowflake dragon.");
-                else message.channel.send("Unrecognized dragon name \"" + d2 + "\" (did you spell it correctly?)");
+                else message.channel.send(`Unrecognized dragon name "${d2}" (did you spell it correctly?)`);
             } else {
-                if ((d1 + "|" + d2) in dvboxCache[fast ? "fast" : "normal"]) {
+                resultsMsg = () => {
                     var timerList = dvboxCache[fast ? "fast" : "normal"][d1 + "|" + d2];
-                        
-                    if (timerList.error) {
-                        message.channel.send(d1 + " and " + d2 + " cannot be bred together. Please try a different query.");
-                        return;
-                    }
 
                     if (timerList.noParent) {
-                        message.channel.send(timerList.noParent + " has not yet been added to DVBox. Please try a different query.");
+                        message.channel.send(`${timerList.noParent} has not yet been added to DVBox. Please try a different query.`);
                         return;
                     } else if (timerList.error) {
-                        message.channel.send(d1 + " and " + d2 + " cannot be bred together. Please try a different query.");
+                        message.channel.send(`${d1} and ${d2} cannot be bred together. Please try a different query.`);
                         return;
                     }
                     
                     var exactMatches = [];
                     var approxMatches = [];
                     for (const key in timerList) {
-                        //if (timerList[key].indexOf("%") != -1) delete timerList[key];
                         if (timerList[key] == timeInt) exactMatches.push(key);
                         else if (timeInt < timerList[key] && timerList[key] <= timeInt + (runic ? 480 : 120)) approxMatches.push(key);
                     }
                     var returnMessage = "";
-                    if (exactMatches.length > 0) returnMessage += ("A timer of " + (runic ? times.join(":") + " in runic caves" : timer) + " when breeding " + d1 + " x " + d2 + " exactly matches: **" + exactMatches.join("**, **").replace(/_/g, " "));
-                    if (approxMatches.length > 0) returnMessage += (((returnMessage.length == 0) ? "A timer of " + timer + (runic ? " (" + times.join(":") + " in runic cave)" : "") + " when breeding " + d1 + " x " + d2 + " is *within 2 minutes* of: **" : "\nThis timer is also within 1 minute of: **") + approxMatches.join("**, **").replace(/_/g, " "));
+                    if (exactMatches.length > 0) returnMessage += (`A timer of ${(runic ? `${times.join(":")} in runic caves` : timer)} when breeding ${d1} x ${d2} exactly matches: **${exactMatches.join("**, **").replace(/_/g, " ")}`);
+                    if (approxMatches.length > 0) returnMessage += (((returnMessage.length == 0) ? `A timer of ${timer + (runic ? ` (${times.join(":")} in runic cave)` : "")} when breeding ${d1} x ${d2} is *within 2 minutes* of: **` : "\nThis timer is also within 1 minute of: **") + approxMatches.join("**, **").replace(/_/g, " "));
                     if (returnMessage.length > 0) returnMessage += "**\nNOTE: Some of the listed dragons may not be available at this time. Check the dragonarium to confirm availability.";
-                    else returnMessage = ("No matches found for timer " + (runic ? times.join(":") + " in runic caves" : timer) + " when breeding " + d1 + " x " + d2);
+                    else returnMessage = (`No matches found for timer ${(runic ? times.join(":") + " in runic caves" : timer)} when breeding ${d1} x ${d2}`);
                     message.channel.send(returnMessage);
-                } else {
-                    var link = d1.replace(/ /g, "_") + "|" + d2.replace(/ /g, "_") + "|";
-                    link += "https://dvbox.bin.sh/#";
-                    link += "d1=" + d1.replace(/ /g, "").replace("Dragon", "").toLowerCase();
-                    link += ";d2=" + d2.replace(/ /g, "").replace("Dragon", "").toLowerCase();
-                    if (fast) link += ";fast=1";
-                    link += ";beb=1";
-                    worker.once('message', timerList => {
-                        console.log("Displaying results of query: " + link);
-                        dvboxCache[fast ? "fast" : "normal"][d1 + "|" + d2] = timerList;
+                }
 
-                        if (timerList.noParent) {
-                            message.channel.send(timerList.noParent + " has not yet been added to DVBox. Please try a different query.");
-                            return;
-                        } else if (timerList.error) {
-                            message.channel.send(d1 + " and " + d2 + " cannot be bred together. Please try a different query.");
-                            return;
-                        }
-                        
-                        var exactMatches = [];
-                        var approxMatches = [];
-                        for (const key in timerList) {
-                            //if (timerList[key].indexOf("%") != -1) delete timerList[key];
-                            if (timerList[key] == timeInt) exactMatches.push(key);
-                            // SCRAP THIS, THE TIMERS ARE RETURNED AS FORMATTED STRINGS NOT INTEGERS
-                            else if (timeInt < timerList[key] && timerList[key] <= timeInt + (runic ? 480 : 120)) approxMatches.push(key);
-                        }
-                        var returnMessage = "";
-                        if (exactMatches.length > 0) returnMessage += ("A timer of " + (runic ? times.join(":") + " in runic caves" : timer) + " when breeding " + d1 + " x " + d2 + " exactly matches: **" + exactMatches.join("**, **").replace(/_/g, " "));
-                        if (approxMatches.length > 0) returnMessage += (((returnMessage.length == 0) ? "A timer of " + (runic ? times.join(":") + " in runic caves" : timer) + " when breeding " + d1 + " x " + d2 + " is *within 2 minutes* of: **" : "\nThis timer is also within 1 minute of: **") + approxMatches.join("**, **").replace(/_/g, " "));
-                        if (returnMessage.length > 0) returnMessage += "**\nNOTE: Some of the listed dragons may not be available at this time. Check the dragonarium to confirm availability.";
-                        else returnMessage = ("No matches found for timer " + (runic ? times.join(":") + " in runic caves" : timer) + " when breeding " + d1 + " x " + d2);
-                        message.channel.send(returnMessage);
+                if ((d1 + "|" + d2) in dvboxCache[fast ? "fast" : "normal"]) {
+                    resultsMsg();
+                } else {
+                    var link = d1.replace(/ /g, "_") + "|" + d2.replace(/ /g, "_");
+                    if (fast) link += "|fast";
+                    worker.once('message', timerList => {
+                        dvboxCache[fast ? "fast" : "normal"][d1 + "|" + d2] = timerList;
+                        resultsMsg();
                     });
                     worker.postMessage(link);
                 }
@@ -770,9 +541,9 @@ client.on('message', async (message) => {
     } else if (cmd === '' || cmd === 'help') {		
 		message.channel.send(helpMsg);
 	} else if (cmd === 'mod' && hasModAccess(message)) {
-        console.log(message.author.tag + " ran mod cmd " + message.content.toLowerCase());
+        console.log(`${message.author.tag} ran mod cmd ${message.content.toLowerCase()}`);
         if (args.length == 0) {
-            const helpMsg = "Mod command list: (prefix all commands with `" + cmdPrefix + "mod`)\n"
+            const helpMsg = `Mod command list: (prefix all commands with \`${cmdPrefix}mod\`)\n`
                     + "- `viewlist [primaries/evolutions/enhanced/dayNight/hiding]` - sends my stored list of dragons to your DMs; optionally specify a flag to only be sent dragons matching that flag, otherwise I send the whole list (warning: it's long)\n"
                     + "- `add <dragon>` - add dragon to dragon list\n"
                     + "- `remove <dragon>` - remove dragon from list\n"
@@ -1058,28 +829,26 @@ client.on('message', async (message) => {
             }
         }
     } else {
-		message.channel.send("Unknown command. Type `" + cmdPrefix + "help` for a list of commands.");
+		message.channel.send(`Unknown command. Type \`${cmdPrefix}help\` for a list of commands.`);
 	}
 });
 
-client.on('messageDelete', message => {
-    if (message.attachments.size > 0) {
-        const botLogCh = message.guild.channels.cache.get('306854862539325450');
-        const embed = new Discord.MessageEmbed()
-                .setColor("#ff0000")
-                .setAuthor(message.author.tag, message.author.avatarURL())
-                .setDescription("Deleted message has attachments")
-                .addField("Message Text", message.content)
-                .setTimestamp()
-                .setFooter(`Message ID: ${message.id} | User ID: ${message.author.id}`);
-    
-        var i = 0;
-        message.attachments.forEach(attachment => {
-            embed.addField(`Attachment ${++i}`, attachment.url + " (Attachment ID: " + attachment.id + ")");
+fetchFromWiki = function(dragon, message, callback) {
+    var dragon_ = dragon.replace(/ /g, "_");
+    https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
+        console.log("Received " + res.statusCode + " status code for " + dragon + "'s page");
+        if (res.statusCode == 404) {
+            message.channel.send("ERROR: " + dragon + "'s wiki page returned a 404 error.");
+            return;
+        }
+        var body = [];
+        res.on('data', (chunk) => body.push(chunk)).on('end', () => {
+            const $ = cheerio.load(Buffer.concat(body).toString());
+            readWikiPage(dragon, $);
+            callback();
         });
-        botLogCh.send(embed);
-    }
-});
+    });
+}
 
 // Note to self: if running locally, remember to replace the variable with the secret token itself; otherwise, make sure it says process.env.BOT_TOKEN !!!
 client.login(process.env.BOT_TOKEN);
@@ -1185,13 +954,11 @@ loadQuests = () => {
 					var qName = $(elem).children('td').eq(0).text().trim().toLowerCase();
 					var qDragon = $(elem).children('td').eq(2).text().trim();
 					questTable[qName] = qDragon;
-					//dragonList.push(qDragon);
 					numLoaded++;
 				}
 			});
 			console.log(numLoaded + " quests loaded!");
 			questsLoaded = true;
-			//dragonList = dragonList.concat(noQuest);
 		}).on('error', (e) => {
 			console.error("An error occurred, quests could not be loaded.\nFull error:\n" + e);
 		});

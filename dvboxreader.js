@@ -17,8 +17,7 @@ https.get('https://dvboxcdn.com/data/dragons.js', (res) => {
 parentPort.on('message', data => {
     const d1 = data.split("|")[0];
     const d2 = data.split("|")[1];
-    const link = data.split("|")[2];
-    const fast = link.search('fast') != -1 ? true : false;
+    const fast = data.split("|").length > 2;
 
     var timerList = {};
     var results = breed_calc(d1, d2, true);
