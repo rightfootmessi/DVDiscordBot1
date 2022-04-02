@@ -123,7 +123,7 @@ client.on('message', async (message) => {
 
     // BEGIN APRIL FOOLS CODE (UNCOMMENT IT ON APRIL 1ST, then reduce odds to 0.01 afterward)
     
-    if (Math.random() < 0.50 && !['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'pet', 'mod'].includes(cmd)) {
+    if (Math.random() < 0.01 && !['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'pet', 'mod', 'help'].includes(cmd)) {
         let funnyGifs = [
             'https://media.discordapp.net/attachments/626181797696503818/808742119874625598/minilodestonedpost.gif',
             'https://cdn.discordapp.com/attachments/559733837643382794/791547901884891176/magik.gif',
