@@ -144,6 +144,10 @@ client.on('message', async (message) => {
     // END APRIL FOOLS CODE
 
     if (cmd === 'msg' && message.member.id == "295625585299030016") {
+        if (args[0] == 'print') {
+            console.log(JSON.stringify(cache, null, 4));
+            return;
+        }
         let serverId = args.shift();
         serverId = (serverId.toLowerCase() == 'dv') ? '233370210617262080' : serverId;
         let server = client.guilds.cache.get(serverId);
@@ -435,7 +439,7 @@ client.on('message', async (message) => {
                         }
                     } else {
                         if (qualifier == 'day' || qualifier == 'normal') {
-                            imgLink = cache[dragon]["pictures"][qualifier][age];
+                            imgLink = cache[dragon]["pictures"]['normal'][age];
                         } else {
                             if (!cache[dragon]["pictures"][qualifier]) message.channel.send(dragon + " does not have a(n) " + qualifier + " form!\nValid qualifiers: `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding`, `summer`/`autumn`/`winter`/`spring` (seasonal), `snowman` (snowball), `wrapped` (giddle), `bush` (dargon)");
                             else imgLink = cache[dragon]["pictures"][qualifier];
