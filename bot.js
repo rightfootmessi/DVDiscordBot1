@@ -21,7 +21,7 @@ const helpMsg = `Command list: (prefix all commands with \`${cmdPrefix}\`)\n`
 				+ "- `sandbox <dragon1>,<dragon2> [beb] [fast]` - open the sandbox for the specified breeding combo (alias: `dvbox`)\n"
 				+ "- `timer <dragon name>` - get the breeding times of the dragon\n"
                 + "- `uses <dragon name>` - get all dragons that include the specified dragon in its breeding combination\n"
-				+ "- `wiki <dragon name>` - get the link to a dragon's wiki page\n"
+				+ "- `wiki <dragon name>` - get the link to a dragon's wiki page, or displays the wiki's search results if the argument is not a dragon\n"
 				+ "- `help` - view this message";
 
 const riftFeeding = [2500, 6000, 9000, 12000, 20000, 30000, 45000, 70000, 100000, 150000, 250000, 350000, 500000, 800000, 1200000, 1800000, 3000000, 4000000, 6250000, 12500000];
@@ -456,11 +456,13 @@ client.on('message', async (message) => {
 		}
 	} else if (cmd === 'wiki') {
 		var dragon = prettyString(args, " ");
-		if (!dragon) message.channel.send("You must specify a dragon!");
+		if (!dragon) message.channel.send("https://dragonvale.fandom.com/wiki/DragonVale_Wiki");
 		else {
 			if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
-			if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
-			else message.channel.send('https://dragonvale.fandom.com/wiki/' + dragon.replace(/\s\d/, "").replace(/ /g, "_"));
+			if (!dragonList.includes(dragon)) {
+                dragon = dragon.substring(0, dragon.length - 7);
+                message.channel.send(`Search results for ${dragon} on the wiki can be found at: <https://dragonvale.fandom.com/wiki/Special:Search?query=${dragon.replace(/ /g, "+")}>`);
+            } else message.channel.send('https://dragonvale.fandom.com/wiki/' + dragon.replace(/\s\d/, "").replace(/ /g, "_"));
 		}
 	} else if (cmd === 'result' || cmd === 'results' || cmd === 'fakeouts') {
         // d!result <d1>,<d2> <d:hh:mm:ss> [fast]
@@ -805,31 +807,26 @@ client.on('message', async (message) => {
                     else {
                         num = Math.min(num, 100);
                         //message.channel.send("Eventually, I'll purge " + num + " messages...");
-                        message.channel.messages.fetch({ limit: (num + 1) }).then(messages => {
+                        message.channel.bulkDelete(num + 1).then(messages => {
                             console.log(`Received ${messages.size} messages`);
                             //Iterate through the messages here with the variable "messages".
                             const botLogCh = message.guild.channels.cache.get('306854862539325450'); // DV #bot_log id = '306854862539325450' | ZBMC #staff-zone id = '291749695175393284'
-                            botLogCh.send("**" + message.author.tag + " purged " + num + " messages in <#" + message.channel.id + ">:**");
+                            botLogCh.send(`**${message.author.tag} purged ${num} messages in <#${message.channel.id}>:**`);
                             messages.forEach(msgToDelete => {
-                                if (!msgToDelete.content.startsWith(cmdPrefix + "mod purge")) {
-                                    /*var outputStr = "**Content:** " + msgToDelete.content
-                                            + "\n\n**Attachments:** " + msgToDelete.attachments.size;
-                                    msgToDelete.attachments.forEach(attachment => outputStr += "\n" + attachment.url + " (Attachment ID: " + attachment.id + ")");*/
-                                    botLogCh.send(makePurgeEmbed(msgToDelete));
-                                }
-                                msgToDelete.delete({reason: `Purged by ${message.author.tag}`});
+                                if (!msgToDelete.content.startsWith(`${cmdPrefix}mod purge`)) botLogCh.send(makePurgeEmbed(msgToDelete));
                             });
-                        })
+                        });
                     }
                 }
             } else if (modCmd === 'spamtest') {
                 const oracleTestCh = message.guild.channels.cache.get('818011940160405534');
-                const dv_smug = client.emojis.cache.get('854908017349623850');
-                for (i = 1; i <= 250; i++) {
-                    oracleTestCh.send(i + ` ${dv_smug}`);
+                const dv_turqwhat = client.emojis.cache.get('812096747672961086');
+                for (i = 1; i <= 10; i++) {
+                    oracleTestCh.send(i + ` ${dv_turqwhat}`);
+                    await sleep(500);
                 } 
             } else {
-                message.channel.send("Unknown mod command. Type `" + cmdPrefix + "mod` for a list of mod commands.");
+                message.channel.send(`Unknown mod command. Type \`${cmdPrefix}mod help\` for a list of commands.`);
             }
         }
     } else {
@@ -880,9 +877,7 @@ function fmt_dhms(t) {
     }
 }
 
-hasModAccess = function(message) {
-    return (message.guild.id == "233370210617262080" && message.member.roles.cache.some(r => r.name === "Mod Wizard")) || message.member.id == "295625585299030016";
-}
+hasModAccess = (message) => (message.guild.id == "233370210617262080" && message.member.roles.cache.some(r => r.name === "Mod Wizard")) || message.member.id == "295625585299030016";
 
 prettyString = function(words, separator) {
 	if (words.length == 0) return false;
@@ -898,22 +893,12 @@ prettyString = function(words, separator) {
 	return result;
 }
 
-isPrimary = function(dName) {
-	dName = dName.replace(" Rift", "");
-	return primaries.includes(dName);
-}
+isPrimary = (dName) => primaries.includes(dName.replace(" Rift", ""));
+isEvolution = (dName) => evolutions.includes(dName);
+isEpic = (element) => !["Plant", "Fire", "Earth", "Cold", "Lightning", "Water", "Air", "Metal", "Light", "Dark", "Rift"].includes(element);
 
-isEvolution = function(dName) {
-	return evolutions.includes(dName);
-}
 
-getSpacing = function(baseLength, int) {
-    return Array(baseLength - int.toString().length).fill(" ").join("");
-}
-
-isEpic = function(element) {
-	return !["Plant", "Fire", "Earth", "Cold", "Lightning", "Water", "Air", "Metal", "Light", "Dark", "Rift"].includes(element);
-}
+getSpacing = (baseLength, int) => Array(baseLength - int.toString().length).fill(" ").join("");
 
 makePurgeEmbed = function(message) {
     const embed = new Discord.MessageEmbed()
@@ -924,11 +909,9 @@ makePurgeEmbed = function(message) {
             .setFooter(`Message ID: ${message.id} | User ID: ${message.author.id}`);
     
     var i = 0;
-    message.attachments.forEach(attachment => {
-        embed.addField(`Attachment ${++i}`, attachment.url + " (Attachment ID: " + attachment.id + ")");
-    });
+    message.attachments.forEach(attachment => embed.addField(`Attachment ${++i}`, attachment.url + " (Attachment ID: " + attachment.id + ")"));
 
-    return embed;
+    return { embed: embed, files: Array.from(message.attachments.values()) };
 }
 
 roundRate = function(rawRate) {
