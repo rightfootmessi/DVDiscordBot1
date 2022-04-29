@@ -832,9 +832,6 @@ client.on('message', async (message) => {
     } else {
 		message.channel.send(`Unknown command. Type \`${cmdPrefix}help\` for a list of commands.`);
 	}
-}).catch(error => {
-    const oracleTestCh = client.guilds.cache.get('233370210617262080').channels.cache.get('818011940160405534');
-    oracleTestCh.send('<@!295625585299030016> I encountered an error; check <#626182769256693770> at the time of this message to find the cause.');
 });
 
 fetchFromWiki = function(dragon, message, callback) {
