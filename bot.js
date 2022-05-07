@@ -466,11 +466,11 @@ client.on('message', async (message) => {
                 } else message.channel.send('https://dragonvale.fandom.com/wiki/' + dragon.replace(/\s\d/, "").replace(/ /g, "_"));
             }
         } else if (cmd === 'result' || cmd === 'results' || cmd === 'fakeouts') {
-            if (!hasModAccess(message)) {
+            /*if (!hasModAccess(message)) {
                 message.channel.send("This command is currently broken! Please be patient while a fix is worked on. <:dv_owobowos:803676880850780160>");
                 return;
-            }
-            // d!result <d1>,<d2> <d:hh:mm:ss> [fast]
+            }*/
+            // d!result <d1>,<d2> <d:hh:mm:ss> [fast|runic]
             var fast = false, runic = false, last = args.pop();
             if (last === 'fast') fast = true;
             else if (last === 'runic') runic = true;
