@@ -892,10 +892,12 @@ hasModAccess = (message) => (message.guild.id == "233370210617262080" && message
 prettyString = function(words, separator) {
 	if (words.length == 0) return false;
 	var result = words[0].toLowerCase();
-	result = result.charAt(0).toUpperCase() + result.substring(1);
+	if (result == 'ponkipong') result = 'PonkiPong';
+	else result = result.charAt(0).toUpperCase() + result.substring(1);
 	for (i = 1; i < words.length; i++) {
 		var str = words[i].toLowerCase();
-		str = str.charAt(0).toUpperCase() + str.substring(1);
+        if (str == 'ponkipong') str = 'PonkiPong';
+		else str = str.charAt(0).toUpperCase() + str.substring(1);
 		result += separator + str;
 	}
 	result = result.replace(/’/g, "'");
