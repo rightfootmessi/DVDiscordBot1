@@ -11,6 +11,8 @@ https.get('https://dvboxcdn.com/data/dragons.js', (res) => {
     res.pipe(concat({ encoding: 'string' }, function (remoteSrc) {
         vm.runInThisContext(remoteSrc);
         dragons_ = dragons;
+        dragons_['PonkiPong_Dragon'] = dragons_['Ponkipong_Dragon'];
+        delete dragons_['Ponkipong_Dragon'];
     }));
 });
 
