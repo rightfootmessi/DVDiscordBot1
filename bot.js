@@ -162,7 +162,7 @@ client.on('message', async (message) => {
             return;
         } else for (i in args) args[i] = args[i].toLowerCase();
 
-        if (!['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'pet', 'mod'].includes(cmd)) {
+        if (!['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'pet', 'mod', 'aurora'].includes(cmd)) {
             // (DragonVale server only) prevent non-meme commands from being executed outside #bot-commands
             if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && (message.channel.id != 626182769256693770 && message.channel.id != 818011940160405534) && message.channel.id != 276384829593878529) return; // bot-commands, oracle-test, mod-chat
         }
@@ -369,6 +369,8 @@ client.on('message', async (message) => {
             message.channel.send("", {files: ["https://i.imgur.com/2NBePN9.jpg"]});
         } else if (cmd === 'smoulderbrushed' || cmd === 'smoulderbushed') {
             message.channel.send("I just got a freaking Smoulderbush for the 30 day event gift. Is this a sick joke...? I didn't spend 30 days playing this event for a freaking SMOULDERBUSH DRAGON. I'm so mad this isn't even funny.");
+        } else if (cmd === 'aurora') {
+            message.channel.send("", {files: ['https://c.tenor.com/ae6296kObnAAAAAC/dragonvale.gif']});
         } else if (cmd === 'sandbox' || cmd === 'dvbox') {
             if (args.length == 0) message.channel.send("The DragonVale Sandbox (or dvbox, for short) can be found at https://dvbox.bin.sh/ \n\nNote: dvbox is fanmade. As such, it may not be entirely up-to-date. In addition, the breeding odds are not accurate and should not be trusted.");
             else {
