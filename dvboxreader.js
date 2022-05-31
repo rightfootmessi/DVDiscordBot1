@@ -13,6 +13,14 @@ https.get('https://dvboxcdn.com/data/dragons.js', (res) => {
         dragons_ = dragons;
         dragons_['PonkiPong_Dragon'] = dragons_['Ponkipong_Dragon'];
         delete dragons_['Ponkipong_Dragon'];
+        // Correcting DVBox inconsistencies
+        dragons_['Platinum_Dragon'].latent = ['water', 'metal'];
+        dragons_['Lumineux_Dragon'].latent = ['earth', 'lightning', 'plant', 'air', 'cold', 'fire', 'metal', 'light', 'dark', 'water'];
+        dragons_['Lumineux_Dragon'].reqs[0] = ['Love', 'dream'];
+        dragons_['Lightmare_Dragon'].latent = ['earth', 'lightning', 'plant', 'air', 'cold', 'fire', 'metal', 'light', 'dark', 'water'];
+        dragons_['Lightmare_Dragon'].reqs[0] = ['Moon', 'Dream'];
+        dragons_['Lullaby_Dragon'].latent = ['earth', 'lightning', 'plant', 'air', 'cold', 'fire', 'metal', 'light', 'dark', 'water'];
+        dragons_['Lullaby_Dragon'].reqs[0] = ['Serenity', 'dream'];
     }));
 });
 
