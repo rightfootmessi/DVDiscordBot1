@@ -400,6 +400,10 @@ client.on('message', async (message) => {
                 }
             }
         } else if (cmd === 'image' || cmd === 'picture' || cmd === 'img' || cmd === 'pic') {
+            if (args.length === 0) {
+                message.channel.send(`Usage: \`${cmdPrefix}image <dragon> <adult|juvenile|baby|egg> [qualifier]\``);
+                return;
+            }
             const qualifiers = ["normal", "day", "night", "organic", "conjured", "enhanced", "nightenhanced", "charlatan", "scourge", "barbarous", "macabre", "hiding", "summer", "autumn", "winter", "spring", "snowman", "wrapped", "bush"];
             const ages = ["elder", "adult", "juvenile", "baby", "egg"];
             
@@ -473,6 +477,10 @@ client.on('message', async (message) => {
                 return;
             }*/
             // d!result <d1>,<d2> <d:hh:mm:ss> [fast|runic]
+            if (args.length === 0) {
+                message.channel.send(`Usage: \`${cmdPrefix}result <dragon1>,<dragon2> <d:hh:mm:ss|hh:mm:ss> [fast|runic]\``);
+                return;
+            }
             var fast = false, runic = false, last = args.pop();
             if (last === 'fast') fast = true;
             else if (last === 'runic') runic = true;
@@ -850,8 +858,8 @@ fetchFromWiki = function(dragon, message, callback) {
     var dragon_ = dragon.replace(/ /g, "_");
     https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
         console.log("Received " + res.statusCode + " status code for " + dragon + "'s page");
-        if (res.statusCode == 404) {
-            message.channel.send("ERROR: " + dragon + "'s wiki page returned a 404 error.");
+        if (res.statusCode == 404 || res.statusCode == 500) {
+            message.channel.send(`ERROR: ${dragon}'s wiki page returned an error. Please try again, or wait a bit if the problem persists (and if it keeps happening, contact Messi).`);
             return;
         }
         var body = [];
@@ -863,8 +871,9 @@ fetchFromWiki = function(dragon, message, callback) {
     });
 }
 
+botToken = (fs.existsSync("./bot_token.txt")) ? fs.readFileSync("./bot_token.txt").toString('utf-8') : "test";
 // Note to self: if running locally, remember to replace the variable with the secret token itself; otherwise, make sure it says process.env.BOT_TOKEN !!!
-client.login(process.env.BOT_TOKEN);
+client.login(botToken);
 
 function fmt_dhms(t) {
     if (t > 0 && t < 60) {
@@ -1137,13 +1146,15 @@ readWikiPage = (dragon, $) => {
 	var regTimer = $(".dragonbox").first().find('tr').eq(5).children().last().text().trim();
 	var upTimer = $(".dragonbox").first().find('tr').eq(6).children().last().text().trim();
 	cache[dragon]["timer"] = "The breeding times of " + dragon + " are **" + regTimer + "** (regular cave) or **" + upTimer + "** (upgraded cave).";
-    // Uses
+    // Uses (now including quest name)
     var uses = [];
     if ($("#Required_Combos").length) {
         $("#Required_Combos").parent().next().next().children().each((i, elem) => uses.push($(elem).text().trim()));
         if ($("#Required_Combos").parent().next().next().next().next().prop("tagName") == "UL") $("#Required_Combos").parent().next().next().next().next().children().each((i, elem) => uses.push($(elem).text().trim()));
     }
     cache[dragon]["uses"] = (uses.length > 0) ? dragon + " is needed in order to obtain the following dragon(s): **" + uses.join("**, **") + "**" : dragon + " is not needed to obtain any other dragons.";
+    var questName = $(".dragonbox").first().find('tr').eq(13).children('td').first().text().trim();
+    cache[dragon]["uses"] += (questName != 'N/A') ? `\n\nCorresponding Quest: *${questName}*` : `\n\n${dragon} has no corresponding quest.`;
 	// Pictures
 	const dragonNoSpace = dragon.replace(/ /g, '');
 	cache[dragon]["pictures"]["normal"] = {};
@@ -1328,6 +1339,7 @@ readMonolithWikiPage = function() {
                     if ($("#Required_Combos").parent().next().next().next().next().prop("tagName") == "UL") $("#Required_Combos").parent().next().next().next().next().children().each((i, elem) => uses.push($(elem).text().trim()));
                 }
                 cache[dragon]["uses"] = (uses.length > 0) ? dragon + " is needed in order to obtain the following dragon(s): **" + uses.join("**, **") + "**" : dragon + " is not needed to obtain any other dragons.";
+                cache[dragon]["uses"] += `\n\n${dragon} has no corresponding quest.`;
 
                 // Pictures
                 const dragonNoSpace = "MonolithDragon";
@@ -1439,6 +1451,7 @@ readSnowflakeWikiPage = function() {
                     if ($("#Required_Combos").parent().next().next().next().next().prop("tagName") == "UL") $("#Required_Combos").parent().next().next().next().next().children().each((i, elem) => uses.push($(elem).text().trim()));
                 }
                 cache[dragon]["uses"] = (uses.length > 0) ? dragon + " is needed in order to obtain the following dragon(s): **" + uses.join("**, **") + "**" : dragon + " is not needed to obtain any other dragons.";
+                cache[dragon]["uses"] += `\n\n${dragon} has no corresponding quest.`;
 
                 // Pictures
                 const dragonNoSpace = "SnowflakeDragon";
