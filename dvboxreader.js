@@ -4,25 +4,28 @@ const vm = require('vm');
 const concat = require('concat-stream');
 const sprintf = require('sprintf-js').sprintf;
 
-var dragons_ = {};
+var dragons = {};
 
-https.get('https://dvboxcdn.com/data/dragons.js', (res) => {
+https.get('https://dvboxcdn.com/data/dragons.json', (res) => {
     res.setEncoding('utf8');
     res.pipe(concat({ encoding: 'string' }, function (remoteSrc) {
-        vm.runInThisContext(remoteSrc);
-        dragons_ = dragons;
-        dragons_['PonkiPong_Dragon'] = dragons_['Ponkipong_Dragon'];
-        delete dragons_['Ponkipong_Dragon'];
+        //vm.runInThisContext(remoteSrc);
+        dragons = JSON.parse(remoteSrc);
+        if (dragons) console.log('DVBox data loaded');
+        dragons['PonkiPong_Dragon'] = dragons['Ponkipong_Dragon'];
+        delete dragons['Ponkipong_Dragon'];
         // Correcting DVBox inconsistencies
-        dragons_['Platinum_Dragon'].latent = ['water', 'metal'];
-        dragons_['Lumineux_Dragon'].latent = ['earth', 'lightning', 'plant', 'air', 'cold', 'fire', 'metal', 'light', 'dark', 'water'];
-        dragons_['Lumineux_Dragon'].reqs[0] = ['Love', 'dream'];
-        dragons_['Lightmare_Dragon'].latent = ['earth', 'lightning', 'plant', 'air', 'cold', 'fire', 'metal', 'light', 'dark', 'water'];
-        dragons_['Lightmare_Dragon'].reqs[0] = ['Moon', 'Dream'];
-        dragons_['Lullaby_Dragon'].latent = ['earth', 'lightning', 'plant', 'air', 'cold', 'fire', 'metal', 'light', 'dark', 'water'];
-        dragons_['Lullaby_Dragon'].reqs[0] = ['Serenity', 'dream'];
+        dragons['Platinum_Dragon'].latent = ['water', 'metal'];
+        dragons['Lumineux_Dragon'].latent = ['earth', 'lightning', 'plant', 'air', 'cold', 'fire', 'metal', 'light', 'dark', 'water'];
+        dragons['Lumineux_Dragon'].reqs[0] = ['Love', 'dream'];
+        dragons['Lightmare_Dragon'].latent = ['earth', 'lightning', 'plant', 'air', 'cold', 'fire', 'metal', 'light', 'dark', 'water'];
+        dragons['Lightmare_Dragon'].reqs[0] = ['Moon', 'Dream'];
+        dragons['Lullaby_Dragon'].latent = ['earth', 'lightning', 'plant', 'air', 'cold', 'fire', 'metal', 'light', 'dark', 'water'];
+        dragons['Lullaby_Dragon'].reqs[0] = ['Serenity', 'dream'];
     }));
 });
+
+if (dragons) console.log('Not a scoping issue');
 
 parentPort.on('message', data => {
     const d1 = data.split("|")[0];
@@ -37,7 +40,7 @@ parentPort.on('message', data => {
     else if (results) {
         var list = sort_by_time(results);
         for (let i in list) {
-            var dragon = dragons_[list[i]];
+            var dragon = dragons[list[i]];
             timerList[dragon.name + " Dragon"] = Math.floor(fast ? 0.8 * dragon.time : dragon.time);
         }
         parentPort.postMessage(timerList);
@@ -103,8 +106,8 @@ function breed_calc(d1, d2, beb) {
         if (opposite_elements(query)) {
             list = primary_dragons(query['elements']);
         }
-        Object.keys(dragons_).forEach(function (dkey) {
-            if (breedable(dragons_[dkey], query)) { list.push(dkey); }
+        Object.keys(dragons).forEach(function (dkey) {
+            if (breedable(dragons[dkey], query)) { list.push(dkey); }
         });
     }
     if (list.length > 0) {
@@ -116,8 +119,8 @@ function breed_calc(d1, d2, beb) {
 
 function breed_query(d1, d2, beb) {
     var query = {
-        'd1': dragons_[d1],
-        'd2': dragons_[d2],
+        'd1': dragons[d1],
+        'd2': dragons[d2],
         'beb': beb,
         'tags': { 'any dragons': 1 }
     };
@@ -210,9 +213,9 @@ function primary_dragons(elements) {
     elements.forEach(function (e) { want[e] = true; });
     var list = [];
 
-    Object.keys(dragons_).forEach(function (dkey) {
-        if (dragons_[dkey]['type'] == 'primary'
-            && want[dragons_[dkey]['primary']]
+    Object.keys(dragons).forEach(function (dkey) {
+        if (dragons[dkey]['type'] == 'primary'
+            && want[dragons[dkey]['primary']]
         ) {
             list.push(dkey);
         }

@@ -5,11 +5,11 @@ const cheerio = require('cheerio');
 const { Worker, resourceLimits } = require('worker_threads');
 const fs = require('fs');
 const sprintf = require('sprintf-js').sprintf;
-const Mee6LevelsApi = require("mee6-levels-api");
+//const Mee6LevelsApi = require("mee6-levels-api");
 
 const cmdPrefix = 'd!';
 
-const helpMsg = `Command list: (prefix all commands with \`${cmdPrefix}\`)\n`
+const helpMsg = `Command list (prefix all commands with \`${cmdPrefix}\`):\n`
                 + "- `breed <dragon>` - find out how to breed a dragon\n"
 				+ "- `elements <dragon>` - get the breeding elements (aka hidden elements) of a dragon\n"
 				+ "- `evolve <dragon>` - find the evolution requirements for a dragon\n"
@@ -18,7 +18,7 @@ const helpMsg = `Command list: (prefix all commands with \`${cmdPrefix}\`)\n`
 				+ "- `quest <quest>` - get the correct dragon to send on a quest\n"
 				+ "- `rates <dragon> [# of boosts OR 'rift']` - get the earning rates of a dragon\n"
                 + "- `result <dragon1>,<dragon2> <d:hh:mm:ss|hh:mm:ss> [fast|runic]` - given 2 parent dragons and the resulting timer, find the potential dragons that can result from the breed. (aliases: `results`, `fakeouts`)\n"
-				+ "- `sandbox <dragon1>,<dragon2> [beb] [fast]` - open the sandbox for the specified breeding combo (alias: `dvbox`)\n"
+				+ "~~- `sandbox <dragon1>,<dragon2> [beb] [fast]` - open the sandbox for the specified breeding combo (alias: `dvbox`)~~\n"
 				+ "- `timer <dragon name>` - get the breeding times of the dragon\n"
                 + "- `uses <dragon name>` - get all dragons that include the specified dragon in its breeding combination\n"
 				+ "- `wiki <dragon name>` - get the link to a dragon's wiki page, or displays the wiki's search results if the argument is not a dragon\n"
@@ -98,14 +98,8 @@ client.on('ready', () => {
 	loadQuests();
     readMonolithWikiPage();
     readSnowflakeWikiPage();
-
-    /*let guildId = "233370210617262080";
-    Mee6LevelsApi.getLeaderboard(guildId).then(leaderboard => {
-        // do something with leaderboard
-        console.log(`${leaderboard.length} members ranked on the leaderboard.`);
-        for (i = 0; i < 1; i++) console.log(JSON.stringify(leaderboard[i], 4));
-    });*/
 });
+
 
 function sleep(ms) {
     return new Promise((resolve) => {
@@ -372,8 +366,9 @@ client.on('message', async (message) => {
         } else if (cmd === 'aurora') {
             message.channel.send("", {files: ['https://c.tenor.com/ae6296kObnAAAAAC/dragonvale.gif']});
         } else if (cmd === 'sandbox' || cmd === 'dvbox') {
-            if (args.length == 0) message.channel.send("The DragonVale Sandbox (or dvbox, for short) can be found at https://dvbox.bin.sh/ \n\nNote: dvbox is fanmade. As such, it may not be entirely up-to-date. In addition, the breeding odds are not accurate and should not be trusted.");
-            else {
+            if (args.length == 0) message.channel.send("The DragonVale Sandbox (or dvbox, for short) can be found at https://dvbox.bin.sh/. Note that DVBox is fanmade and may not be entirely up-to-date. _In addition, the breeding odds are not accurate and should not be trusted_. \n\nUnfortunately this command can no longer take you directly to a list of possible breeding results. You will have to manually enter the parent dragons on the website. Sorry! <:dv_ikatastrophe:870846763173552158>");
+            return;
+            /*else {
                 let fast = args.slice(-2).includes('fast');
                 let beb = args.slice(-2).includes('beb');
                 if (fast) args.splice(args.indexOf('fast'), 1);
@@ -398,7 +393,7 @@ client.on('message', async (message) => {
                         message.channel.send(`See the breeding results of ${d1} x ${d2} at: ${imgLink}`);
                     }
                 }
-            }
+            }*/
         } else if (cmd === 'image' || cmd === 'picture' || cmd === 'img' || cmd === 'pic') {
             if (args.length === 0) {
                 message.channel.send(`Usage: \`${cmdPrefix}image <dragon> <adult|juvenile|baby|egg> [qualifier]\``);
@@ -766,6 +761,8 @@ client.on('message', async (message) => {
                     };
                     readMonolithWikiPage();
                     readSnowflakeWikiPage();
+                    worker.terminate();
+                    worker = new Worker('./dvboxreader.js');
                     message.channel.send("Cache cleared. Information given should now reflect the most recent wiki changes.");
                 } else if (modCmd === 'dljson') {
                     message.author.send("Here is my current `dragonList.json` file.", {files: ["./dragonList.json"]});
@@ -849,7 +846,8 @@ client.on('message', async (message) => {
         }
     } catch(err) {
         const oracleTestCh = client.guilds.cache.get('233370210617262080').channels.cache.get('818011940160405534');
-        oracleTestCh.send('<@!295625585299030016> error occurred while attempting to process the following command: ' + message.content);
+        oracleTestCh.send(`<@!295625585299030016> error occurred while attempting to process the following command: \`${message.content}\` (stack trace logged to console)`);
+        console.log(err);
     }
 	
 });
@@ -857,7 +855,7 @@ client.on('message', async (message) => {
 fetchFromWiki = function(dragon, message, callback) {
     var dragon_ = dragon.replace(/ /g, "_");
     https.get('https://dragonvale.fandom.com/wiki/' + dragon_, (res) => {
-        console.log("Received " + res.statusCode + " status code for " + dragon + "'s page");
+        console.log(`Received ${res.statusCode} status code for ${dragon}'s page`);
         if (res.statusCode == 404 || res.statusCode == 500) {
             message.channel.send(`ERROR: ${dragon}'s wiki page returned an error. Please try again, or wait a bit if the problem persists (and if it keeps happening, contact Messi).`);
             return;
@@ -871,7 +869,7 @@ fetchFromWiki = function(dragon, message, callback) {
     });
 }
 
-botToken = (fs.existsSync("./bot_token.txt")) ? fs.readFileSync("./bot_token.txt").toString('utf-8') : "test";
+botToken = (fs.existsSync("./bot_token.txt")) ? fs.readFileSync("./bot_token.txt").toString('utf-8') : process.env.BOT_TOKEN;
 // Note to self: if running locally, remember to replace the variable with the secret token itself; otherwise, make sure it says process.env.BOT_TOKEN !!!
 client.login(botToken);
 
@@ -1034,7 +1032,7 @@ readWikiPage = (dragon, $) => {
 			hiddenElems.push(imgName.split(" ")[1].replace(".png", ""));
 		}
 	});
-	var elemsResponse = dragon + " has the " + prettyString(elems, ", ") + " elements on its profile.\n";
+	var elemsResponse = `${dragon} has the ${prettyString(elems, ", ")} elements on its profile.\n`;
     elemsResponse += (hiddenElems.length == 10) ? dragon + " adds all 10 elements when breeding (often called a *pseudo*)." : (hiddenElems.length > 0) ? dragon + " adds the " + prettyString(hiddenElems, ", ") + " elements when breeding." : "Error: The wiki is missing the breeding elements of the " + dragon;
 	cache[dragon]["elements"] = elemsResponse;
 	// Evolve
@@ -1080,16 +1078,13 @@ readWikiPage = (dragon, $) => {
 				rates[i+10] = (!isNaN(num)) ? roundRate(num) : "---";
 			});
 			var table = "```| Lvl : DC/min | Lvl : DC/min |"
-					+ "\n|-----:--------|-----:--------|";
+					   + "\n|-----:--------|-----:--------|";
 			for (i = 0; i < 10; i++) {
-				var lvlA = i + 1;
-				var lvlB = i + 11;
-				result = "\n| " + lvlA + getSpacing(4, lvlA) + ":" + getSpacing(7, rates[i]) + rates[i] + " | " + lvlB + getSpacing(4, lvlB) + ":" + getSpacing(7, rates[i+10]) + rates[i+10] + " |";
-				table += result;
+				table += `\n| ${sprintf('%-4d', (i+1))}:${sprintf('%7s', rates[i])} | ${sprintf('%-4d', (i+11))}:${sprintf('%7s', rates[i+10])} |`;
 			}
             if (elders.includes(dragon)) {
                 let elderRate = roundRate(Math.ceil(parseInt(title.parent().next().next().children().first().children().eq(5).children().first().text().trim()) * (1 + 0.3 * boosts)));
-                table += "\n|              | 21  :" + getSpacing(7, elderRate) + elderRate + " |";
+                table += `\n|              | 21  :${sprintf('%7s', elderRate)} |`;
             }
 			cache[dragon]["rates"]["non-rift"][boosts] = "DragonCash earning rates for " + dragon + " (" + boosts + "/" + maxBoosts + " boosts):\n" + table + "```"
 					+ "\nNOTE: Your dragon's profile will likely show a lower number than what's in this table. That number is wrong (this has been experimentally proven). The numbers here are the *actual* earning rates.";
