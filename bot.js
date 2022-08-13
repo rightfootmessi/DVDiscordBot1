@@ -366,7 +366,7 @@ client.on('message', async (message) => {
         } else if (cmd === 'aurora') {
             message.channel.send("", {files: ['https://c.tenor.com/ae6296kObnAAAAAC/dragonvale.gif']});
         } else if (cmd === 'sandbox' || cmd === 'dvbox') {
-            /*if (args.length == 0)*/ message.channel.send("The DragonVale Sandbox (or dvbox, for short) can be found at https://dvbox.bin.sh/. Note that DVBox is fanmade and may not be entirely up-to-date. _In addition, the breeding odds are not accurate and should not be trusted_. \n\nUnfortunately this command can no longer take you directly to a list of possible breeding results. You will have to manually enter the parent dragons on the website. Sorry! <:dv_ikatastrophe:870846763173552158>");
+            /*if (args.length == 0)*/ message.channel.send("The DragonVale Sandbox (or dvbox, for short) can be found at https://dvbox.bin.sh/. Note that DVBox is fanmade and may not be entirely up-to-date. _In addition, all timers posted are accurate and breeding results are correct in almost all cases, but listed percentages are inaccurate_. \n\nUnfortunately this command can no longer take you directly to a list of possible breeding results. You will have to manually enter the parent dragons on the website. Sorry! <:dv_ikatastrophe:870846763173552158>");
             return;
             /*else {
                 let fast = args.slice(-2).includes('fast');
