@@ -2,10 +2,9 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const https = require('https');
 const cheerio = require('cheerio');
-const { Worker, resourceLimits } = require('worker_threads');
+const { Worker } = require('worker_threads');
 const fs = require('fs');
 const sprintf = require('sprintf-js').sprintf;
-//const Mee6LevelsApi = require("mee6-levels-api");
 
 const cmdPrefix = 'd!';
 
@@ -18,7 +17,7 @@ const helpMsg = `Command list (prefix all commands with \`${cmdPrefix}\`):\n`
 				+ "- `quest <quest>` - get the correct dragon to send on a quest\n"
 				+ "- `rates <dragon> [# of boosts OR 'rift']` - get the earning rates of a dragon\n"
                 + "- `result <dragon1>,<dragon2> <d:hh:mm:ss|hh:mm:ss> [fast|runic]` - given 2 parent dragons and the resulting timer, find the potential dragons that can result from the breed. (aliases: `results`, `fakeouts`)\n"
-				+ "~~- `sandbox <dragon1>,<dragon2> [beb] [fast]` - open the sandbox for the specified breeding combo (alias: `dvbox`)~~\n"
+				+ "- `sandbox <dragon1>,<dragon2> [beb] [fast]` - open the sandbox for the specified breeding combo (alias: `dvbox`)\n"
 				+ "- `timer <dragon name>` - get the breeding times of the dragon\n"
                 + "- `uses <dragon name>` - get all dragons that include the specified dragon in its breeding combination\n"
 				+ "- `wiki <dragon name>` - get the link to a dragon's wiki page, or displays the wiki's search results if the argument is not a dragon\n"
@@ -366,9 +365,8 @@ client.on('message', async (message) => {
         } else if (cmd === 'aurora') {
             message.channel.send("", {files: ['https://c.tenor.com/ae6296kObnAAAAAC/dragonvale.gif']});
         } else if (cmd === 'sandbox' || cmd === 'dvbox') {
-            if (args.length == 0) message.channel.send("The DragonVale Sandbox (or dvbox, for short) can be found at https://dvbox.bin.sh/. Note that DVBox is fanmade and may not be entirely up-to-date. _In addition, the breeding odds are not accurate and should not be trusted_. \n\nUnfortunately this command can no longer take you directly to a list of possible breeding results. You will have to manually enter the parent dragons on the website. Sorry! <:dv_ikatastrophe:870846763173552158>");
-            return;
-            /*else {
+            if (args.length == 0) message.channel.send("The DragonVale Sandbox (or dvbox, for short) can be found at https://dvbox.bin.sh/. Note that DVBox is fanmade and may not be entirely up-to-date. In addition, please note that while the results and timers shown are accurate, the breeding odds provided are incorrect.");
+            else {
                 let fast = args.slice(-2).includes('fast');
                 let beb = args.slice(-2).includes('beb');
                 if (fast) args.splice(args.indexOf('fast'), 1);
@@ -393,7 +391,7 @@ client.on('message', async (message) => {
                         message.channel.send(`See the breeding results of ${d1} x ${d2} at: ${imgLink}`);
                     }
                 }
-            }*/
+            }
         } else if (cmd === 'image' || cmd === 'picture' || cmd === 'img' || cmd === 'pic') {
             if (args.length === 0) {
                 message.channel.send(`Usage: \`${cmdPrefix}image <dragon> <adult|juvenile|baby|egg> [qualifier]\``);
