@@ -12,7 +12,7 @@ const helpMsg = `Command list (prefix all commands with \`${cmdPrefix}\`):\n`
                 + "- `breed <dragon>` - find out how to breed a dragon\n"
 				+ "- `elements <dragon>` - get the breeding elements (aka hidden elements) of a dragon\n"
 				+ "- `evolve <dragon>` - find the evolution requirements for a dragon\n"
-                + "- `feed [initial level] <final level> [rift]` - find the number of treats needed to feed a dragon from the initial level (defaults to 1 if not specified) to the final level"
+                + "- `feed [initial level] <final level> [rift]` - find the number of treats needed to feed a dragon from the initial level (defaults to 1 if not specified) to the final level\n"
 				+ "- `image <dragon> <adult|juvenile|baby|egg> [qualifier]` - get a PNG image of the dragon; defaults to adult if no stage specified; valid qualifiers can be listed using `d!image flags`  (aliases: `picture`, `img`, `pic`)\n"
 				+ "- `quest <quest>` - get the correct dragon to send on a quest\n"
 				+ "- `rates <dragon> [# of boosts OR 'rift']` - get the earning rates of a dragon\n"
@@ -20,7 +20,7 @@ const helpMsg = `Command list (prefix all commands with \`${cmdPrefix}\`):\n`
 				+ "- `sandbox <dragon1>,<dragon2> [beb] [fast]` - open the sandbox for the specified breeding combo (alias: `dvbox`)\n"
 				+ "- `timer <dragon name>` - get the breeding times of the dragon\n"
                 + "- `uses <dragon name>` - get all dragons that include the specified dragon in its breeding combination\n"
-				+ "- `wiki <dragon name>` - get the link to a dragon's wiki page, or displays the wiki's search results if the argument is not a dragon\n"
+				+ "- `wiki <dragon name OR item>` - get the link to a dragon's wiki page, or displays the wiki's search results if the argument is another item\n"
 				+ "- `help` - view this message";
 
 const riftFeeding = [2500, 6000, 9000, 12000, 20000, 30000, 45000, 70000, 100000, 150000, 250000, 350000, 500000, 800000, 1200000, 1800000, 3000000, 4000000, 6250000, 12500000];
