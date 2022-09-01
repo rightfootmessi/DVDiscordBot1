@@ -117,7 +117,7 @@ client.on('message', async (message) => {
 
         // BEGIN APRIL FOOLS CODE (UNCOMMENT IT ON APRIL 1ST, then reduce odds to 0.01 afterward)
         
-        if (Math.random() < 0.01 && !['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'pet', 'mod', 'help'].includes(cmd)) {
+        if (Math.random() < 0.01 && !['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'pet', 'mod', 'help', 'random'].includes(cmd)) {
             let funnyGifs = [
                 'https://media.discordapp.net/attachments/626181797696503818/808742119874625598/minilodestonedpost.gif',
                 'https://cdn.discordapp.com/attachments/559733837643382794/791547901884891176/magik.gif',
@@ -155,7 +155,7 @@ client.on('message', async (message) => {
             return;
         } else for (i in args) args[i] = args[i].toLowerCase();
 
-        if (!['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'pet', 'mod', 'aurora'].includes(cmd)) {
+        if (!['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'pet', 'mod', 'aurora', 'random'].includes(cmd)) {
             // (DragonVale server only) prevent non-meme commands from being executed outside #bot-commands
             if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && (message.channel.id != 626182769256693770 && message.channel.id != 818011940160405534) && message.channel.id != 276384829593878529) return; // bot-commands, oracle-test, mod-chat
         }
@@ -252,83 +252,6 @@ client.on('message', async (message) => {
                     else fetchFromWiki(dragon, message, evolveMsg);
                 }
             }
-        } else if (cmd === 'rates') {
-            var rift = false;
-            var boosts = 0;
-            var last = args.pop();
-            // edge case: check if user is seeking DC rates of a rift primary
-            if (last == 'rift') {
-                var nextLast = args.pop();
-                if (dragonList.includes(prettyString([nextLast, last], " ") + " Dragon")) {
-                    args.push(nextLast);
-                    args.push(last);
-                } else {
-                    args.push(nextLast);
-                    rift = true;
-                }
-            }
-            else if (!isNaN(parseInt(last))) {
-                boosts = parseInt(last);
-                // make sure is not a monolith/snowflake identifier first
-                let nextLast = args[args.length - 1];
-                if (nextLast == 'monolith' || nextLast == 'snowflake') {
-                    boosts = 0;
-                    args.push(last);
-                }
-                if (boosts < 0 || !Number.isInteger(boosts)) {
-                    message.channel.send("The number of boosts must be an integer greater than 0.");
-                    return;
-                }
-            } else args.push(last);
-            var dragon = prettyString(args, " ");
-            if (!dragon) message.channel.send("You must specify a dragon!");
-            else {
-                if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
-                if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
-                else {
-                    ratesMsg = () => {
-                        if (!rift) message.channel.send(cache[dragon]["rates"]["non-rift"][Math.min(boosts, cache[dragon]["rates"]["maxBoosts"])]).catch(error => {
-                            message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-                        });
-                        else message.channel.send(cache[dragon]["rates"]["rift"]).catch(error => {
-                            message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-                        });
-                    }
-
-                    if (dragon in cache) ratesMsg();
-                    else fetchFromWiki(dragon, message, ratesMsg);
-                }
-            }
-        } else if (cmd === 'timer') {
-            var dragon = prettyString(args, " ");
-            if (!dragon) message.channel.send("You must specify a dragon!");
-            else {
-                if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
-                if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
-                else {
-                    timerMsg = () => message.channel.send(cache[dragon]["timer"]).catch(error => {
-                        message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-                    });
-                    
-                    if (dragon in cache) timerMsg();
-                    else fetchFromWiki(dragon, message, timerMsg);
-                }
-            }
-        } else if (cmd === 'uses') {
-            var dragon = prettyString(args, " ");
-            if (!dragon) message.channel.send("You must specify a dragon!");
-            else {
-                if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
-                if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
-                else {
-                    usesMsg = () => message.channel.send(cache[dragon]["uses"]).catch(error => {
-                        message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
-                    });
-                    
-                    if (dragon in cache) usesMsg();
-                    else fetchFromWiki(dragon, message, usesMsg);
-                }
-            }
         } else if (cmd === 'feed') {
             if (args.length > 3) {
                 message.channel.send("Invalid command format. Please provide the starting level and ending level (and add 'rift' if you are feeding a rift dragon).");
@@ -358,40 +281,6 @@ client.on('message', async (message) => {
                 treatsNeeded += 4 * (rift ? riftFeeding[i-1] : 5 * Math.pow(2, i-1));
             }
             message.channel.send(`A total of **${treatsNeeded.toLocaleString()} treats** are required to feed a${rift ? " rift" : ""} dragon from level ${level1} to ${level2}.`);
-        } else if (cmd === 'lodestoned') {
-            message.channel.send("", {files: ["https://i.imgur.com/2NBePN9.jpg"]});
-        } else if (cmd === 'smoulderbrushed' || cmd === 'smoulderbushed') {
-            message.channel.send("I just got a freaking Smoulderbush for the 30 day event gift. Is this a sick joke...? I didn't spend 30 days playing this event for a freaking SMOULDERBUSH DRAGON. I'm so mad this isn't even funny.");
-        } else if (cmd === 'aurora') {
-            message.channel.send("", {files: ['https://c.tenor.com/ae6296kObnAAAAAC/dragonvale.gif']});
-        } else if (cmd === 'sandbox' || cmd === 'dvbox') {
-            if (args.length == 0) message.channel.send("The DragonVale Sandbox (or dvbox, for short) can be found at https://dvbox.bin.sh/. Note that DVBox is fanmade and may not be entirely up-to-date. In addition, please note that while the results and timers shown are accurate, the breeding odds provided are incorrect.");
-            else {
-                let fast = args.slice(-2).includes('fast');
-                let beb = args.slice(-2).includes('beb');
-                if (fast) args.splice(args.indexOf('fast'), 1);
-                if (beb) args.splice(args.indexOf('beb'), 1);
-                
-                var parents = args.join(" ").split(",");
-                if (parents.length != 2) message.channel.send("You must specify 2 dragons for the parents.");
-                else {
-                    var d1 = prettyString(parents[0].trim().split(" "), " ");
-                    if (d1.indexOf("Dragon") == -1) d1 += " Dragon";
-                    var d2 = prettyString(parents[1].trim().split(" "), " ");
-                    if (d2.indexOf("Dragon") == -1) d2 += " Dragon";
-                    if (d1.includes('Monolith') || d1.includes('Snowflake') || d2.includes('Monolith') || d2.includes('Snowflake')) message.channel.send("It looks like you're trying to breed with a Monolith and/or Snowflake. Unfortunately you will have to manually enter your query at https://dvbox.bin.sh/, as there is no way to specify the number of the dragon in the URL. Sorry!");
-                    else if (!dragonList.includes(d1)) message.channel.send(`Unrecognized dragon name "${d1}" (did you spell it correctly?)`);
-                    else if (!dragonList.includes(d2)) message.channel.send(`Unrecognized dragon name "${d2}" (did you spell it correctly?)`);
-                    else {
-                        var imgLink = "https://dvbox.bin.sh/#";
-                        imgLink += "d1=" + d1.replace(/ /g, "").replace("Dragon", "").toLowerCase();
-                        imgLink += ";d2=" + d2.replace(/ /g, "").replace("Dragon", "").toLowerCase();
-                        if (beb) imgLink += ";beb=1";
-                        if (fast) imgLink += ";fast=1";
-                        message.channel.send(`See the breeding results of ${d1} x ${d2} at: ${imgLink}`);
-                    }
-                }
-            }
         } else if (cmd === 'image' || cmd === 'picture' || cmd === 'img' || cmd === 'pic') {
             if (args.length === 0) {
                 message.channel.send(`Usage: \`${cmdPrefix}image <dragon> <adult|juvenile|baby|egg> [qualifier]\``);
@@ -454,15 +343,52 @@ client.on('message', async (message) => {
                     else fetchFromWiki(dragon, message, imgMsg);
                 }
             }
-        } else if (cmd === 'wiki') {
+        } else if (cmd === 'rates') {
+            var rift = false;
+            var boosts = 0;
+            var last = args.pop();
+            // edge case: check if user is seeking DC rates of a rift primary
+            if (last == 'rift') {
+                var nextLast = args.pop();
+                if (dragonList.includes(prettyString([nextLast, last], " ") + " Dragon")) {
+                    args.push(nextLast);
+                    args.push(last);
+                } else {
+                    args.push(nextLast);
+                    rift = true;
+                }
+            }
+            else if (!isNaN(parseInt(last))) {
+                boosts = parseInt(last);
+                // make sure is not a monolith/snowflake identifier first
+                let nextLast = args[args.length - 1];
+                if (nextLast == 'monolith' || nextLast == 'snowflake') {
+                    boosts = 0;
+                    args.push(last);
+                }
+                if (boosts < 0 || !Number.isInteger(boosts)) {
+                    message.channel.send("The number of boosts must be an integer greater than 0.");
+                    return;
+                }
+            } else args.push(last);
             var dragon = prettyString(args, " ");
-            if (!dragon) message.channel.send("https://dragonvale.fandom.com/wiki/DragonVale_Wiki");
+            if (!dragon) message.channel.send("You must specify a dragon!");
             else {
                 if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
-                if (!dragonList.includes(dragon)) {
-                    dragon = dragon.substring(0, dragon.length - 7);
-                    message.channel.send(`Search results for ${dragon} on the wiki can be found at: <https://dragonvale.fandom.com/wiki/Special:Search?query=${dragon.replace(/ /g, "+")}>`);
-                } else message.channel.send('https://dragonvale.fandom.com/wiki/' + dragon.replace(/\s\d/, "").replace(/ /g, "_"));
+                if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
+                else {
+                    ratesMsg = () => {
+                        if (!rift) message.channel.send(cache[dragon]["rates"]["non-rift"][Math.min(boosts, cache[dragon]["rates"]["maxBoosts"])]).catch(error => {
+                            message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+                        });
+                        else message.channel.send(cache[dragon]["rates"]["rift"]).catch(error => {
+                            message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+                        });
+                    }
+
+                    if (dragon in cache) ratesMsg();
+                    else fetchFromWiki(dragon, message, ratesMsg);
+                }
             }
         } else if (cmd === 'result' || cmd === 'results' || cmd === 'fakeouts') {
             /*if (!hasModAccess(message)) {
@@ -551,6 +477,74 @@ client.on('message', async (message) => {
                         worker.postMessage(link);
                     }
                 }
+            }
+        } else if (cmd === 'sandbox' || cmd === 'dvbox') {
+            if (args.length == 0) message.channel.send("The DragonVale Sandbox (or dvbox, for short) can be found at https://dvbox.bin.sh/. Note that DVBox is fanmade and may not be entirely up-to-date. In addition, please note that while the results and timers shown are accurate, the breeding odds provided are incorrect.");
+            else {
+                let fast = args.slice(-2).includes('fast');
+                let beb = args.slice(-2).includes('beb');
+                if (fast) args.splice(args.indexOf('fast'), 1);
+                if (beb) args.splice(args.indexOf('beb'), 1);
+                
+                var parents = args.join(" ").split(",");
+                if (parents.length != 2) message.channel.send("You must specify 2 dragons for the parents.");
+                else {
+                    var d1 = prettyString(parents[0].trim().split(" "), " ");
+                    if (d1.indexOf("Dragon") == -1) d1 += " Dragon";
+                    var d2 = prettyString(parents[1].trim().split(" "), " ");
+                    if (d2.indexOf("Dragon") == -1) d2 += " Dragon";
+                    if (d1.includes('Monolith') || d1.includes('Snowflake') || d2.includes('Monolith') || d2.includes('Snowflake')) message.channel.send("It looks like you're trying to breed with a Monolith and/or Snowflake. Unfortunately you will have to manually enter your query at https://dvbox.bin.sh/, as there is no way to specify the number of the dragon in the URL. Sorry!");
+                    else if (!dragonList.includes(d1)) message.channel.send(`Unrecognized dragon name "${d1}" (did you spell it correctly?)`);
+                    else if (!dragonList.includes(d2)) message.channel.send(`Unrecognized dragon name "${d2}" (did you spell it correctly?)`);
+                    else {
+                        var imgLink = "https://dvbox.bin.sh/#";
+                        imgLink += "d1=" + d1.replace(/ /g, "").replace("Dragon", "").toLowerCase();
+                        imgLink += ";d2=" + d2.replace(/ /g, "").replace("Dragon", "").toLowerCase();
+                        if (beb) imgLink += ";beb=1";
+                        if (fast) imgLink += ";fast=1";
+                        message.channel.send(`See the breeding results of ${d1} x ${d2} at: ${imgLink}`);
+                    }
+                }
+            }
+        } else if (cmd === 'timer') {
+            var dragon = prettyString(args, " ");
+            if (!dragon) message.channel.send("You must specify a dragon!");
+            else {
+                if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
+                if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
+                else {
+                    timerMsg = () => message.channel.send(cache[dragon]["timer"]).catch(error => {
+                        message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+                    });
+                    
+                    if (dragon in cache) timerMsg();
+                    else fetchFromWiki(dragon, message, timerMsg);
+                }
+            }
+        } else if (cmd === 'uses') {
+            var dragon = prettyString(args, " ");
+            if (!dragon) message.channel.send("You must specify a dragon!");
+            else {
+                if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
+                if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
+                else {
+                    usesMsg = () => message.channel.send(cache[dragon]["uses"]).catch(error => {
+                        message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+                    });
+                    
+                    if (dragon in cache) usesMsg();
+                    else fetchFromWiki(dragon, message, usesMsg);
+                }
+            }
+        } else if (cmd === 'wiki') {
+            var dragon = prettyString(args, " ");
+            if (!dragon) message.channel.send("https://dragonvale.fandom.com/wiki/DragonVale_Wiki");
+            else {
+                if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
+                if (!dragonList.includes(dragon)) {
+                    dragon = dragon.substring(0, dragon.length - 7);
+                    message.channel.send(`Search results for ${dragon} on the wiki can be found at: <https://dragonvale.fandom.com/wiki/Special:Search?query=${dragon.replace(/ /g, "+")}>`);
+                } else message.channel.send('https://dragonvale.fandom.com/wiki/' + dragon.replace(/\s\d/, "").replace(/ /g, "_"));
             }
         } else if (cmd === '' || cmd === 'help') {		
             message.channel.send(helpMsg);
@@ -839,6 +833,19 @@ client.on('message', async (message) => {
                     message.channel.send(`Unknown mod command. Type \`${cmdPrefix}mod help\` for a list of commands.`);
                 }
             }
+        } else if (cmd === 'aurora') {
+            message.channel.send("", {files: ['https://c.tenor.com/ae6296kObnAAAAAC/dragonvale.gif']});
+        } else if (cmd === 'lodestoned') {
+            message.channel.send("", {files: ["https://i.imgur.com/2NBePN9.jpg"]});
+        } else if (cmd === 'random') {
+            let unmodifiedList = dragonList;
+            unmodifiedList.push("Oracle Dragon");
+            unmodifiedList.push("Oracle Dragon");
+            unmodifiedList.push("Oracle Dragon");
+            unmodifiedList.push("Oracle Dragon"); // hehe xd
+            message.channel.send(`Your *totally* randomly selected dragon is: **${unmodifiedList[Math.floor(Math.random() * unmodifiedList.length)]}**`);
+        } else if (cmd === 'smoulderbrushed' || cmd === 'smoulderbushed') {
+            message.channel.send("I just got a freaking Smoulderbush for the 30 day event gift. Is this a sick joke...? I didn't spend 30 days playing this event for a freaking SMOULDERBUSH DRAGON. I'm so mad this isn't even funny.");
         } else {
             message.channel.send(`Unknown command. Type \`${cmdPrefix}help\` for a list of commands.`);
         }
