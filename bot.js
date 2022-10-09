@@ -81,7 +81,7 @@ dvboxCache: {
 }
 */
 
-const worker = new Worker('./dvboxreader.js');
+let worker = new Worker('./dvboxreader.js');
 
 client.on('ready', () => {
 	console.log('Oracle is waking up...');
