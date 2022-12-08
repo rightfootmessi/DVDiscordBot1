@@ -165,7 +165,7 @@ client.on('message', async (message) => {
                 message.channel.send("Your query contains a monolith dragon, but you did not specify which. Please re-enter the query using `Monolith #`, where `#` is replaced by the number of the monolith dragon.");
                 return;
             }
-        } else if (args.includes("snowflake") && !(cmd === 'result' || cmd === 'fakeouts') && !(cmd === 'sandbox' || cmd === 'dvbox')) {
+        } else if (args.includes("snowflake") && !(cmd === 'result' || cmd === 'results' || cmd === 'fakeouts') && !(cmd === 'sandbox' || cmd === 'dvbox')) {
             if (isNaN(args[args.indexOf("snowflake") + 1])) {
                 message.channel.send("Your query contains a snowflake dragon, but you did not specify which. Please re-enter the query using `Snowflake #`, where `#` is replaced by the number of the snowflake dragon.");
                 return;
