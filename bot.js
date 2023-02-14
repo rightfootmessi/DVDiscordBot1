@@ -6,13 +6,14 @@ const { Worker } = require('worker_threads');
 const fs = require('fs');
 const sprintf = require('sprintf-js').sprintf;
 
-const cmdPrefix = 'd!';
+const cmdPrefix = 'd%';
 
 const helpMsg = `Command list (prefix all commands with \`${cmdPrefix}\`):\n`
                 + "- `breed <dragon>` - find out how to breed a dragon\n"
 				+ "- `elements <dragon>` - get the breeding elements (aka hidden elements) of a dragon\n"
 				+ "- `evolve <dragon>` - find the evolution requirements for a dragon\n"
                 + "- `feed [initial level] <final level> [rift]` - find the number of treats needed to feed a dragon from the initial level (defaults to 1 if not specified) to the final level\n"
+                + "- `guide [guide] - retrieves a guide, or lists all available guides if none specified (alias: `guides`)\n"
 				+ "- `image <dragon> <adult|juvenile|baby|egg> [qualifier]` - get a PNG image of the dragon; defaults to adult if no stage specified; valid qualifiers can be listed using `d!image flags`  (aliases: `picture`, `img`, `pic`)\n"
 				+ "- `quest <quest>` - get the correct dragon to send on a quest\n"
 				+ "- `rates <dragon> [# of boosts OR 'rift']` - get the earning rates of a dragon\n"
@@ -27,6 +28,7 @@ const riftFeeding = [2500, 6000, 9000, 12000, 20000, 30000, 45000, 70000, 100000
 
 var primaries, evolutions, enhanced, dayNight, hiding, elders, dragonList, fullData;
 var questTable = {};
+var guides = {};
 var questsLoaded = false;
 
 var cache = {};
@@ -97,6 +99,7 @@ client.on('ready', () => {
 	loadQuests();
     readMonolithWikiPage();
     readSnowflakeWikiPage();
+    guides = JSON.parse(fs.readFileSync('guides.json'));
 });
 
 
@@ -155,7 +158,7 @@ client.on('message', async (message) => {
             return;
         } else for (i in args) args[i] = args[i].toLowerCase();
 
-        if (!['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'pet', 'mod', 'aurora', 'random'].includes(cmd)) {
+        if (!['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'pet', 'mod', 'aurora', 'random', 'guide', 'guides'].includes(cmd)) {
             // (DragonVale server only) prevent non-meme commands from being executed outside #bot-commands
             if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && (message.channel.id != 626182769256693770 && message.channel.id != 818011940160405534) && message.channel.id != 276384829593878529) return; // bot-commands, oracle-test, mod-chat
         }
@@ -281,6 +284,17 @@ client.on('message', async (message) => {
                 treatsNeeded += 4 * (rift ? riftFeeding[i-1] : 5 * Math.pow(2, i-1));
             }
             message.channel.send(`A total of **${treatsNeeded.toLocaleString()} treats** are required to feed a${rift ? " rift" : ""} dragon from level ${level1} to ${level2}.`);
+        } else if (cmd === 'guide' || cmd === 'guides') {
+            if (args.length == 0) {
+                message.channel.send(`Available guides: \`${Object.keys(guides).join("`, `")}\``);
+            } else {
+                let guide = args.shift();
+                if (guide in guides) {
+                    message.channel.send(guides[guide]);
+                } else {
+                    message.channel.send(`Guide \`${guide}\` not found. See a list of available guides with \`d!guide\`.`);
+                }
+            }
         } else if (cmd === 'image' || cmd === 'picture' || cmd === 'img' || cmd === 'pic') {
             if (args.length === 0) {
                 message.channel.send(`Usage: \`${cmdPrefix}image <dragon> <adult|juvenile|baby|egg> [qualifier]\``);
@@ -557,6 +571,7 @@ client.on('message', async (message) => {
                         + "- `remove <dragon>` - remove dragon from list\n"
                         + "- `flag <dragon> <primaries/evolutions/enhanced/dayNight/hiding>` - add the specified flag to the dragon\n"
                         + "- `unflag <dragon> <primaries/evolutions/enhanced/dayNight/hiding>` - remove the specified flag from the dragon\n"
+                        + "- `guide <add/remove> <name> [contents]` - add/remove a guide\n"
                         + "- `clearcache` - clear the bot's cache (useful after updating the wiki)\n"
                         + "- `dljson` - sends a downloadable copy of my dragon list as a json file\n"
                         + "- `uljson` - upload a new dragon list json file for me to use (note: the file's name *must* be `dragonList.json`!)\n"
@@ -743,6 +758,37 @@ client.on('message', async (message) => {
                             delete cache[dragon];
                         }
                     });
+                } else if (modCmd === 'guide') {
+                    let add = args.shift();
+                    if (add === 'add') {
+                        if (args.length < 2) message.channel.send("Please specify the name and contents of the guide to add.");
+                        else {
+                            let gName = args.shift();
+                            let numChars = args.join(" ").length;
+                            let gContents = message.content.replace(/\s{2,}/g, ' ').replace(/@/g, '').slice(cmdPrefix.length).trim().slice(-numChars);
+                            guides[gName] = gContents;
+                            fs.writeFile('guides.json', JSON.stringify(guides, null, 4), (err) => {
+                                if (err) message.channel.send("An unexpected error occurred and the guide file could not be updated.");
+                                else message.channel.send(`Added guide \`${gName}\` with contents:\n\n${gContents}`);
+                            });
+                        }
+                    } else if (add === 'remove') {
+                        if (args.length == 0) message.channel.send("Please specify the name of the guide to remove.");
+                        else {
+                            let gName = args.shift();
+                            if (gName in guides) {
+                                delete guides[gName];
+                                fs.writeFile('guides.json', JSON.stringify(guides, null, 4), (err) => {
+                                    if (err) message.channel.send("An unexpected error occurred and the guide list could not be updated.");
+                                    else message.channel.send(`Removed guide \`${gName}\``);
+                                });
+                            } else {
+                                message.channel.send(`Guide \`${gName}\` not found. See a list of available guides with \`d!guide\`.`);
+                            }
+                        }
+                    } else {
+                        message.channel.send(`Error: expected \`add\` or \`remove\`, but got \`${add}\``);
+                    }
                 } else if (modCmd === 'clearcache') {
                     questTable = {};
                     loadQuests();
@@ -838,11 +884,8 @@ client.on('message', async (message) => {
         } else if (cmd === 'lodestoned') {
             message.channel.send("", {files: ["https://i.imgur.com/2NBePN9.jpg"]});
         } else if (cmd === 'random') {
-            let unmodifiedList = dragonList;
-            unmodifiedList.push("Oracle Dragon");
-            unmodifiedList.push("Oracle Dragon");
-            unmodifiedList.push("Oracle Dragon");
-            unmodifiedList.push("Oracle Dragon"); // hehe xd
+            let unmodifiedList = dragonList.slice(0);
+            for (i = 0; i < 5; i++) unmodifiedList.push("Oracle Dragon"); // hehe xd
             message.channel.send(`Your *totally* randomly selected dragon is: **${unmodifiedList[Math.floor(Math.random() * unmodifiedList.length)]}**`);
         } else if (cmd === 'smoulderbrushed' || cmd === 'smoulderbushed') {
             message.channel.send("I just got a freaking Smoulderbush for the 30 day event gift. Is this a sick joke...? I didn't spend 30 days playing this event for a freaking SMOULDERBUSH DRAGON. I'm so mad this isn't even funny.");

@@ -4,3 +4,4 @@ dv-data.json
 dv-leaderboard-raw.json
 dv-levels.json
 UserXpStats-sqlUpsert.sql
+guides.json
