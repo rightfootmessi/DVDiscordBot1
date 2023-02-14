@@ -6,7 +6,7 @@ const { Worker } = require('worker_threads');
 const fs = require('fs');
 const sprintf = require('sprintf-js').sprintf;
 
-const cmdPrefix = 'd!';
+const cmdPrefix = 'd%';
 
 const helpMsg = `Command list (prefix all commands with \`${cmdPrefix}\`):\n`
                 + "- `breed <dragon>` - find out how to breed a dragon\n"
@@ -213,7 +213,7 @@ client.on('message', async (message) => {
             else {
                 if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
                 if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
-                else if (isNew(dragon)) message.channel.send(`${dragon} is a new release, and thus it has an incomplete wiki page; I unfortunately cannot give you information about it at this time. Try again later, or ask others for help!`);
+                else if (isNew(dragon)) message.channel.send(`${dragon} is a new release, and thus it has an incomplete wiki page; I unfortunately cannot give you information about it at this time. Try again later, or check out <#738831348915241051> in the meantime.`);
                 else if (isPrimary(dragon)) message.channel.send(`${dragon} is a primary dragon, just breed two of them together to get more...`);
                 else if (isEvolution(dragon)) message.channel.send(`${dragon} is an evolved dragon, you must breed two of them together to get more. To find out how to evolve this dragon, type \`d!evolve ${dragon}\``);
                 else {
@@ -231,7 +231,7 @@ client.on('message', async (message) => {
             else {
                 if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
                 if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
-                else if (isNew(dragon)) message.channel.send(`${dragon} is a new release, and thus it has an incomplete wiki page; I unfortunately cannot give you information about it at this time. Try again later, or ask others for help!`);
+                // else if (isNew(dragon)) message.channel.send(`${dragon} is a new release, and thus it has an incomplete wiki page; I unfortunately cannot give you information about it at this time. Try again later, or check out <#738831348915241051> in the meantime.`);
                 else if (isPrimary(dragon)) message.channel.send(dragon + " is a primary dragon, its only element is in its name...");
                 else {
                     elementsMsg = () => message.channel.send(cache[dragon]["elements"]).catch(error => {
@@ -248,7 +248,7 @@ client.on('message', async (message) => {
             else {
                 if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
                 if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
-                else if (isNew(dragon)) message.channel.send(`${dragon} is a new release, and thus it has an incomplete wiki page; I unfortunately cannot give you information about it at this time. Try again later, or ask others for help!`);
+                else if (isNew(dragon)) message.channel.send(`${dragon} is a new release, and thus it has an incomplete wiki page; I unfortunately cannot give you information about it at this time. Try again later, or check out <#738831348915241051> in the meantime.`);
                 else if (!isEvolution(dragon)) message.channel.send(dragon + " is not obtained through evolution.");
                 else {
                     evolveMsg = () => message.channel.send(cache[dragon]["evolve"]).catch(error => {
@@ -327,7 +327,7 @@ client.on('message', async (message) => {
             else {
                 if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
                 if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
-                else if (isNew(dragon)) message.channel.send(`${dragon} is a new release, and thus it has an incomplete wiki page; I unfortunately cannot give you information about it at this time. Try again later, or ask others for help!`);
+                else if (isNew(dragon)) message.channel.send(`${dragon} is a new release, and thus it has an incomplete wiki page; I unfortunately cannot give you information about it at this time. Try again later, or check out <#738831348915241051> in the meantime.`);
                 else {
                     imgMsg = () => {
                         var imgLink;
@@ -395,7 +395,7 @@ client.on('message', async (message) => {
             else {
                 if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
                 if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
-                else if (isNew(dragon)) message.channel.send(`${dragon} is a new release, and thus it has an incomplete wiki page; I unfortunately cannot give you information about it at this time. Try again later, or ask others for help!`);
+                else if (isNew(dragon)) message.channel.send(`${dragon} is a new release, and thus it has an incomplete wiki page; I unfortunately cannot give you information about it at this time. Try again later, or check out <#738831348915241051> in the meantime.`);
                 else {
                     ratesMsg = () => {
                         if (!rift) message.channel.send(cache[dragon]["rates"]["non-rift"][Math.min(boosts, cache[dragon]["rates"]["maxBoosts"])]).catch(error => {
@@ -532,7 +532,7 @@ client.on('message', async (message) => {
             else {
                 if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
                 if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
-                else if (isNew(dragon)) message.channel.send(`${dragon} is a new release, and thus it has an incomplete wiki page; I unfortunately cannot give you information about it at this time. Try again later, or ask others for help!`);
+                else if (isNew(dragon)) message.channel.send(`${dragon} is a new release, and thus it has an incomplete wiki page; I unfortunately cannot give you information about it at this time. Try again later, or check out <#738831348915241051> in the meantime.`);
                 else {
                     timerMsg = () => message.channel.send(cache[dragon]["timer"]).catch(error => {
                         message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
@@ -547,8 +547,8 @@ client.on('message', async (message) => {
             if (!dragon) message.channel.send("You must specify a dragon!");
             else {
                 if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
-                else if (isNew(dragon)) message.channel.send(`${dragon} is a new release, and thus it has an incomplete wiki page; I unfortunately cannot give you information about it at this time. Try again later, or ask others for help!`);
                 if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
+                else if (isNew(dragon)) message.channel.send(`${dragon} is a new release, and thus it has an incomplete wiki page; I unfortunately cannot give you information about it at this time. Try again later, or check out <#738831348915241051> in the meantime.`);
                 else {
                     usesMsg = () => message.channel.send(cache[dragon]["uses"]).catch(error => {
                         message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
