@@ -6,7 +6,7 @@ const { Worker } = require('worker_threads');
 const fs = require('fs');
 const sprintf = require('sprintf-js').sprintf;
 
-const cmdPrefix = 'd%';
+const cmdPrefix = 'd!';
 
 const helpMsg = `Command list (prefix all commands with \`${cmdPrefix}\`):\n`
                 + "- `breed <dragon>` - find out how to breed a dragon\n"
