@@ -673,7 +673,6 @@
         "Teozinte Dragon",
         "Terracotta Dragon",
         "Terradiem Dragon",
-        "Test Dragon",
         "Thicket Dragon",
         "Thistle Dragon",
         "Thorn Dragon",
@@ -885,5 +884,8 @@
         "Metal Dragon",
         "Plant Dragon",
         "Water Dragon"
+    ],
+    "newDrags": [
+        
     ]
 }

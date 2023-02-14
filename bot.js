@@ -6,14 +6,14 @@ const { Worker } = require('worker_threads');
 const fs = require('fs');
 const sprintf = require('sprintf-js').sprintf;
 
-const cmdPrefix = 'd%';
+const cmdPrefix = 'd!';
 
 const helpMsg = `Command list (prefix all commands with \`${cmdPrefix}\`):\n`
                 + "- `breed <dragon>` - find out how to breed a dragon\n"
 				+ "- `elements <dragon>` - get the breeding elements (aka hidden elements) of a dragon\n"
 				+ "- `evolve <dragon>` - find the evolution requirements for a dragon\n"
                 + "- `feed [initial level] <final level> [rift]` - find the number of treats needed to feed a dragon from the initial level (defaults to 1 if not specified) to the final level\n"
-                + "- `guide [guide] - retrieves a guide, or lists all available guides if none specified (alias: `guides`)\n"
+                + "- `guide [guide]` - retrieves a guide, or lists all available guides if none specified (alias: `guides`)\n"
 				+ "- `image <dragon> <adult|juvenile|baby|egg> [qualifier]` - get a PNG image of the dragon; defaults to adult if no stage specified; valid qualifiers can be listed using `d!image flags`  (aliases: `picture`, `img`, `pic`)\n"
 				+ "- `quest <quest>` - get the correct dragon to send on a quest\n"
 				+ "- `rates <dragon> [# of boosts OR 'rift']` - get the earning rates of a dragon\n"
@@ -26,7 +26,7 @@ const helpMsg = `Command list (prefix all commands with \`${cmdPrefix}\`):\n`
 
 const riftFeeding = [2500, 6000, 9000, 12000, 20000, 30000, 45000, 70000, 100000, 150000, 250000, 350000, 500000, 800000, 1200000, 1800000, 3000000, 4000000, 6250000, 12500000];
 
-var primaries, evolutions, enhanced, dayNight, hiding, elders, dragonList, fullData;
+var primaries, evolutions, enhanced, dayNight, hiding, elders, dragonList, newDrags, fullData;
 var questTable = {};
 var guides = {};
 var questsLoaded = false;
@@ -96,6 +96,7 @@ client.on('ready', () => {
     hiding = data.hiding;
     elders = data.elders;
     dragonList = data.dragonList;
+    newDrags = data.newDrags;
 	loadQuests();
     readMonolithWikiPage();
     readSnowflakeWikiPage();
@@ -212,6 +213,7 @@ client.on('message', async (message) => {
             else {
                 if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
                 if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
+                else if (isNew(dragon)) message.channel.send(`${dragon} is a new release, and thus it has an incomplete wiki page; I unfortunately cannot give you information about it at this time. Try again later, or ask others for help!`);
                 else if (isPrimary(dragon)) message.channel.send(`${dragon} is a primary dragon, just breed two of them together to get more...`);
                 else if (isEvolution(dragon)) message.channel.send(`${dragon} is an evolved dragon, you must breed two of them together to get more. To find out how to evolve this dragon, type \`d!evolve ${dragon}\``);
                 else {
@@ -229,6 +231,7 @@ client.on('message', async (message) => {
             else {
                 if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
                 if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
+                else if (isNew(dragon)) message.channel.send(`${dragon} is a new release, and thus it has an incomplete wiki page; I unfortunately cannot give you information about it at this time. Try again later, or ask others for help!`);
                 else if (isPrimary(dragon)) message.channel.send(dragon + " is a primary dragon, its only element is in its name...");
                 else {
                     elementsMsg = () => message.channel.send(cache[dragon]["elements"]).catch(error => {
@@ -245,6 +248,7 @@ client.on('message', async (message) => {
             else {
                 if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
                 if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
+                else if (isNew(dragon)) message.channel.send(`${dragon} is a new release, and thus it has an incomplete wiki page; I unfortunately cannot give you information about it at this time. Try again later, or ask others for help!`);
                 else if (!isEvolution(dragon)) message.channel.send(dragon + " is not obtained through evolution.");
                 else {
                     evolveMsg = () => message.channel.send(cache[dragon]["evolve"]).catch(error => {
@@ -323,6 +327,7 @@ client.on('message', async (message) => {
             else {
                 if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
                 if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
+                else if (isNew(dragon)) message.channel.send(`${dragon} is a new release, and thus it has an incomplete wiki page; I unfortunately cannot give you information about it at this time. Try again later, or ask others for help!`);
                 else {
                     imgMsg = () => {
                         var imgLink;
@@ -384,12 +389,13 @@ client.on('message', async (message) => {
                     message.channel.send("The number of boosts must be an integer greater than 0.");
                     return;
                 }
-            } else args.push(last);
+            } else if (last != undefined) args.push(last);
             var dragon = prettyString(args, " ");
             if (!dragon) message.channel.send("You must specify a dragon!");
             else {
                 if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
                 if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
+                else if (isNew(dragon)) message.channel.send(`${dragon} is a new release, and thus it has an incomplete wiki page; I unfortunately cannot give you information about it at this time. Try again later, or ask others for help!`);
                 else {
                     ratesMsg = () => {
                         if (!rift) message.channel.send(cache[dragon]["rates"]["non-rift"][Math.min(boosts, cache[dragon]["rates"]["maxBoosts"])]).catch(error => {
@@ -526,6 +532,7 @@ client.on('message', async (message) => {
             else {
                 if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
                 if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
+                else if (isNew(dragon)) message.channel.send(`${dragon} is a new release, and thus it has an incomplete wiki page; I unfortunately cannot give you information about it at this time. Try again later, or ask others for help!`);
                 else {
                     timerMsg = () => message.channel.send(cache[dragon]["timer"]).catch(error => {
                         message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
@@ -540,6 +547,7 @@ client.on('message', async (message) => {
             if (!dragon) message.channel.send("You must specify a dragon!");
             else {
                 if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
+                else if (isNew(dragon)) message.channel.send(`${dragon} is a new release, and thus it has an incomplete wiki page; I unfortunately cannot give you information about it at this time. Try again later, or ask others for help!`);
                 if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
                 else {
                     usesMsg = () => message.channel.send(cache[dragon]["uses"]).catch(error => {
@@ -571,6 +579,7 @@ client.on('message', async (message) => {
                         + "- `remove <dragon>` - remove dragon from list\n"
                         + "- `flag <dragon> <primaries/evolutions/enhanced/dayNight/hiding>` - add the specified flag to the dragon\n"
                         + "- `unflag <dragon> <primaries/evolutions/enhanced/dayNight/hiding>` - remove the specified flag from the dragon\n"
+                        + "- `getflags <dragon>` - gets all flags on the specified dragon\n"
                         + "- `guide <add/remove> <name> [contents]` - add/remove a guide\n"
                         + "- `clearcache` - clear the bot's cache (useful after updating the wiki)\n"
                         + "- `dljson` - sends a downloadable copy of my dragon list as a json file\n"
@@ -580,17 +589,19 @@ client.on('message', async (message) => {
             } else {
                 const modCmd = args.shift();
                 if (modCmd === 'viewlist') {
-                    var tempList = (args == "primaries") ? [...primaries] : (args == "evolutions") ? [...evolutions] : (args == "enhanced") ? [...enhanced] : (args == "daynight") ? [...dayNight] : (args == "hiding") ? [...hiding] : [...dragonList];
-                    var msg = "";
-                    while (tempList.length > 0) {
-                        if (msg.length + tempList[0].length > 2000) {
-                            message.author.send(msg);
-                            msg = "";
+                    var tempList = (args == "primaries") ? [...primaries] : (args == "evolutions") ? [...evolutions] : (args == "enhanced") ? [...enhanced] : (args == "daynight") ? [...dayNight] : (args == "hiding") ? [...hiding] : (args == "new") ? [...newDrags] : [...dragonList];
+                    if (tempList.length > 0) {
+                        var msg = "";
+                        while (tempList.length > 0) {
+                            if (msg.length + tempList[0].length > 2000) {
+                                message.author.send(msg);
+                                msg = "";
+                            }
+                            msg += tempList.shift() + "\n";
                         }
-                        msg += tempList.shift() + "\n";
-                    }
-                    if (msg.length > 0) message.author.send(msg);
-                    message.channel.send("I have sent my list of dragons to your DMs.");
+                        if (msg.length > 0) message.author.send(msg);
+                        message.channel.send("I have sent my list of dragons to your DMs.");
+                    } else message.channel.send("There are no dragons with this flag!");
                 } else if (modCmd === 'add') {
                     var dragon = prettyString(args, " ");
                     if (!dragon) {
@@ -606,6 +617,8 @@ client.on('message', async (message) => {
         
                     dragonList.push(dragon);
                     dragonList.sort();
+                    newDrags.push(dragon);
+                    newDrags.sort();
                     fs.writeFile('dragonList.json', JSON.stringify(fullData, null, 4), (err) => {
                         if (err) message.channel.send("An unexpected error occurred and the dragon list could not be updated.");
                         else message.channel.send(dragon + " was added to the list. If this was a mistake, type `" + cmdPrefix + "mod remove " + dragon + "` to remove it.");
@@ -680,14 +693,22 @@ client.on('message', async (message) => {
                             break;
                         case "hiding":
                             if (hiding.includes(dragon)) {
-                                message.channel.send(hiding + " already has this flag.");
+                                message.channel.send(dragon + " already has this flag.");
                                 return;
                             }
                             hiding.push(dragon);
                             hiding.sort();
                             break;
+                        case "new":
+                            if (newDrags.includes(dragon)) {
+                                message.channel.send(dragon + " already has this flag.");
+                                return;
+                            }
+                            newDrags.push(dragon);
+                            newDrags.sort();
+                            break;
                         default:
-                            message.channel.send("Unrecognized flag. Valid flags: `primaries`, `evolutions`, `enhanced`, `dayNight`");
+                            message.channel.send("Unrecognized flag. Valid flags: `primaries`, `evolutions`, `enhanced`, `dayNight`, `hiding`, `new`");
                             return;
                     }
                     fs.writeFile('dragonList.json', JSON.stringify(fullData, null, 4), (err) => {
@@ -747,17 +768,45 @@ client.on('message', async (message) => {
                             }
                             hiding.splice(hiding.indexOf(dragon), 1);
                             break;
+                        case "new":
+                            if (!newDrags.includes(dragon)) {
+                                message.channel.send(dragon + " already does not have this flag.");
+                                return;
+                            }
+                            newDrags.splice(newDrags.indexOf(dragon), 1);
+                            break;
                         default:
-                            message.channel.send("Unrecognized flag. Valid flags: `primaries`, `evolutions`, `enhanced`, `dayNight`");
+                            message.channel.send("Unrecognized flag. Valid flags: `primaries`, `evolutions`, `enhanced`, `dayNight`, `hiding`, `new`");
                             return;
                     }
                     fs.writeFile('dragonList.json', JSON.stringify(fullData, null, 4), (err) => {
                         if (err) message.channel.send("An unexpected error occurred and the dragon list could not be updated.");
                         else {
-                            message.channel.send(dragon + " was unflagged as `" + flag + "`. If this was a mistake, type `" + cmdPrefix + "mod unflag " + dragon + " " + flag + "` to remove it.");
+                            message.channel.send(dragon + " was unflagged as `" + flag + "`. If this was a mistake, type `" + cmdPrefix + "mod flag " + dragon + " " + flag + "` to re-add it.");
                             delete cache[dragon];
                         }
                     });
+                } else if (modCmd === 'getflags') {
+                    var dragon = prettyString(args, " ");
+                    if (!dragon) {
+                        message.channel.send("You must specify a dragon!");
+                        return;
+                    }
+                    if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
+                    if (!dragonList.includes(dragon)) {
+                        message.channel.send(dragon + " is not in my list.");
+                        return;
+                    }
+                    flags = [];
+                    if (primaries.includes(dragon)) flags.push("primaries");
+                    if (evolutions.includes(dragon)) flags.push("evolutions");
+                    if (enhanced.includes(dragon)) flags.push("enhanced");
+                    if (dayNight.includes(dragon)) flags.push("daynight");
+                    if (hiding.includes(dragon)) flags.push("hiding");
+                    if (newDrags.includes(dragon)) flags.push("new");
+
+                    if (flags.length > 0) message.channel.send(`${dragon} has flags: \`${flags.join('`, `')}\``);
+                    else message.channel.send(`${dragon} has no flags.`);
                 } else if (modCmd === 'guide') {
                     let add = args.shift();
                     if (add === 'add') {
@@ -964,6 +1013,7 @@ prettyString = function(words, separator) {
 
 isPrimary = (dName) => primaries.includes(dName.replace(" Rift", ""));
 isEvolution = (dName) => evolutions.includes(dName);
+isNew = (dName) => newDrags.includes(dName);
 isEpic = (element) => !["Plant", "Fire", "Earth", "Cold", "Lightning", "Water", "Air", "Metal", "Light", "Dark", "Rift"].includes(element);
 
 
