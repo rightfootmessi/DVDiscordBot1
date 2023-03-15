@@ -159,7 +159,7 @@ client.on('message', async (message) => {
             return;
         } else for (i in args) args[i] = args[i].toLowerCase();
 
-        if (!['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'pet', 'mod', 'aurora', 'random', 'guide', 'guides'].includes(cmd)) {
+        if (!['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'pet', 'mod', 'aurora', 'random'].includes(cmd)) {
             // (DragonVale server only) prevent non-meme commands from being executed outside #bot-commands
             if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && (message.channel.id != 626182769256693770 && message.channel.id != 818011940160405534) && message.channel.id != 276384829593878529) return; // bot-commands, oracle-test, mod-chat
         }

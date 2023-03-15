@@ -278,6 +278,7 @@
         "Glacier Dragon",
         "Glare Dragon",
         "Glass Dragon",
+        "Glassia Dragon",
         "Glasswing Dragon",
         "Glimmerwing Dragon",
         "Glitz Dragon",
@@ -389,6 +390,7 @@
         "Lotus Dragon",
         "Love Dragon",
         "Lovesick Dragon",
+        "Lovonone Dragon",
         "Luck Dragon",
         "Lullaby Dragon",
         "Lumineux Dragon",
@@ -411,6 +413,7 @@
         "Meadow Dragon",
         "Melancholy Dragon",
         "Mesmer Dragon",
+        "Mesmerus Dragon",
         "Mesolite Dragon",
         "Metal Dragon",
         "Metal Rift Dragon",
@@ -459,6 +462,7 @@
         "Nightmare Dragon",
         "Nightshade Dragon",
         "Nimbus Dragon",
+        "Nomnoter Dragon",
         "Nosferatu Dragon",
         "Nova Dragon",
         "Nox Dragon",
@@ -673,6 +677,7 @@
         "Teozinte Dragon",
         "Terracotta Dragon",
         "Terradiem Dragon",
+        "Test Dragon",
         "Thicket Dragon",
         "Thistle Dragon",
         "Thorn Dragon",
@@ -827,6 +832,7 @@
         "Elegant Dragon",
         "Iden Dragon",
         "Kwall Dragon",
+        "Lovonone Dragon",
         "Lycan Dragon",
         "Monte Dragon",
         "Moriante Dragon",
@@ -885,7 +891,5 @@
         "Plant Dragon",
         "Water Dragon"
     ],
-    "newDrags": [
-        
-    ]
+    "newDrags": []
 }
