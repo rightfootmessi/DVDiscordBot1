@@ -1,6 +1,5 @@
 const { parentPort } = require('worker_threads');
 const https = require('https');
-const vm = require('vm');
 const concat = require('concat-stream');
 const sprintf = require('sprintf-js').sprintf;
 

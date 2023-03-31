@@ -1,5 +1,29 @@
-const Discord = require('discord.js');
-const client = new Discord.Client();
+const {Discord, Client, GatewayIntentBits} = require('discord.js');
+const client = new Client(
+    {
+        intents: [
+            GatewayIntentBits.AutoModerationConfiguration,
+            GatewayIntentBits.AutoModerationExecution,
+            GatewayIntentBits.DirectMessageReactions,
+            GatewayIntentBits.DirectMessageTyping,
+            GatewayIntentBits.DirectMessages,
+            GatewayIntentBits.GuildEmojisAndStickers,
+            GatewayIntentBits.GuildIntegrations,
+            GatewayIntentBits.GuildInvites,
+            GatewayIntentBits.GuildMembers,
+            GatewayIntentBits.GuildMessageReactions,
+            GatewayIntentBits.GuildMessageTyping,
+            GatewayIntentBits.GuildMessages,
+            GatewayIntentBits.GuildModeration,
+            GatewayIntentBits.GuildPresences,
+            GatewayIntentBits.GuildScheduledEvents,
+            GatewayIntentBits.GuildVoiceStates,
+            GatewayIntentBits.GuildWebhooks,
+            GatewayIntentBits.Guilds,
+            GatewayIntentBits.MessageContent
+        ]
+    }
+);
 const https = require('https');
 const cheerio = require('cheerio');
 const { Worker } = require('worker_threads');
@@ -84,6 +108,31 @@ dvboxCache: {
 */
 
 let worker = new Worker('./dvboxreader.js');
+let qotd_worker = new Worker('./qotd.js');
+
+function post_qotd(data) {
+    console.log('listener attached');
+    console.log(JSON.stringify(data));
+    if (data != null) {
+        var postStr = `**Question of the Day ${data.num}:** ${data.q.question}`;
+        if (data.q.asker != null) {
+            if (data.q.anon) postStr += " (Thank you for the submission!)";
+            else postStr += ` (Thank you <@${data.q.asker}> for the submission!)`;
+        }
+        const qotdCh = client.guilds.cache.get('233370210617262080').channels.cache.get('999342201387630732'); // oracle-pet ID = 818011940160405534
+        qotdCh.send(postStr).then(qMsg => {
+            console.log(qMsg.constructor.name);
+            console.log(typeof qMsg.startThread === 'function');
+            qMsg.startThread({
+                name: `Question of the Day ${data.num}`,
+                autoArchiveDuration: qMsg.channel.defaultAutoArchiveDuration
+            }).then(thread => console.log(thread.name));
+        });
+    } else {
+        console.log("No QOTD received - did we run out?")
+    }
+    // TODO remove inactive members from Adding Friends forum post?
+}
 
 client.on('ready', () => {
 	console.log('Oracle is waking up...');
@@ -101,6 +150,9 @@ client.on('ready', () => {
     readMonolithWikiPage();
     readSnowflakeWikiPage();
     guides = JSON.parse(fs.readFileSync('guides.json'));
+
+    qotd_worker.on('message', data => post_qotd(data));
+    qotd_worker.postMessage({cmd: 'restart'});
 });
 
 
@@ -112,7 +164,7 @@ function sleep(ms) {
 
 var petCooldown = 0;
  
-client.on('message', async (message) => {
+client.on('messageCreate', async (message) => {
     try {
         if (!message.content.toLowerCase().startsWith(cmdPrefix) || message.author.bot) return;
 
@@ -581,6 +633,7 @@ client.on('message', async (message) => {
                         + "- `unflag <dragon> <primaries/evolutions/enhanced/dayNight/hiding>` - remove the specified flag from the dragon\n"
                         + "- `getflags <dragon>` - gets all flags on the specified dragon\n"
                         + "- `guide <add/remove> <name> [contents]` - add/remove a guide\n"
+                        + "- `qotd <viewlist/add/remove> <position> <asker> <anon> <question>` - Adds/removes an upcoming QOTD, or lists all pending questions\n"
                         + "- `clearcache` - clear the bot's cache (useful after updating the wiki)\n"
                         + "- `dljson` - sends a downloadable copy of my dragon list as a json file\n"
                         + "- `uljson` - upload a new dragon list json file for me to use (note: the file's name *must* be `dragonList.json`!)\n"
@@ -621,7 +674,7 @@ client.on('message', async (message) => {
                     newDrags.sort();
                     fs.writeFile('dragonList.json', JSON.stringify(fullData, null, 4), (err) => {
                         if (err) message.channel.send("An unexpected error occurred and the dragon list could not be updated.");
-                        else message.channel.send(dragon + " was added to the list. If this was a mistake, type `" + cmdPrefix + "mod remove " + dragon + "` to remove it.");
+                        else message.channel.send(`${dragon} was added to the list and automatically flagged as \`new\`. If this was a mistake, type \`${cmdPrefix}mod remove ${dragon}\` to remove it."`);
                     });
                 } else if (modCmd === 'remove') {
                     var dragon = prettyString(args, " ");
@@ -837,6 +890,73 @@ client.on('message', async (message) => {
                         }
                     } else {
                         message.channel.send(`Error: expected \`add\` or \`remove\`, but got \`${add}\``);
+                    }
+                } else if (modCmd === 'qotd') {
+                    let subCmd = args.shift();
+                    let qotdData = JSON.parse(fs.readFileSync('qotdlist.json'));
+                    if (subCmd === 'viewlist') {
+                        let response = "Pending QOTDs:\n";
+                        while (qotdData.queue.length > 0) {
+                            let next = qotdData.queue.shift();
+                            response += `**#${qotdData.num++}:** ${next.question} *[asked by ${next.asker}${next.anon ? " anonymously" : ""}]*\n`;
+                        }
+                        message.channel.send(response);
+                    } else if (subCmd === 'add') {
+                        if (args.length <= 3) {
+                            message.channel.send(`Too few arguments! \`${cmdPrefix}mod qotd add <position> <asker> <anon> <question>\``);
+                            return;
+                        }
+                        let pos = parseInt(args.shift());
+                        if (!Number.isInteger(pos) || pos < 0) {
+                            message.channel.send("Position should be a nonnegative integer!");
+                            return;
+                        } else if (pos > qotdData.queue.length) pos = qotdData.queue.length;
+                        let asker = args.shift();
+                        if (asker === "null") asker = null;
+                        // TODO verify valid user ID?
+                        let anon = args.shift() === "true";
+                        let numChars = args.join(" ").length;
+                        let qContents = message.content.replace(/\s{2,}/g, ' ').replace(/@/g, '').slice(cmdPrefix.length).trim().slice(-numChars);
+                        qObj = {
+                            question: qContents,
+                            asker: asker,
+                            anon: anon
+                        };
+                        console.log(qotdData.queue.length);
+                        qotdData.queue.splice(pos, 0, qObj);
+                        console.log(qotdData.queue.length);
+                        fs.writeFile('qotdlist.json', JSON.stringify(qotdData, null, 4), (err) => {
+                            if (err) message.channel.send("An unexpected error occurred and the guide file could not be updated.");
+                            else {
+                                message.channel.send(`Added new QOTD at position ${pos} in queue: "${qContents}" *(asked by ${asker}, with anon = ${anon})*\n\nConfirm the new queue is correct using \`${cmdPrefix}mod qotd viewlist\`.`);
+                                qotd_worker.postMessage({cmd: 'loadfile'});
+                            }
+                        });
+                    } else if (subCmd === 'remove') {
+                        if (args.length < 1) {
+                            message.channel.send("Error: please specify the position (0-indexed) of the QOTD to be removed!");
+                        } else {
+                            let pos = parseInt(args.shift());
+                            if (!Number.isInteger(pos) || pos < 0) {
+                                message.channel.send("Error: position should be a nonnegative integer!");
+                                return;
+                            } else if (pos >= qotdData.queue.length) {
+                                message.channel.send(`Error: position ${pos} is out of the queue boundaries!`);
+                            } else {
+                                console.log(qotdData.queue.length);
+                                let removed = qotdData.queue.splice(pos, 1)[0];
+                                console.log(qotdData.queue.length);
+                                fs.writeFile('qotdlist.json', JSON.stringify(qotdData, null, 4), (err) => {
+                                    if (err) message.channel.send("An unexpected error occurred and the guide file could not be updated.");
+                                    else {
+                                        message.channel.send(`Removed QOTD at position ${pos} from queue: "${removed.question}" *(asked by ${removed.asker}, with anon = ${removed.anon})*\n\nConfirm the new queue is correct using \`${cmdPrefix}mod qotd viewlist\`.`);
+                                        qotd_worker.postMessage({cmd: 'loadfile'});
+                                    }
+                                });
+                            }
+                        }
+                    } else {
+                        message.channel.send(`Command usage: \`${cmdPrefix}mod qotd <viewlist/add/remove> <position> <asker> <anon> <question>\``);
                     }
                 } else if (modCmd === 'clearcache') {
                     questTable = {};
