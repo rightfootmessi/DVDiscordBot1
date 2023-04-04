@@ -211,10 +211,10 @@ client.on('messageCreate', async (message) => {
             return;
         } else for (i in args) args[i] = args[i].toLowerCase();
 
-        if (!['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'pet', 'mod', 'aurora', 'random', 'guide', 'guides'].includes(cmd)) {
-            // (DragonVale server only) prevent non-meme commands from being executed outside #bot-commands
-            if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && (message.channel.id != 626182769256693770 && message.channel.id != 818011940160405534) && message.channel.id != 276384829593878529) return; // bot-commands, oracle-test, mod-chat
-        }
+        // if (!['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'pet', 'mod', 'aurora', 'random', 'guide', 'guides'].includes(cmd)) {
+        //     // (DragonVale server only) prevent non-meme commands from being executed outside #bot-commands
+        //     if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && (message.channel.id != 626182769256693770 && message.channel.id != 818011940160405534) && message.channel.id != 276384829593878529) return; // bot-commands, oracle-test, mod-chat
+        // }
 
         if (args.includes("monolith") && !(cmd === 'result' || cmd === 'results' || cmd === 'fakeouts') && !(cmd === 'sandbox' || cmd === 'dvbox')) {
             if (isNaN(args[args.indexOf("monolith") + 1])) {
@@ -249,6 +249,7 @@ client.on('messageCreate', async (message) => {
         }
 
         if (cmd === 'quest') {
+            if (cmdInWrongChannel(message)) return;
             if (!questsLoaded) message.channel.send("Quests have not been loaded yet!");
             else {
                 var questname = prettyString(args, " ");
@@ -260,6 +261,7 @@ client.on('messageCreate', async (message) => {
                 }
             }
         } else if (cmd === 'breed') {
+            if (cmdInWrongChannel(message)) return;
             var dragon = prettyString(args, " ");
             if (!dragon) message.channel.send("You must specify a dragon!");
             else {
@@ -278,6 +280,7 @@ client.on('messageCreate', async (message) => {
                 }
             }
         } else if (cmd === 'elements') {
+            if (cmdInWrongChannel(message)) return;
             var dragon = prettyString(args, " ");
             if (!dragon) message.channel.send("You must specify a dragon!");
             else {
@@ -295,6 +298,7 @@ client.on('messageCreate', async (message) => {
                 }
             }
         } else if (cmd === 'evolve') {
+            if (cmdInWrongChannel(message)) return;
             var dragon = prettyString(args, " ");
             if (!dragon) message.channel.send("You must specify a dragon!");
             else {
@@ -312,6 +316,7 @@ client.on('messageCreate', async (message) => {
                 }
             }
         } else if (cmd === 'feed') {
+            if (cmdInWrongChannel(message)) return;
             if (args.length > 3) {
                 message.channel.send("Invalid command format. Please provide the starting level and ending level (and add 'rift' if you are feeding a rift dragon).");
                 return;
@@ -352,6 +357,7 @@ client.on('messageCreate', async (message) => {
                 }
             }
         } else if (cmd === 'image' || cmd === 'picture' || cmd === 'img' || cmd === 'pic') {
+            if (cmdInWrongChannel(message)) return;
             if (args.length === 0) {
                 message.channel.send(`Usage: \`${cmdPrefix}image <dragon> <adult|juvenile|baby|egg> [qualifier]\``);
                 return;
@@ -415,6 +421,7 @@ client.on('messageCreate', async (message) => {
                 }
             }
         } else if (cmd === 'rates') {
+            if (cmdInWrongChannel(message)) return;
             var rift = false;
             var boosts = 0;
             var last = args.pop();
@@ -463,6 +470,7 @@ client.on('messageCreate', async (message) => {
                 }
             }
         } else if (cmd === 'result' || cmd === 'results' || cmd === 'fakeouts') {
+            if (cmdInWrongChannel(message)) return;
             /*if (!hasModAccess(message)) {
                 message.channel.send("This command is currently broken! Please be patient while a fix is worked on. <:dv_owobowos:803676880850780160>");
                 return;
@@ -551,6 +559,7 @@ client.on('messageCreate', async (message) => {
                 }
             }
         } else if (cmd === 'sandbox' || cmd === 'dvbox') {
+            if (cmdInWrongChannel(message)) return;
             if (args.length == 0) message.channel.send("The DragonVale Sandbox (or dvbox, for short) can be found at https://dvbox.bin.sh/. Note that DVBox is fanmade and may not be entirely up-to-date. In addition, please note that while the results and timers shown are accurate, the breeding odds provided are incorrect.");
             else {
                 let fast = args.slice(-2).includes('fast');
@@ -579,6 +588,7 @@ client.on('messageCreate', async (message) => {
                 }
             }
         } else if (cmd === 'timer') {
+            if (cmdInWrongChannel(message)) return;
             var dragon = prettyString(args, " ");
             if (!dragon) message.channel.send("You must specify a dragon!");
             else {
@@ -595,6 +605,7 @@ client.on('messageCreate', async (message) => {
                 }
             }
         } else if (cmd === 'uses') {
+            if (cmdInWrongChannel(message)) return;
             var dragon = prettyString(args, " ");
             if (!dragon) message.channel.send("You must specify a dragon!");
             else {
@@ -611,6 +622,7 @@ client.on('messageCreate', async (message) => {
                 }
             }
         } else if (cmd === 'wiki') {
+            if (cmdInWrongChannel(message)) return;
             var dragon = prettyString(args, " ");
             if (!dragon) message.channel.send("https://dragonvale.fandom.com/wiki/DragonVale_Wiki");
             else {
@@ -620,7 +632,8 @@ client.on('messageCreate', async (message) => {
                     message.channel.send(`Search results for ${dragon} on the wiki can be found at: <https://dragonvale.fandom.com/wiki/Special:Search?query=${dragon.replace(/ /g, "+")}>`);
                 } else message.channel.send('https://dragonvale.fandom.com/wiki/' + dragon.replace(/\s\d/, "").replace(/ /g, "_"));
             }
-        } else if (cmd === '' || cmd === 'help') {		
+        } else if (cmd === '' || cmd === 'help') {	
+            if (cmdInWrongChannel(message)) return;	
             message.channel.send(helpMsg);
         } else if (cmd === 'mod' && hasModAccess(message)) {
             console.log(`${message.author.tag} ran mod cmd ${message.content.toLowerCase()}`);
@@ -973,7 +986,7 @@ client.on('messageCreate', async (message) => {
                     worker = new Worker('./dvboxreader.js');
                     message.channel.send("Cache cleared. Information given should now reflect the most recent wiki changes.");
                 } else if (modCmd === 'dljson') {
-                    message.author.send("Here is my current `dragonList.json` file.", {files: ["./dragonList.json"]});
+                    message.author.send({content: "Here is my current `dragonList.json` file.", files: ["./dragonList.json"]});
                 } else if (modCmd === 'uljson') {
                     let file = message.attachments.first();
                     if (!file) message.channel.send("You must upload a file!");
@@ -1050,9 +1063,9 @@ client.on('messageCreate', async (message) => {
                 }
             }
         } else if (cmd === 'aurora') {
-            message.channel.send("", {files: ['https://c.tenor.com/ae6296kObnAAAAAC/dragonvale.gif']});
+            message.channel.send({files: ['aurora.gif']});
         } else if (cmd === 'lodestoned') {
-            message.channel.send("", {files: ["https://i.imgur.com/2NBePN9.jpg"]});
+            message.channel.send({files: ["lodestoned.jpg"]});
         } else if (cmd === 'random') {
             let unmodifiedList = dragonList.slice(0);
             for (i = 0; i < 5; i++) unmodifiedList.push("Oracle Dragon"); // hehe xd
@@ -1060,6 +1073,7 @@ client.on('messageCreate', async (message) => {
         } else if (cmd === 'smoulderbrushed' || cmd === 'smoulderbushed') {
             message.channel.send("I just got a freaking Smoulderbush for the 30 day event gift. Is this a sick joke...? I didn't spend 30 days playing this event for a freaking SMOULDERBUSH DRAGON. I'm so mad this isn't even funny.");
         } else {
+            if (cmdInWrongChannel(message)) return;
             message.channel.send(`Unknown command. Type \`${cmdPrefix}help\` for a list of commands.`);
         }
     } catch(err) {
@@ -1115,6 +1129,19 @@ function fmt_dhms(t) {
 }
 
 hasModAccess = (message) => (message.guild.id == "233370210617262080" && message.member.roles.cache.some(r => r.name === "Mod Wizard")) || message.member.id == "295625585299030016";
+
+cmdInWrongChannel = function(message) {
+    // (DragonVale server only) prevent non-meme commands from being executed outside appropriate channels
+    if (message.channel.type == 'dm') return false;
+    if (message.guild.id != '233370210617262080') return false;
+    else {
+        // Only want to respond in #bot-commands, mod-chat, oracle-pet
+        if (message.channel.id == '626182769256693770') return false; // #bot-commands
+        else if (message.channel.id == '818011940160405534') return false; // #oracle-pet
+        else if (message.channel.id == '276384829593878529') return false; // #mod-chat
+        return true;
+    }
+}
 
 prettyString = function(words, separator) {
 	if (words.length == 0) return false;

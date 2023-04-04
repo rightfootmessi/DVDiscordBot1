@@ -7,8 +7,10 @@ var nextTimeout = null;
 parentPort.on('message', order => {
     if (order.cmd == 'restart') {
         clearTimeout(nextTimeout);
-        console.log("Worker loaded");
+        console.log("QOTD worker loaded");
         data = JSON.parse(fs.readFileSync('qotdlist.json'));
+
+        if (data.hasOwnProperty('local')) return; // disables QOTD when I'm running locally
     
         var now = new Date();
         var millisTill10 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 16, 0, 0, 0) - now; // GMT on Oracle Cloud but EST on my laptop!
