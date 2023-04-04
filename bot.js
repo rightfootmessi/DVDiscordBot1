@@ -896,9 +896,10 @@ client.on('messageCreate', async (message) => {
                     let qotdData = JSON.parse(fs.readFileSync('qotdlist.json'));
                     if (subCmd === 'viewlist') {
                         let response = "Pending QOTDs:\n";
+                        let idx = 0;
                         while (qotdData.queue.length > 0) {
                             let next = qotdData.queue.shift();
-                            response += `**#${qotdData.num++}:** ${next.question} *[asked by ${next.asker}${next.anon ? " anonymously" : ""}]*\n`;
+                            response += `**#${qotdData.num++} (pos ${idx++}):** ${next.question} *[asked by ${next.asker}${next.anon ? " anonymously" : ""}]*\n`;
                         }
                         message.channel.send(response);
                     } else if (subCmd === 'add') {
