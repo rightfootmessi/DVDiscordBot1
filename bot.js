@@ -928,7 +928,14 @@ client.on('messageCreate', async (message) => {
                         let asker = args.shift();
                         if (asker === "null") asker = null;
                         // TODO verify valid user ID?
-                        let anon = args.shift() === "true";
+                        let anon = args.shift();
+                        console.log(`anon = ${anon}`);
+                        if (anon != "true" && anon != "false") {
+                            message.channel.send(`Please indicate with either \`true\` or \`false\` whether the question was asked anonymously (if asker is null, it doesn't matter what you put).\nCommand usage: \`${cmdPrefix}mod qotd <viewlist/add/remove> <position> <asker> <anon> <question>\``);
+                            return;
+                        } else {
+                            anon = anon === "true";
+                        }
                         let numChars = args.join(" ").length;
                         let qContents = message.content.replace(/\s{2,}/g, ' ').replace(/@/g, '').slice(cmdPrefix.length).trim().slice(-numChars);
                         qObj = {

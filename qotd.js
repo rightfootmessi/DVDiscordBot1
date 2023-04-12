@@ -10,8 +10,11 @@ parentPort.on('message', order => {
         console.log("QOTD worker loaded");
         data = JSON.parse(fs.readFileSync('qotdlist.json'));
 
-        if (data.hasOwnProperty('local')) return; // disables QOTD when I'm running locally
-    
+        if (data.hasOwnProperty('local')) {
+            console.log('Running locally - disabling QOTD!');
+            return; // disables QOTD when I'm running locally
+        }
+
         var now = new Date();
         var millisTill10 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 16, 0, 0, 0) - now; // GMT on Oracle Cloud but EST on my laptop!
         if (millisTill10 < 0) {
