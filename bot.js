@@ -1406,80 +1406,80 @@ readWikiPage = (dragon, $) => {
 	// Pictures
 	const dragonNoSpace = dragon.replace(/ /g, '');
 	cache[dragon]["pictures"]["normal"] = {};
-	cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='" + dragonNoSpace + "Adult.png']").first().attr('src');
-	cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='" + dragonNoSpace + "Juvenile.png']").first().attr('src');
-	cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='" + dragonNoSpace + "Baby.png']").first().attr('src');
-	cache[dragon]["pictures"]["egg"] = $("[alt='" + dragonNoSpace + "Egg.png']").first().attr('data-src');
+	cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='" + dragonNoSpace + "Adult']").first().attr('src');
+	cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='" + dragonNoSpace + "Juvenile']").first().attr('src');
+	cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='" + dragonNoSpace + "Baby']").first().attr('src');
+	cache[dragon]["pictures"]["egg"] = $("[alt='" + dragonNoSpace + "Egg']").first().attr('data-src');
 	if (elders.includes(dragon)) {
-        cache[dragon]["pictures"]["normal"]["elder"] = $("[alt='" + dragonNoSpace + "Elder.png']").first().attr('src');
-        cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='" + dragonNoSpace + "Baby.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["normal"]["elder"] = $("[alt='" + dragonNoSpace + "Elder']").first().attr('src');
+        cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='" + dragonNoSpace + "Baby']").first().attr('data-src');
     }
 	if (enhanced.includes(dragon)) {
 		if (dragon == "Eldritch Dragon") {
-			cache[dragon]["pictures"]["barbarous"] = $("[alt='EldritchDragonAdultBarbarous.png']").first().attr('data-src');
-			cache[dragon]["pictures"]["charlatan"] = $("[alt='EldritchDragonAdultCharlatan.png']").first().attr('data-src');
-			cache[dragon]["pictures"]["macabre"] = $("[alt='EldritchDragonAdultMacabre.png']").first().attr('data-src');
-			cache[dragon]["pictures"]["scourge"] = $("[alt='EldritchDragonAdultScourge.png']").first().attr('data-src');
+			cache[dragon]["pictures"]["barbarous"] = $("[alt='EldritchDragonAdultBarbarous']").first().attr('data-src');
+			cache[dragon]["pictures"]["charlatan"] = $("[alt='EldritchDragonAdultCharlatan']").first().attr('data-src');
+			cache[dragon]["pictures"]["macabre"] = $("[alt='EldritchDragonAdultMacabre']").first().attr('data-src');
+			cache[dragon]["pictures"]["scourge"] = $("[alt='EldritchDragonAdultScourge']").first().attr('data-src');
 		} else if (dayNight.includes(dragon)) {
-			cache[dragon]["pictures"]["enhanced"] = $("[alt='" + dragonNoSpace + "AdultEnhanced.png']").first().attr('data-src');
-			cache[dragon]["pictures"]["nightenhanced"] = $("[alt='" + dragonNoSpace + "AdultNightEnhanced.png']").first().attr('data-src');
+			cache[dragon]["pictures"]["enhanced"] = $("[alt='" + dragonNoSpace + "AdultEnhanced']").first().attr('data-src');
+			cache[dragon]["pictures"]["nightenhanced"] = $("[alt='" + dragonNoSpace + "AdultNightEnhanced']").first().attr('data-src');
 		} else {
-			cache[dragon]["pictures"]["organic"] = $("[alt='" + dragonNoSpace + "AdultOrganic.png']").first().attr('data-src');
-			cache[dragon]["pictures"]["conjured"] = $("[alt='" + dragonNoSpace + "AdultConjured.png']").first().attr('data-src');
+			cache[dragon]["pictures"]["organic"] = $("[alt='" + dragonNoSpace + "AdultOrganic']").first().attr('data-src');
+			cache[dragon]["pictures"]["conjured"] = $("[alt='" + dragonNoSpace + "AdultConjured']").first().attr('data-src');
 		}
 	}
 	if (dayNight.includes(dragon)) {
 		cache[dragon]["pictures"]["night"] = {};
 		if (dragon == "Lycan Dragon") {
-			cache[dragon]["pictures"]["night"]["adult"] = $("[alt='LycanDragonAdultFullMoon.png']").first().attr('data-src');
-			cache[dragon]["pictures"]["night"]["juvenile"] = $("[alt='LycanDragonJuvenileFullMoon.png']").first().attr('data-src');
-			cache[dragon]["pictures"]["night"]["baby"] = $("[alt='LycanDragonBabyFullMoon.png']").first().attr('data-src');
+			cache[dragon]["pictures"]["night"]["adult"] = $("[alt='LycanDragonAdultFullMoon']").first().attr('data-src');
+			cache[dragon]["pictures"]["night"]["juvenile"] = $("[alt='LycanDragonJuvenileFullMoon']").first().attr('data-src');
+			cache[dragon]["pictures"]["night"]["baby"] = $("[alt='LycanDragonBabyFullMoon']").first().attr('data-src');
 		} else {
-			cache[dragon]["pictures"]["night"]["adult"] = $("[alt='" + dragonNoSpace + "AdultNight.png']").first().attr('data-src');
-			cache[dragon]["pictures"]["night"]["juvenile"] = $("[alt='" + dragonNoSpace + "JuvenileNight.png']").first().attr('data-src');
-			cache[dragon]["pictures"]["night"]["baby"] = $("[alt='" + dragonNoSpace + "BabyNight.png']").first().attr('data-src');
+			cache[dragon]["pictures"]["night"]["adult"] = $("[alt='" + dragonNoSpace + "AdultNight']").first().attr('data-src');
+			cache[dragon]["pictures"]["night"]["juvenile"] = $("[alt='" + dragonNoSpace + "JuvenileNight']").first().attr('data-src');
+			cache[dragon]["pictures"]["night"]["baby"] = $("[alt='" + dragonNoSpace + "BabyNight']").first().attr('data-src');
 		}
 	}
-    if (hiding.includes(dragon)) cache[dragon]["pictures"]["hiding"] = $("[alt='" + dragonNoSpace + "Hiding.png']").first().attr('data-src');
+    if (hiding.includes(dragon)) cache[dragon]["pictures"]["hiding"] = $("[alt='" + dragonNoSpace + "Hiding']").first().attr('data-src');
     if (dragon == "Seasonal Dragon") {
         cache[dragon]["pictures"]["summer"] = {};
         cache[dragon]["pictures"]["autumn"] = {};
         cache[dragon]["pictures"]["winter"] = {};
         cache[dragon]["pictures"]["spring"] = {};
-        cache[dragon]["pictures"]["summer"]["adult"] = $("[alt='SummerSeasonalDragonAdult.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["summer"]["juvenile"] = $("[alt='SummerSeasonalDragonJuvenile.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["summer"]["baby"] = $("[alt='SummerSeasonalDragonBaby.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["autumn"]["adult"] = $("[alt='AutumnSeasonalDragonAdult.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["autumn"]["juvenile"] = $("[alt='AutumnSeasonalDragonJuvenile.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["autumn"]["baby"] = $("[alt='AutumnSeasonalDragonBaby.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["winter"]["adult"] = $("[alt='WinterSeasonalDragonAdult.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["winter"]["juvenile"] = $("[alt='WinterSeasonalDragonJuvenile.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["winter"]["baby"] = $("[alt='WinterSeasonalDragonBaby.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["spring"]["adult"] = $("[alt='SpringSeasonalDragonAdult.png']").first().attr('src');
-        cache[dragon]["pictures"]["spring"]["juvenile"] = $("[alt='SpringSeasonalDragonJuvenile.png']").first().attr('src');
-        cache[dragon]["pictures"]["spring"]["baby"] = $("[alt='SpringSeasonalDragonBaby.png']").first().attr('src');
+        cache[dragon]["pictures"]["summer"]["adult"] = $("[alt='SummerSeasonalDragonAdult']").first().attr('data-src');
+        cache[dragon]["pictures"]["summer"]["juvenile"] = $("[alt='SummerSeasonalDragonJuvenile']").first().attr('data-src');
+        cache[dragon]["pictures"]["summer"]["baby"] = $("[alt='SummerSeasonalDragonBaby']").first().attr('data-src');
+        cache[dragon]["pictures"]["autumn"]["adult"] = $("[alt='AutumnSeasonalDragonAdult']").first().attr('data-src');
+        cache[dragon]["pictures"]["autumn"]["juvenile"] = $("[alt='AutumnSeasonalDragonJuvenile']").first().attr('data-src');
+        cache[dragon]["pictures"]["autumn"]["baby"] = $("[alt='AutumnSeasonalDragonBaby']").first().attr('data-src');
+        cache[dragon]["pictures"]["winter"]["adult"] = $("[alt='WinterSeasonalDragonAdult']").first().attr('data-src');
+        cache[dragon]["pictures"]["winter"]["juvenile"] = $("[alt='WinterSeasonalDragonJuvenile']").first().attr('data-src');
+        cache[dragon]["pictures"]["winter"]["baby"] = $("[alt='WinterSeasonalDragonBaby']").first().attr('data-src');
+        cache[dragon]["pictures"]["spring"]["adult"] = $("[alt='SpringSeasonalDragonAdult']").first().attr('src');
+        cache[dragon]["pictures"]["spring"]["juvenile"] = $("[alt='SpringSeasonalDragonJuvenile']").first().attr('src');
+        cache[dragon]["pictures"]["spring"]["baby"] = $("[alt='SpringSeasonalDragonBaby']").first().attr('src');
     } else if (dragon == "Snowball Dragon") {
-        cache[dragon]["pictures"]["snowman"] = $("[alt='SnowballDragonSnowman.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["snowman"] = $("[alt='SnowballDragonSnowman']").first().attr('data-src');
     } else if (dragon == "Giddle Dragon") {
-        cache[dragon]["pictures"]["wrapped"] = $("[alt='GiddleDragonWrapped.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["wrapped"] = $("[alt='GiddleDragonWrapped']").first().attr('data-src');
     } else if (dragon == "Dargon Dragon") {
-        cache[dragon]["pictures"]["bush"] = $("[alt='DargonDragonAdultBush.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["bush"] = $("[alt='DargonDragonAdultBush']").first().attr('data-src');
     }
     // Edge cases for dragons whose images work weirdly
     if (dragon == "Dark Dragon") {
-        cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='DarkDragonAdultOld.png']").first().attr('src');
-        cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='DarkDragonJuvenileOld.png']").first().attr('src');
-        cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='DarkDragonBabyOld.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='DarkDragonAdultOld']").first().attr('src');
+        cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='DarkDragonJuvenileOld']").first().attr('src');
+        cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='DarkDragonBabyOld']").first().attr('data-src');
     } else if (dragon == "Flower Dragon") {
-        cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='FlowerDragonAdult.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='FlowerDragonJuvenile.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='FlowerDragonBaby.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["egg"] = $("[alt='FlowerDragonRiftEgg.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='FlowerDragonAdult']").first().attr('data-src');
+        cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='FlowerDragonJuvenile']").first().attr('data-src');
+        cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='FlowerDragonBaby']").first().attr('data-src');
+        cache[dragon]["pictures"]["egg"] = $("[alt='FlowerDragonRiftEgg']").first().attr('data-src');
     } else if (dragon == "Meteor Dragon") {
-        cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='MeteorDragonAdult.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='MeteorDragonJuvenile.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='MeteorDragonBaby.png']").first().attr('data-src');
-        cache[dragon]["pictures"]["egg"] = $("[alt='MeteorDragonRiftEgg.png']").first().attr('data-src');
+        cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='MeteorDragonAdult']").first().attr('data-src');
+        cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='MeteorDragonJuvenile']").first().attr('data-src');
+        cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='MeteorDragonBaby']").first().attr('data-src');
+        cache[dragon]["pictures"]["egg"] = $("[alt='MeteorDragonRiftEgg']").first().attr('data-src');
     }
 }
 
@@ -1593,10 +1593,10 @@ readMonolithWikiPage = function() {
                 const dragonNoSpace = "MonolithDragon";
                 cache[dragon]["pictures"] = {};
                 cache[dragon]["pictures"]["normal"] = {};
-                cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='" + dragonNoSpace + "Adult" + id + ".png']").first().attr((id == 1) ? 'src' : 'data-src');
-                cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='" + dragonNoSpace + "Juvenile" + id + ".png']").first().attr('data-src');
-                cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='" + dragonNoSpace + "Baby" + id + ".png']").first().attr('data-src');
-                cache[dragon]["pictures"]["egg"] = $("[alt='" + dragonNoSpace + "Egg.png']").first().attr('data-src');
+                cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='" + dragonNoSpace + "Adult" + id + "']").first().attr((id == 1) ? 'src' : 'data-src');
+                cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='" + dragonNoSpace + "Juvenile" + id + "']").first().attr('data-src');
+                cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='" + dragonNoSpace + "Baby" + id + "']").first().attr('data-src');
+                cache[dragon]["pictures"]["egg"] = $("[alt='" + dragonNoSpace + "Egg']").first().attr('data-src');
 
             }
 		}).on('error', (e) => {
@@ -1705,10 +1705,10 @@ readSnowflakeWikiPage = function() {
                 const dragonNoSpace = "SnowflakeDragon";
                 cache[dragon]["pictures"] = {};
                 cache[dragon]["pictures"]["normal"] = {};
-                cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='" + dragonNoSpace + "Adult" + id + ".png']").first().attr((id == 1) ? 'src' : 'data-src');
-                cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='" + dragonNoSpace + "Juvenile" + id + ".png']").first().attr('data-src');
-                cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='" + dragonNoSpace + "Baby" + id + ".png']").first().attr('data-src');
-                cache[dragon]["pictures"]["egg"] = $("[alt='" + dragonNoSpace + "Egg.png']").first().attr('data-src');
+                cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='" + dragonNoSpace + "Adult" + id + "']").first().attr((id == 1) ? 'src' : 'data-src');
+                cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='" + dragonNoSpace + "Juvenile" + id + "']").first().attr('data-src');
+                cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='" + dragonNoSpace + "Baby" + id + "']").first().attr('data-src');
+                cache[dragon]["pictures"]["egg"] = $("[alt='" + dragonNoSpace + "Egg']").first().attr('data-src');
 
             }
 		}).on('error', (e) => {
