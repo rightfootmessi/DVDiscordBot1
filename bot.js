@@ -25,6 +25,7 @@ const client = new Client(
     }
 );
 const https = require('https');
+const httpsFR = require('follow-redirects/https');
 const cheerio = require('cheerio');
 const { Worker } = require('worker_threads');
 const fs = require('fs');
@@ -39,6 +40,7 @@ const helpMsg = `Command list (prefix all commands with \`${cmdPrefix}\`):\n`
                 + "- `feed [initial level] <final level> [rift]` - find the number of treats needed to feed a dragon from the initial level (defaults to 1 if not specified) to the final level\n"
                 + "- `guide [guide]` - retrieves a guide, or lists all available guides if none specified (alias: `guides`)\n"
 				+ "- `image <dragon> <adult|juvenile|baby|egg> [qualifier]` - get a PNG image of the dragon; defaults to adult if no stage specified; valid qualifiers can be listed using `d!image flags`  (aliases: `picture`, `img`, `pic`)\n"
+                + "- `odds <dragon>` - lists the breeding odds of the specified dragon in each cave, including cloning rates (aliases: `chances`, `percents`)\n"
 				+ "- `quest <quest>` - get the correct dragon to send on a quest\n"
 				+ "- `rates <dragon> [# of boosts OR 'rift']` - get the earning rates of a dragon\n"
                 + "- `result <dragon1>,<dragon2> <d:hh:mm:ss|hh:mm:ss> [fast|runic]` - given 2 parent dragons and the resulting timer, find the potential dragons that can result from the breed. (aliases: `results`, `fakeouts`)\n"
@@ -104,6 +106,13 @@ dvboxCache: {
         d1|d2: timerList,
         ...
     }
+}
+*/
+var oddsCache = {};
+/*
+oddsCache: {
+    dragpn: string,
+    // etc.
 }
 */
 
@@ -272,7 +281,7 @@ client.on('messageCreate', async (message) => {
                 else if (isEvolution(dragon)) message.channel.send(`${dragon} is an evolved dragon, you must breed two of them together to get more. To find out how to evolve this dragon, type \`d!evolve ${dragon}\``);
                 else {
                     questMsg = () => message.channel.send(cache[dragon]["breedCombo"]).catch(error => {
-                        message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+                        message.channel.send(`An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/${dragon.replace(/ /g, "_")}`);
                     });
 
                     if (dragon in cache) questMsg();
@@ -290,7 +299,7 @@ client.on('messageCreate', async (message) => {
                 else if (isPrimary(dragon)) message.channel.send(dragon + " is a primary dragon, its only element is in its name...");
                 else {
                     elementsMsg = () => message.channel.send(cache[dragon]["elements"]).catch(error => {
-                        message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+                        message.channel.send(`An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/${dragon.replace(/ /g, "_")}`);
                     });
                     
                     if (dragon in cache) elementsMsg();
@@ -308,7 +317,7 @@ client.on('messageCreate', async (message) => {
                 else if (!isEvolution(dragon)) message.channel.send(dragon + " is not obtained through evolution.");
                 else {
                     evolveMsg = () => message.channel.send(cache[dragon]["evolve"]).catch(error => {
-                        message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+                        message.channel.send(`An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/${dragon.replace(/ /g, "_")}`);
                     });
                     
                     if (dragon in cache) evolveMsg();
@@ -412,12 +421,64 @@ client.on('messageCreate', async (message) => {
                             }
                         }
                         message.channel.send(imgLink ? imgLink : "Sorry, I couldn't find the image you were looking for! Here's the wiki page to retrieve it yourself: <" + 'https://dragonvale.fandom.com/wiki/' + dragon.replace(/ /g, "_") + ">").catch(error => {
-                            message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+                            message.channel.send(`An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/${dragon.replace(/ /g, "_")}`);
                         });
                     }
                     
                     if (dragon in cache) imgMsg();
                     else fetchFromWiki(dragon, message, imgMsg);
+                }
+            }
+        } else if (cmd === 'odds' || cmd === 'chances' || cmd === 'percents') {
+            if (cmdInWrongChannel(message)) return;
+            var dragon = prettyString(args, " ");
+            if (!dragon) message.channel.send("You must specify a dragon!");
+            else {
+                if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
+                if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
+                else if (dragon in oddsCache) message.channel.send(oddsCache[dragon]);
+                else {
+                    let msgRef = await message.channel.send("Fetching data from the DV Compendium, please wait a moment... (this message will be edited once the content is ready)");
+                    console.log(`https://script.google.com/macros/s/AKfycbwvFX3FtYmAr4nsPcpXsGyEqrX7jC8y8sqguX9GMgLDyXdBBn7Sa300GGO3vR9pFV0k-g/exec?dragon=${dragon.substring(0, dragon.length - 7)}`);
+                    httpsFR.get(`https://script.google.com/macros/s/AKfycbwvFX3FtYmAr4nsPcpXsGyEqrX7jC8y8sqguX9GMgLDyXdBBn7Sa300GGO3vR9pFV0k-g/exec?dragon=${dragon.substring(0, dragon.length - 7)}`, (res) => {
+                        // console.log(`Received ${res.statusCode} status code for ${dragon}'s page`);
+                        if (res.statusCode == 404 || res.statusCode == 500) {
+                            msgRef.edit(`ERROR: the Compendium returned an error. Please try again, or wait a bit if the problem persists (and if it keeps happening, contact Messi).`);
+                            return;
+                        }
+                        var body = [];
+                        res.on('data', (chunk) => body.push(chunk)).on('end', () => {
+                            response = JSON.parse(body)[0];
+                            // console.log(JSON.stringify(response, null, 4));
+                            pattern = /(\d{1,2}(?:\.\d{1,2})?|\?)%(?: \((\d{1,2}(?:\.\d{1,2})?|\?)%\))?/;
+                            breed = response["Breed Chance"].match(pattern); // FIX: CRASHES IF THIS STRING IS EMPTY (i.e. no breed chance)
+                            normal = response["Normal Clone"].match(pattern);
+                            social = response["Social Clone"].match(pattern);
+                            rift = response["Rift Clone"].match(pattern);
+
+                            oddsObj = {
+                                breedFirst: breed ? breed[1] : undefined, // default rate
+                                breedAgain: breed ? breed[2] : undefined, // only some dragons have this
+                                baseSingle: normal[1], // single clone in normal cave/ebi
+                                baseDouble: normal[2], // double clone in normal cave/ebi
+                                coopSingle: social[1], // single clone in coop cave
+                                coopDouble: social[2], // double clone in coop cave
+                                riftSingle: rift[1], // single clone in rift cave
+                                riftDouble: rift[2]  // double clone in rift cave
+                            };
+
+                            oddsMsg = `**__${dragon} breeding odds:__**\n`
+                                        + `__Base chance:__ **${oddsObj.breedFirst ? `${oddsObj.breedFirst}%`: "N/A"}** ${oddsObj.breedAgain ? `(if unowned) OR **${oddsObj.breedAgain}%** (if owned)` : ``}\n`
+                                        + `__Normal cloning:__ **${oddsObj.baseSingle}%** (single); **${oddsObj.baseDouble}%** (double)\n`
+                                        + `__Social cloning:__ **${oddsObj.coopSingle}%** (single); **${oddsObj.coopDouble}%** (double)\n`
+                                        + `__Rift cloning:__ **${oddsObj.riftSingle}%** (single); **${oddsObj.riftDouble}%** (double)\n`
+                                        + `This data is sourced from the DV Compendium. Check it out for more data and simulation options!`;
+                            
+                            oddsCache[dragon] = oddsMsg;
+
+                            msgRef.edit(oddsMsg);
+                        });
+                    });
                 }
             }
         } else if (cmd === 'rates') {
@@ -458,10 +519,10 @@ client.on('messageCreate', async (message) => {
                 else {
                     ratesMsg = () => {
                         if (!rift) message.channel.send(cache[dragon]["rates"]["non-rift"][Math.min(boosts, cache[dragon]["rates"]["maxBoosts"])]).catch(error => {
-                            message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+                            message.channel.send(`An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/${dragon.replace(/ /g, "_")}`);
                         });
                         else message.channel.send(cache[dragon]["rates"]["rift"]).catch(error => {
-                            message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+                            message.channel.send(`An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/${dragon.replace(/ /g, "_")}`);
                         });
                     }
 
@@ -597,7 +658,7 @@ client.on('messageCreate', async (message) => {
                 else if (isNew(dragon)) message.channel.send(`${dragon} is a new release, and thus it has an incomplete wiki page; I unfortunately cannot give you information about it at this time. Try again later, or check out <#738831348915241051> in the meantime.`);
                 else {
                     timerMsg = () => message.channel.send(cache[dragon]["timer"]).catch(error => {
-                        message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+                        message.channel.send(`An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/${dragon.replace(/ /g, "_")}`);
                     });
                     
                     if (dragon in cache) timerMsg();
@@ -614,7 +675,7 @@ client.on('messageCreate', async (message) => {
                 else if (isNew(dragon)) message.channel.send(`${dragon} is a new release, and thus it has an incomplete wiki page; I unfortunately cannot give you information about it at this time. Try again later, or check out <#738831348915241051> in the meantime.`);
                 else {
                     usesMsg = () => message.channel.send(cache[dragon]["uses"]).catch(error => {
-                        message.channel.send("An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/" + dragon_);
+                        message.channel.send(`An error occurred and I cannot retrieve the information provided. You may be able to locate it manually on this wiki page: https://dragonvale.fandom.com/wiki/${dragon.replace(/ /g, "_")}`);
                     });
                     
                     if (dragon in cache) usesMsg();
@@ -987,6 +1048,7 @@ client.on('messageCreate', async (message) => {
                         normal: {},
                         fast: {}
                     };
+                    oddsCache = {};
                     readMonolithWikiPage();
                     readSnowflakeWikiPage();
                     worker.terminate();
