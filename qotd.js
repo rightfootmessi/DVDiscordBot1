@@ -16,7 +16,7 @@ parentPort.on('message', order => {
         }
 
         var now = new Date();
-        var millisTill10 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 16, 0, 0, 0) - now; // GMT on Oracle Cloud but EST on my laptop!
+        var millisTill10 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 17, 0, 0, 0) - now; // GMT on Oracle Cloud but EST on my laptop!
         if (millisTill10 < 0) {
             millisTill10 += 86400000; // it's after 10am, try 10am tomorrow.
         }

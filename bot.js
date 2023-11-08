@@ -1,4 +1,4 @@
-const {Discord, Client, GatewayIntentBits} = require('discord.js');
+const {Discord, Client, GatewayIntentBits, SnowflakeUtil} = require('discord.js');
 const client = new Client(
     {
         intents: [
@@ -448,35 +448,40 @@ client.on('messageCreate', async (message) => {
                         }
                         var body = [];
                         res.on('data', (chunk) => body.push(chunk)).on('end', () => {
-                            response = JSON.parse(body)[0];
-                            // console.log(JSON.stringify(response, null, 4));
-                            pattern = /(\d{1,2}(?:\.\d{1,2})?|\?)%(?: \((\d{1,2}(?:\.\d{1,2})?|\?)%\))?/;
-                            breed = response["Breed Chance"].match(pattern); // FIX: CRASHES IF THIS STRING IS EMPTY (i.e. no breed chance)
-                            normal = response["Normal Clone"].match(pattern);
-                            social = response["Social Clone"].match(pattern);
-                            rift = response["Rift Clone"].match(pattern);
+                            try {
+                                response = JSON.parse(body)[0];
+                                // console.log(JSON.stringify(response, null, 4));
+                                pattern = /(\d{1,2}(?:\.\d{1,2})?|\?)%(?: \((\d{1,2}(?:\.\d{1,2})?|\?)%\))?/;
+                                breed = response["Breed Chance"].match(pattern); // FIX: CRASHES IF THIS STRING IS EMPTY (i.e. no breed chance)
+                                normal = response["Normal Clone"].match(pattern);
+                                social = response["Social Clone"].match(pattern);
+                                rift = response["Rift Clone"].match(pattern);
 
-                            oddsObj = {
-                                breedFirst: breed ? breed[1] : undefined, // default rate
-                                breedAgain: breed ? breed[2] : undefined, // only some dragons have this
-                                baseSingle: normal[1], // single clone in normal cave/ebi
-                                baseDouble: normal[2], // double clone in normal cave/ebi
-                                coopSingle: social[1], // single clone in coop cave
-                                coopDouble: social[2], // double clone in coop cave
-                                riftSingle: rift[1], // single clone in rift cave
-                                riftDouble: rift[2]  // double clone in rift cave
-                            };
+                                oddsObj = {
+                                    breedFirst: breed ? breed[1] : undefined, // default rate
+                                    breedAgain: breed ? breed[2] : undefined, // only some dragons have this
+                                    baseSingle: normal[1], // single clone in normal cave/ebi
+                                    baseDouble: normal[2], // double clone in normal cave/ebi
+                                    coopSingle: social[1], // single clone in coop cave
+                                    coopDouble: social[2], // double clone in coop cave
+                                    riftSingle: rift[1], // single clone in rift cave
+                                    riftDouble: rift[2]  // double clone in rift cave
+                                };
 
-                            oddsMsg = `**__${dragon} breeding odds:__**\n`
-                                        + `__Base chance:__ **${oddsObj.breedFirst ? `${oddsObj.breedFirst}%`: "N/A"}** ${oddsObj.breedAgain ? `(if unowned) OR **${oddsObj.breedAgain}%** (if owned)` : ``}\n`
-                                        + `__Normal cloning:__ **${oddsObj.baseSingle}%** (single); **${oddsObj.baseDouble}%** (double)\n`
-                                        + `__Social cloning:__ **${oddsObj.coopSingle}%** (single); **${oddsObj.coopDouble}%** (double)\n`
-                                        + `__Rift cloning:__ **${oddsObj.riftSingle}%** (single); **${oddsObj.riftDouble}%** (double)\n`
-                                        + `This data is sourced from the DV Compendium. Check it out for more data and simulation options!`;
+                                oddsMsg = `**__${dragon} breeding odds:__**\n`
+                                            + `__Base chance:__ **${oddsObj.breedFirst ? `${oddsObj.breedFirst}%`: "N/A"}** ${oddsObj.breedAgain ? `(if unowned) OR **${oddsObj.breedAgain}%** (if owned)` : ``}\n`
+                                            + `__Normal cloning:__ **${oddsObj.baseSingle}%** (single); **${oddsObj.baseDouble}%** (double)\n`
+                                            + `__Social cloning:__ **${oddsObj.coopSingle}%** (single); **${oddsObj.coopDouble}%** (double)\n`
+                                            + `__Rift cloning:__ **${oddsObj.riftSingle}%** (single); **${oddsObj.riftDouble}%** (double)\n`
+                                            + `This data is sourced from the DV Compendium. Check it out for more data and simulation options!`;
+                                
+                                oddsCache[dragon] = oddsMsg;
+
+                                msgRef.edit(oddsMsg);
+                            } catch (err) {
+                                msgRef.edit(`Error: the DV Compendium did not return data for ${dragon} (if it's a brand new dragon, it may not have been added to the Compendium yet!).`);
+                            }
                             
-                            oddsCache[dragon] = oddsMsg;
-
-                            msgRef.edit(oddsMsg);
                         });
                     });
                 }
@@ -711,7 +716,8 @@ client.on('messageCreate', async (message) => {
                         + "- `clearcache` - clear the bot's cache (useful after updating the wiki)\n"
                         + "- `dljson` - sends a downloadable copy of my dragon list as a json file\n"
                         + "- `uljson` - upload a new dragon list json file for me to use (note: the file's name *must* be `dragonList.json`!)\n"
-                        + "- `purge <# of messages>` - clears the specified number of most recent messages from the channel it's used in";
+                        + "- `purge <# of messages>` - clears the specified number of most recent messages from the channel it's used in\n"
+                        + "- `cleanthread <id>` - removes any user from the specified thread who has not sent a message in it for the past 30 days, or is no longer in the server";
                 message.channel.send(helpMsg);
             } else {
                 const modCmd = args.shift();
@@ -1120,6 +1126,40 @@ client.on('messageCreate', async (message) => {
                             });
                         }
                     }
+                } else if (modCmd === 'cleanthread') {
+                    // Removes inactive members from thread
+                    // Pass in thread by ID
+                    if (args.length == 0) {
+                        message.channel.send("Please specify of the channel ID of the thread/forum post.");
+                        return;
+                    }
+                    let threadId = args[0];
+                    // Get all members of thread
+                    let thread = message.guild.channels.cache.get(threadId);
+                    if (thread) {
+                        if (thread.isThread()) {
+                            // For each member:
+                            // - get last message
+                            // - if message was sent >30 days ago, remove user from thread
+                            let threadMems = await thread.members.fetch();
+                            let time = new Date();
+                            time.setDate(time.getDate() - 30);
+                            let snowflake = SnowflakeUtil.generate({timestamp: time});
+                            let threadMsgs = await thread.messages.fetch({limit: 1000, after: snowflake}); // TODO limit caps at 100 - use helper function lots_of_messages_getter
+                            console.log(`Found ${threadMsgs.size} messages in \`${thread.name}\` after ${time.toLocaleString()}`);
+                            threadMems.each(user => {
+                                if (user != null) {
+                                    if (user.guildMember != null) { // if else, maybe means they aren't in the server?
+                                        //if (user.user.username.indexOf('_') > -1) console.log(user.guildMember.nickname);
+                                    }
+                                }
+                                // else if (user.guildMember.nickname.charAt(0) == 'a') console.log(user.guildMember.nickname);
+                            });
+                            // message.channel.send(`Found ${testFilterOnCache.size}/${threadMems.cache.size} members in \`${thread.name}\` passing test filter`);
+                        } else {
+                            message.channel.send(`ID ${threadId} is for channel \`${thread.name}\`, which is not a thread!`);
+                        }
+                    } else message.channel.send(`Did not find a channel/thread with ID ${threadId}`);
                 } else if (modCmd === 'spamtest') {
                     const oracleTestCh = message.guild.channels.cache.get('818011940160405534');
                     const dv_turqwhat = client.emojis.cache.get('812096747672961086');
@@ -1232,6 +1272,29 @@ isPrimary = (dName) => primaries.includes(dName.replace(" Rift", ""));
 isEvolution = (dName) => evolutions.includes(dName);
 isNew = (dName) => newDrags.includes(dName);
 isEpic = (element) => !["Plant", "Fire", "Earth", "Cold", "Lightning", "Water", "Air", "Metal", "Light", "Dark", "Rift"].includes(element);
+
+// TODO convert this to use after snowflake instead of 
+async function lots_of_messages_getter(channel, limit = 500) {
+    const sum_messages = [];
+    let last_id;
+
+    while (true) {
+        const options = { limit: 100 };
+        if (last_id) {
+            options.before = last_id;
+        }
+
+        const messages = await channel.fetchMessages(options);
+        sum_messages.push(...messages.array());
+        last_id = messages.last().id;
+
+        if (messages.size != 100 || sum_messages >= limit) {
+            break;
+        }
+    }
+
+    return sum_messages;
+}
 
 
 getSpacing = (baseLength, int) => Array(baseLength - int.toString().length).fill(" ").join("");

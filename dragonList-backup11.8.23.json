@@ -209,6 +209,7 @@
         "Evergreen Dragon",
         "Eww Dragon",
         "Exandrew Dragon",
+        "Exterrean Dragon",
         "Fae Dragon",
         "Faire Dragon",
         "Fates Dragon",
@@ -235,6 +236,7 @@
         "Fomhar Dragon",
         "Forest Dragon",
         "Forge Dragon",
+        "Fortified Dragon",
         "Frond Dragon",
         "Frons Dragon",
         "Frostbite Dragon",
@@ -934,5 +936,7 @@
         "Plant Dragon",
         "Water Dragon"
     ],
-    "newDrags": []
+    "newDrags": [
+        "Exterrean Dragon"
+    ]
 }
