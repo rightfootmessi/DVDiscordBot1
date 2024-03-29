@@ -1324,31 +1324,40 @@ roundRate = function(rawRate) {
 }
 
 loadQuests = () => {
-	https.get('https://dragonvale.fandom.com/wiki/Quests', (res) => {
-		console.log("Received " + res.statusCode + " status code for quest request");
-		var body = [];
-		res.on('data', (chunk) => {
-			body.push(chunk);
-		}).on('end', () => {
-			body = Buffer.concat(body).toString();
-			const $ = cheerio.load(body);
-			var questsTableHTML = $('.sortable').first();
-			var entries = questsTableHTML.find('tbody').first();
-			var numLoaded = 0;
-			entries.children('tr').each((i, elem) => {
-				if (i > 0) {
-					var qName = $(elem).children('td').eq(0).text().trim().toLowerCase();
-					var qDragon = $(elem).children('td').eq(2).text().trim();
-					questTable[qName] = qDragon;
-					numLoaded++;
-				}
-			});
-			console.log(numLoaded + " quests loaded!");
-			questsLoaded = true;
-		}).on('error', (e) => {
-			console.error("An error occurred, quests could not be loaded.\nFull error:\n" + e);
-		});
-	});
+    // TODO FIX SCRAPER
+    questTable = JSON.parse(fs.readFileSync('questsBackup.json'));
+    console.log(`Loaded ${Object.keys(questTable).length} quests MANUALLY!`);
+    for (k in questTable) if (questTable[k].indexOf("Dragon") == -1) questTable[k] += " Dragon";
+    questsLoaded = true;
+
+	// https.get('https://dragonvale.fandom.com/wiki/Quests', (res) => {
+	// 	console.log("Received " + res.statusCode + " status code for quest request");
+	// 	var body = [];
+	// 	res.on('data', (chunk) => {
+	// 		body.push(chunk);
+	// 	}).on('end', () => {
+	// 		body = Buffer.concat(body).toString();
+	// 		const $ = cheerio.load(body);
+    //         fs.writeFileSync('questspage.html', $('body').html(), (err) => {});
+	// 		var questsTableHTML = $('#DataTables_Table_0');
+	// 		var entries = questsTableHTML.find('tbody').first();
+	// 		var numLoaded = 0;
+    //         console.log(`Found ${questsTableHTML.length} questsTableHTML entries`);
+	// 		entries.children('tr').each((i, elem) => {
+	// 			if (i > 0) {
+	// 				var qName = $(elem).children('td').eq(0).text().trim().toLowerCase();
+	// 				var qDragon = $(elem).children('td').eq(2).text().trim();
+                    
+	// 				questTable[qName] = qDragon;
+	// 				numLoaded++;
+	// 			}
+	// 		});
+	// 		console.log(numLoaded + " quests loaded!");
+	// 		questsLoaded = true;
+	// 	}).on('error', (e) => {
+	// 		console.error("An error occurred, quests could not be loaded.\nFull error:\n" + e);
+	// 	});
+	// });
 }
 
 /*
