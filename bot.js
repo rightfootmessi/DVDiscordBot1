@@ -180,6 +180,11 @@ client.on('messageCreate', async (message) => {
         var args = message.content.replace(/\s{2,}/g, ' ').replace(/@/g, '').slice(cmdPrefix.length).trim().split(" ");
         const cmd = args.shift().toLowerCase();
 
+        // if (!hasModAccess(message)) {
+        //     message.channel.send("The bot is currently undergoing maintenance and cannot be used right now, please be patient! <:dv_owobowos:803676880850780160>");
+        //     return
+        // }
+
         // BEGIN APRIL FOOLS CODE (UNCOMMENT IT ON APRIL 1ST, then reduce odds to 0.01 afterward)
         
         if (Math.random() < 0.01 && !['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'pet', 'mod', 'help', 'random'].includes(cmd)) {
