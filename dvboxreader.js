@@ -5,7 +5,10 @@ const sprintf = require('sprintf-js').sprintf;
 
 var dragons = {};
 
+var enabled = false;
+
 https.get('https://dvboxcdn.com/data/dragons.json', (res) => {
+    if (!enabled) return;
     res.setEncoding('utf8');
     res.pipe(concat({ encoding: 'string' }, function (remoteSrc) {
         //vm.runInThisContext(remoteSrc);
