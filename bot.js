@@ -31,7 +31,7 @@ const { Worker } = require('worker_threads');
 const fs = require('fs');
 const sprintf = require('sprintf-js').sprintf;
 
-const cmdPrefix = 'd%';
+const cmdPrefix = 'd!';
 
 const helpMsg = `Command list (prefix all commands with \`${cmdPrefix}\`):\n`
                 + "- `breed <dragon>` - find out how to breed a dragon\n"
@@ -546,8 +546,8 @@ client.on('messageCreate', async (message) => {
                 message.channel.send("This command is currently broken! Please be patient while a fix is worked on. <:dv_owobowos:803676880850780160>");
                 return;
             }*/
-            message.channel.send("This command is currently disabled due to its reliance on the DV Sandbox website, which is currently down. While I wait for the site to be restored, I encourage you to try using the Compendium to find out what dragon you're getting. <:dv_owobowos:803676880850780160>");
-            return;
+            // message.channel.send("This command is currently disabled due to its reliance on the DV Sandbox website, which is currently down. While I wait for the site to be restored, I encourage you to try using the Compendium to find out what dragon you're getting. <:dv_owobowos:803676880850780160>");
+            // return;
             // d!result <d1>,<d2> <d:hh:mm:ss> [fast|runic]
             if (args.length === 0) {
                 message.channel.send(`Usage: \`${cmdPrefix}result <dragon1>,<dragon2> <d:hh:mm:ss|hh:mm:ss> [fast|runic]\``);

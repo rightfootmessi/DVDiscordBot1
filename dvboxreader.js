@@ -5,7 +5,7 @@ const sprintf = require('sprintf-js').sprintf;
 
 var dragons = {};
 
-var enabled = false;
+var enabled = true;
 
 https.get('https://dvboxcdn.com/data/dragons.json', (res) => {
     if (!enabled) return;
