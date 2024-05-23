@@ -1,800 +1,3230 @@
 {
-    "a fungus": "Hydnellum",
-    "a gift in the rift": "Light Rift",
-    "a glad dose of adventure": "Rigel",
-    "a good scoop": "Lageto",
-    "a guardian's guide": "Quintessence",
-    "a lunar tick": "Lunis",
-    "a magical puff": "Fae",
-    "a malcontent's mutation": "Wrath",
-    "a molded marker": "Terracotta",
-    "a peek into the future": "Scryer",
-    "a prickly pretense": "Xanthium",
-    "a quest for food": "Undau",
-    "a rift aground": "Earth Rift",
-    "a star is bred": "Dazzle",
-    "a swamp thing": "Ghostly Moss",
-    "a tail of two": "Lovey",
-    "a telltale return": "Ghostly Spectre",
-    "a thorn in the side": "Dapplethorn",
-    "a true masterpiece": "Canvas",
-    "achoired taste": "Chorister",
-    "across the acrostic sea": "Char",
-    "admiral antics": "Trick",
-    "adrenaline rush": "Derecho",
-    "adrift in the rift": "Dark Rift",
-    "affluent adventure": "Opulent",
-    "afternoon nap": "Somnig",
-    "age of alignment": "Solar Eclipse",
-    "akitu's assay": "Spring",
-    "algae analogy": "Lichen",
-    "allengin pass": "Howl",
-    "alloy analysis": "Embossed",
-    "alpha in disguise": "Alffa",
-    "always in style": "Woolen",
-    "ami'lya's adventure": "River",
-    "amorphous porpoise": "Riptide",
-    "amphibian meridian": "Salamander",
-    "an experimental surprise": "Fushi",
-    "an unforgettable mug": "Nibwhip",
-    "anayrahm dive": "Trench",
-    "anchored adventure": "Squall",
-    "ancient madness": "Ooze",
-    "ancient pink": "Magnolia",
-    "anger wrangler": "Petunia",
-    "anti-gravity antics": "Verdigris",
-    "apparent apparition": "Ghostly Ghost",
-    "aquatic anathema": "Sailback",
-    "archetypal acceptance": "Amaryllis",
-    "ardent valley": "Viridian",
-    "aroma therapy": "Smoulderbrush",
-    "as long as winter itself": "Longcicle",
-    "astral projection": "Astraline",
-    "at the pinnacle": "Apex",
-    "audrey two": "Ghostly Flower",
-    "back in the hat": "Morphimagus",
-    "backflip trip": "Paper",
-    "beacons of freedom": "Liberty",
-    "beauty and grace": "Swiftgrace",
-    "beauty in shadow": "Corrupticorn",
-    "belladonna's bastion": "Nightshade",
-    "below the floe": "Glacier",
-    "below zero": "Zero",
-    "bemine spelunking": "Sweetheart",
-    "bessemer's bounty": "Scoria",
-    "best friends forever": "Zumi",
-    "big-billed beats": "Toco",
-    "bird of paradise": "Gawk",
-    "blessing of wisdom": "Ancestor",
-    "blight blockade": "Fungus",
-    "blossoming": "Blossom",
-    "blue odyssey": "Celerulean",
-    "blues chase": "Zaffer",
-    "bolt buffet": "Thunderbird",
-    "book of evil": "Grimoire",
-    "boreal brink": "Aurora",
-    "boss stage": "Dungeon",
-    "bounceback bluff": "Lightning Rift",
-    "bouncy": "PonkiPong",
-    "bounding around": "Bounteous",
-    "brash bargaining": "Begonia",
-    "brave new vale": "Valor",
-    "breeze floating": "Dandelion",
-    "bright sunlight": "Solary",
-    "bring it on!": "Ruckus",
-    "broken ice shelf": "Iceberg",
-    "brow mountain": "Conifer",
-    "brume bluff": "Wisp",
-    "bryophyte plight": "Moss",
-    "bud-dy": "Helianthus",
-    "budding bayou": "Sprout",
-    "bug-eyed bloom": "Kroki",
-    "bullish tendencies": "Auroch",
-    "burcadian hooray": "Tansy",
-    "cadberry wells": "Rosebud",
-    "calcified crusade": "Bonescale",
-    "camping trip": "Scout",
-    "canary's revenge": "Ghostly Coal",
-    "cancelling the apocalypse": "Kaiju",
-    "cape calm": "Serenity",
-    "carat coulee": "Gold",
-    "carbon craze": "Diamond",
-    "catacombs of ulmek": "Jade",
-    "caught in the crimson sea": "Shimmer",
-    "cauldron canyon": "Soot",
-    "cave of caroling": "Twinkle",
-    "cave of wanderers": "Djinni",
-    "caves of ramora": "Glare",
-    "celebratory expedition": "Party",
-    "celestial duality": "Andromedan",
-    "celestial rarity": "Sorarian",
-    "centrifuge": "Pisceian",
-    "chain reaction": "Shackle",
-    "chaotic encounter": "Fire Rift",
-    "charged assumptions": "Fulgurite",
-    "charisma chasm": "Magnetic",
-    "checking it twice": "Kringle",
-    "cheelei's cove": "Pepper",
-    "chilly shellebration": "Coldcoil",
-    "chione chasm": "Snowy Bronze",
-    "chione climb": "Snowy Silver",
-    "chione peaks": "Snowy Gold",
-    "chiseled cliffs": "Mountain Sun",
-    "chroma chasm": "Iridescent",
-    "chromatic cave": "Chromacorn",
-    "clamps": "Cansian",
-    "claws of steel": "Vaul",
-    "clinch location": "Vipera",
-    "close shave": "Bearded",
-    "cloud striker": "Thunderbolt",
-    "clouds of garita": "Snowpocalypse",
-    "coarse and rough": "Saharus",
-    "cold light chase": "Firefly",
-    "cold sweat": "Fever",
-    "colorful ride": "Arcrider",
-    "colorless chasm": "Barite",
-    "come-bust-out some moves": "Combustion",
-    "composed conquest": "Charlatan",
-    "concentrated fire magic": "Infrared",
-    "conductive conundrum": "Copper",
-    "confabulated confectionary": "Ortreat",
-    "conflagration course": "Ember",
-    "conspiracy bluff": "Jetstream",
-    "copse consternation": "Forest",
-    "corn maze": "Teozinte",
-    "corrosion excursion": "Rust",
-    "corrosive crater": "Acid",
-    "covert galantry": "Darcowl",
-    "creeper keeper": "Crypt",
-    "creeping charlie": "Hedera",
-    "creeping in": "Void",
-    "creepy crawler": "Chitin",
-    "crimson canyon": "Garnet",
-    "crop security": "Sow",
-    "crunch and munch": "Chipichipi",
-    "crystal clear chasm": "Quartz",
-    "curious explorer": "Burrow",
-    "d for delici(ous)": "Delicia",
-    "daffadowndilly's cousin": "Narcis",
-    "daily lily": "Daylily",
-    "dante's dungeon": "Inferno",
-    "dappled tale": "Marbletail",
-    "dare devil": "Fuefuego",
-    "dark side of the moon": "Prism",
-    "daylight deprivation": "Rotblossom",
-    "death defying": "Macabre",
-    "debunking spelunking": "Fluorescent",
-    "deep dive": "Invento",
-    "deep slumber": "Glyph",
-    "delightfully disguised": "Morpho",
-    "den development": "Oni",
-    "depression secession": "Cyclamen",
-    "desert duds": "Arid",
-    "desert sting": "Mantasu",
-    "diggy diggy hole": "Diggy",
-    "divine starshine": "Nova",
-    "divine vine": "Thicket",
-    "do you see what icy": "Clairvoyant",
-    "doily dash": "Lace",
-    "dolphins of the sky": "Lazuli",
-    "doublehue ditch": "Double Rainbow",
-    "doubley alloyed": "Brass",
-    "down falls": "Ruin",
-    "down underground": "Cave",
-    "down with dissonance": "Harmony",
-    "dragon dragon": "Dargon",
-    "dramorian delve": "Mine",
-    "drape escape": "Satin",
-    "dreamcatcher": "Lightmare",
-    "duality": "Brutiful",
-    "dune diving": "Sandscale",
-    "dungeon of distractions": "Moonstruck",
-    "dust storm": "Khamsin",
-    "ebenezer's enemy": "Ghostly Kringle",
-    "efflorescent expedition": "Bloom",
-    "eggstraordinary eggventure": "Yolkwing",
-    "electric shuffle": "Techno",
-    "eliyse's clearing": "Meadow",
-    "emit hguorht pirt a": "Soriak",
-    "enamel upgrade": "Porcelain",
-    "enrichment en masse": "Avarice",
-    "enveloping darkness": "Umbra",
-    "ephemeral spire": "Steam",
-    "escapades on ice": "Shiver",
-    "even scales": "Librian",
-    "event horizon": "Singularity",
-    "everburning": "Infinitum",
-    "everflowering fields": "Glowwing",
-    "exceptional endeavor": "Portent",
-    "experienced piscator": "Chimmit",
-    "expert of the wild": "Wilderness",
-    "explosions in the sky": "Firework",
-    "extinction exodus": "Trilobite",
-    "extre extre endeavor": "Herald",
-    "fair is fair": "Faire",
-    "falling for you": "Frons",
-    "family time": "Brood",
-    "fancy feet": "Sugarplum",
-    "far-off travels": "Venture",
-    "fear & figments": "Phantom",
-    "fearsome fruits": "Berry",
-    "feast or famine": "Scourge",
-    "field of shrooms": "Spore",
-    "fields of achoo": "Pollen",
-    "fiercely frosted": "Jadice",
-    "fiery forage": "Blazing",
-    "fight or fight": "Dodo",
-    "filigree falls": "Lacewing",
-    "final fever": "Delirium",
-    "fire hazard": "Ariesian",
-    "fire-flower fashion": "Rubrum",
-    "firewater": "Ignaqtus",
-    "five score frenzy": "Century",
-    "flame and flicker": "Flickerflame",
-    "flaming starscape": "Antarian",
-    "flash freeze": "Ice",
-    "flaunting flair": "Snootroot",
-    "fleetly flittering": "Dartwing",
-    "flip the switch": "Moriante",
-    "floral flight": "Bouquet",
-    "floral quarrel": "Flower",
-    "flower power": "Bellflower",
-    "flowing riffs": "Drifter",
-    "flowy and glowy": "Virgonian",
-    "fluff bluff": "Frostfluff",
-    "fluffy jewel": "Buttercup",
-    "flying the friendly skies": "Davinese",
-    "foot drill": "Trepak",
-    "forage in the great forest": "Seed",
-    "forever wrapped": "Ghostly Gift",
-    "forgotten fuels": "Coal",
-    "formidable force": "Quantum",
-    "fossil folly": "Amber",
-    "fractal fever": "Crystal",
-    "free real estate": "Igluit",
-    "free shell estate": "Scuttle",
-    "freezey chaos": "Cold Rift",
-    "freezey-cold flight": "Permafrost",
-    "frequent flier": "Dittoglide",
-    "from the great beyond": "Nox",
-    "fruitful feat": "Harvest",
-    "fulgent foray": "Dazzling",
-    "furious flurry": "Snow",
-    "fury's foray": "Shield",
-    "garden warden": "Arbor",
-    "gardenia's grace": "Garden",
-    "gargantuan grasslands": "Plains",
-    "gaznul gulch": "Wraith",
-    "gelndun gutter": "Nightmare",
-    "gerias gauntlet": "Azurite",
-    "gerias mines": "Amethyst",
-    "get lucky": "Jackpot",
-    "getaway stick": "Ahoy",
-    "getting lost": "Maze",
-    "gilded wonder": "Vanguard",
-    "giving gulch": "Gift",
-    "glacial dig": "Icy Torrent",
-    "glimmer grotto": "Flicker",
-    "glimmering gorge": "Glimmerwing",
-    "glitter glen": "Scarab",
-    "globe trot": "Terradiem",
-    "glochid grounds": "Cactus",
-    "gloop": "Eww",
-    "glow ‘n' go": "Surge",
-    "glowing descent": "Candescent",
-    "glowing gulch": "Luminous",
-    "go green every day": "Curlyleaf",
-    "going nuts": "Glider",
-    "gold detector": "Trove",
-    "golden foolery": "Pyrite",
-    "golden-brown feathers": "Huddle",
-    "gone caroling": "Sleighbell",
-    "good mawning": "Maw",
-    "grand entrance": "Elegant",
-    "gravel gathering": "Gargoyle",
-    "gravity falls": "Gravity",
-    "green hill havoc": "Sonic",
-    "green-eyed guide": "Scorn",
-    "group hug": "Lumineux",
-    "grumpy wumpy": "Greenge",
-    "gulf of the guardian": "Watch",
-    "gulping gully": "Swallowtail",
-    "half-light hunt": "Dusk",
-    "hall of halitosis": "Cerberus",
-    "hall of hedera": "Ivy",
-    "hall of the ice kings": "Blizzard",
-    "hanging in there": "Dracabra",
-    "hares everywhere": "Ketu",
-    "hawk's eye": "Sagittarian",
-    "head in the clouds": "Cumulus",
-    "headstrong": "Capricornian",
-    "hearing intensifies": "Oaris",
-    "heart of roses": "Glassia",
-    "heart of the swamp": "Etch",
-    "heartbreak hold": "Love",
-    "heat wave havoc": "Radiant",
-    "heavy petal": "Peoni",
-    "hemisphere mutineer": "Equinox",
-    "hemisphere pioneer": "Seasonal",
-    "herculean effort": "Gold Olympus",
-    "hide & seek": "Leathery",
-    "hiding like snowbody's business": "Snowball",
-    "high noon rune": "Midday",
-    "highlands havoc": "Lagoon",
-    "hip and hop": "Wolper",
-    "hive mind": "Busby",
-    "holistic hope": "Silverline",
-    "home sweet horror": "Ghostly Oni",
-    "hop to it": "Bilby",
-    "hot air hullabaloo": "Fireflight",
-    "hot potato": "Pangolian",
-    "howdy": "Country",
-    "howling hunt": "Lycan",
-    "huggie snuggie": "Fluffles",
-    "hypersonic frolic": "Comet",
-    "hypoallergenic": "Pollenizer",
-    "hysterical hype": "Razzle",
-    "i am root!": "Karroot",
-    "i see icy icicles": "Icecarade",
-    "ice change": "Nature",
-    "ice cube": "Cubicle",
-    "ice shuffle": "Dancey",
-    "iceberry gobbling": "Krampus",
-    "icebitten": "Frostbite",
-    "icy encounters": "Icebound",
-    "icy feathers": "Grandeur",
-    "ignite the sky": "Ignis",
-    "igniting the fireworks": "Yanghis",
-    "immunity proclivity": "Serket",
-    "inception misconception": "Fury",
-    "infinite loop": "Ouroboros",
-    "infinite regression": "Nesting",
-    "ink-redible experience": "Atramento",
-    "inky heights": "Sumi",
-    "insightful": "Ocular",
-    "intercalary anarchy": "Leap Year",
-    "interesting interest": "Redbeard",
-    "into the bushes": "Tinsel",
-    "intuitive innovation": "Brilliant",
-    "ionized guise": "Plasma",
-    "iron will": "Iron",
-    "island of illusions": "Dream",
-    "isle of indignation": "Ire",
-    "it came from the clouds": "Flurry",
-    "it comes in makeshift boat": "Canna",
-    "it's real glass": "Glasswing",
-    "itsy bitesy": "Vampir",
-    "jaws 'n claws": "Exterrean",
-    "jingle jangle": "Festive",
-    "jubilee spree": "Carnival",
-    "juicy joy": "Monte",
-    "jungle juggle": "Binky",
-    "just right gauntlet": "Frostflower",
-    "kamgwa karst": "Tidal",
-    "keepsake cavern": "Trinket",
-    "kelpy corrale": "Coral",
-    "khorasan kame": "Turquoise",
-    "king of the sea": "Zilla",
-    "knots for naught": "Celtic",
-    "koo hill trek": "Orchid",
-    "lake of the abyss": "Lacuna",
-    "laki chasm": "Fissure",
-    "land of the unsweetened": "Ghostly Decay",
-    "land without candy": "Decay",
-    "lantern deeps": "Abyss",
-    "laurel lament": "Garland",
-    "left turn lagoon": "Steel",
-    "lerner's toyshop": "Bronze",
-    "let it snow": "Elkar",
-    "let's see this through": "Kwall",
-    "lever physics": "Chaiko",
-    "leviathan caverns": "Hydra",
-    "libra lark": "Tourmaline",
-    "light up": "Lightmatter",
-    "lighting the rift": "Alpenglow",
-    "lignite night": "Jet",
-    "likely a lich": "Ghostly Lichen",
-    "log in the fog": "Bog",
-    "lord of the fjords": "Verglace",
-    "loud and unclear": "Quaa",
-    "lovely cuisine": "Nomnoter",
-    "lovestruck": "Cupido",
-    "luck in the muck": "Mud",
-    "lucky day": "Luck",
-    "lunar blues": "Blue Moon",
-    "lunar lunacy": "Moon",
-    "macabre marrow": "Ghostly Bone",
-    "madcap muskeg": "Swamp",
-    "maelstrom": "Liveloch",
-    "magic scales": "Margento",
-    "magic scrolls": "Scribe",
-    "magmatism": "Magma",
-    "magnet junket": "Lodestone",
-    "make the moss of it": "Mosser",
-    "malediction": "Curse",
-    "mammu's bargain": "Cumberpatch",
-    "manic antics": "Delight",
-    "map to the stars": "Starwing",
-    "marigold moon": "Harvest Moon",
-    "maritime mission": "Limulimu",
-    "master key": "Keyper",
-    "mega metamorphosis": "Chrysalis",
-    "megastellar mission": "Rayleian",
-    "memories of winter": "Reminiscence",
-    "mercurial madness": "Quicksilver",
-    "merry cherry": "Cherrie",
-    "mesmeric mausoleum": "Hypnotic",
-    "miasma menace": "Fog",
-    "mighty roar": "Leonian",
-    "mind over matter": "Psyche",
-    "mineral mire": "Mesolite",
-    "misadventure time": "Misfortune",
-    "misfortune marsh": "Clover",
-    "mogok mania": "Ruby",
-    "mollusca marina": "Conch",
-    "molten motive": "Lava",
-    "monster mimicry": "Faux",
-    "moonlit garden": "Tulip",
-    "morbid molten motive": "Ghostly Lava",
-    "mort's moratorium": "Stoneheart",
-    "mosh pit": "Punk",
-    "murphy's ode": "Nebula",
-    "mystical marshmallow": "Fluffydoodle",
-    "nadia's nursery": "Rose",
-    "neverblue woods": "Evergreen",
-    "nevermore cavern": "Spectre",
-    "new year flight": "Neoteric",
-    "newsflash": "Shadowflash",
-    "nib nursery": "Cocoahollow",
-    "nice and cozy": "Sugarmitten",
-    "night flight": "Nightbloom",
-    "nimble narrows": "Nimbus",
-    "no salt here": "Saccharine",
-    "noble peril": "Palladium",
-    "noisy neighbour": "Malefice",
-    "nope rope": "Funis",
-    "nor'easter beaster": "Regift",
-    "nori cove": "Seaweed",
-    "northern chills": "Arctic",
-    "not a grump nor a heel": "Burglehoo",
-    "noxious nuzzles": "Okenite",
-    "oasis to-go": "Oasian",
-    "oceanic portals": "Water Rift",
-    "odin's pride": "Sparkles",
-    "oh shiny": "Aurum",
-    "olivine's ordeal": "Peridot",
-    "olympian struggle": "Bronze Olympus",
-    "ominous wishes": "Efreet",
-    "on the rocks": "Construct",
-    "once and floral": "Floristry",
-    "one for all": "Bastion",
-    "one prickly pear": "Razortail",
-    "one shell of a dragon": "Crackle",
-    "opalescent operation": "Opal",
-    "out of spite": "Spite",
-    "overly attached": "Smitten",
-    "painted hills": "Spritely",
-    "paired pulsars": "Bizurian",
-    "palagos islands": "Frostfire",
-    "pan galactic gargle": "Arcturian",
-    "pancake plunder": "Nether",
-    "pandora's box": "Ghostly Trinket",
-    "paradise palisade": "Halo",
-    "partner in crime": "Entwined",
-    "partners in magic": "Prestina",
-    "passage of prophecy": "Oracle",
-    "pearlescent": "Nacre",
-    "penalty claws": "Shaper",
-    "perfectly balanced": "Brizoni",
-    "pet teacher": "Professo",
-    "phantasm adrift": "Ghast",
-    "phantasm chasm": "Mirage",
-    "philosopher's dragon": "Pond",
-    "phoenix edict": "Ash",
-    "photosynthetic folly": "Leaf",
-    "pi roh's paradise": "Blazing Gale",
-    "picnic time": "Pouke",
-    "pillar of autumn": "Fomhar",
-    "pincer power": "Antumbra",
-    "plaaaaaaaaains": "Zombie",
-    "plot twist": "Prestige",
-    "plunder strike": "Thunder",
-    "plunder thunder": "Loot",
-    "polaris plummet": "Polarian",
-    "poltergeist heist": "Ghost",
-    "poltergeist pine": "Ghostly Evergreen",
-    "polyhue palms": "Rainbow",
-    "port enthusiast": "Aperture",
-    "posh and glamorous": "Poshwing",
-    "power overwhelming": "Abraxas",
-    "powerful mojo": "Greymatter",
-    "powerful presence": "Hyperion",
-    "preserved in time": "Lyuba",
-    "pretty power": "Pearlescent",
-    "prophetic pursuit": "Apocalypse",
-    "prowess immeasurable": "Solarflare",
-    "pumpermelon imposter": "Plumpkin",
-    "pumpermelon pull": "Ironwrought",
-    "pumping metal": "Lunk",
-    "pumpkin patch": "Gourd",
-    "pupolar": "Snowdrop",
-    "purple royale": "Aubergine",
-    "pursuit of love": "Pricklefluff",
-    "putrid plunge": "Sulfur",
-    "questionable heights": "Air Rift",
-    "quite the appetite": "Gulletail",
-    "raining presents": "Jamjam",
-    "ray of rage": "Gamma",
-    "razor ramble": "Bramble",
-    "reaching for the scarlet moon": "Iden",
-    "reef research": "Humuhumu",
-    "refraction extraction": "Bismuth",
-    "remember november": "Topaz",
-    "resolute ritual": "Hakahaka",
-    "retrieve & retreat": "Labradorite",
-    "reverie quarry": "Daydream",
-    "ribgate": "Dortal",
-    "riddle rabble": "Iron Blossom",
-    "ride eternal": "Chrome",
-    "riff master": "Heavy Metal",
-    "rift fire mire": "Promethium",
-    "rift innovations": "Plant Rift",
-    "righteous relaxation": "Frond",
-    "ringing wrangle": "Jingle",
-    "riptide rush": "Manomano",
-    "robotics": "Machina",
-    "rock the boat": "Euryale",
-    "rocky horror tincture show": "Ghostly Poison",
-    "roll for initiative": "Exandrew",
-    "rolling and rollicking": "Sprite",
-    "rolling in the waves": "Spinky",
-    "rootmoot": "Tree",
-    "rorrim rock": "Mirror",
-    "rosa rubiginosa": "Divi",
-    "royal presence": "Orlena",
-    "rudna's rollick": "Silver",
-    "ruins of war": "Barbarous",
-    "run through the vines": "Woodvine",
-    "runic river": "Stygian",
-    "sail the high seas": "Yarr",
-    "sandakloz's surprise": "Reindeer",
-    "sandara's sojourn": "Sand",
-    "sandy canyon": "Quicksand",
-    "sandy peaks": "Alayzem",
-    "scalding stretch": "Scorch",
-    "scaredy cave": "Voltaic",
-    "scarlet sprint": "Flash",
-    "scene maker": "Vibe",
-    "scorched ice": "Blue Fire",
-    "sea you later": "Mylio",
-    "seaside shellslide": "Honuhonu",
-    "sediment impediment": "Geode",
-    "seeking thrills": "Corsair",
-    "seismic trick": "Quake",
-    "serpent of the sea": "Valeodon",
-    "serpentine point": "Ragnarok",
-    "setse sighting": "Shining",
-    "shaded shelter": "Sunscorch",
-    "shadowy visitor": "Kage",
-    "sharp insights": "Tusk",
-    "sharply appointed": "Rhinotorch",
-    "shell scheme": "Ovalith",
-    "shi nee's saga": "Molten",
-    "shimmering slough": "Pearl",
-    "shine on": "Starshine",
-    "shiny start": "Plumewing",
-    "shock and aww": "Surprise",
-    "shock rock": "Spark",
-    "shocked and rattled": "Shockproof",
-    "shocked and shaken": "Bouldershock",
-    "shrouded in mystery": "Eldritch",
-    "sickengen's den": "Platinum",
-    "sights unseen": "Cyclops",
-    "silica valley": "Glass",
-    "silverfalls gorge": "Eve",
-    "silvery peaks": "Silver Olympus",
-    "six-fingered lake": "Bogberry",
-    "skeletal pedestal": "Bone",
-    "sleigh ride": "Ornamental",
-    "slippery companion": "Enfis",
-    "slither hither": "Kann",
-    "slow & steady": "Snapper",
-    "slow show": "Grove",
-    "slow-moving summit": "Plateau",
-    "smash valley": "Malachite",
-    "smithy snafu": "Forge",
-    "smog bog": "Miasma",
-    "smoke on the boulder": "Smolder",
-    "snap back": "Crawler",
-    "snap back to reality": "Mesmer",
-    "snooze no more": "Snooz",
-    "snoring": "Lullaby",
-    "snow day": "Thundersnow",
-    "snow pawtrol": "Snopaw",
-    "snowdrift dive": "Snowbrush",
-    "soaring heights": "Seraph",
-    "sol strike": "Sunstruck",
-    "solar controller": "Sun",
-    "solar power": "Nubis",
-    "solo summit": "Mountain",
-    "something catchy": "Angler",
-    "song of the siren": "Alure",
-    "sonoluminescence": "Spectrapod",
-    "soothing waters": "Infernus",
-    "spark in the dark": "Hidden Bolt",
-    "sparkflow connection": "Current",
-    "sparkle startle": "Glitz",
-    "speckled spelunking": "Jasper",
-    "spectral spruce": "Ghostly Tree",
-    "speedy sense": "Dash",
-    "spikey": "Pikeleaf",
-    "spiky spire brier": "Thorn",
-    "spiraling storm": "Vortex",
-    "splash zone": "Jumpiplop",
-    "splish splash": "Aquarian",
-    "spring bringer": "Pixie",
-    "spring to action": "Bumi",
-    "squall shoal": "Storm",
-    "squash": "Squish",
-    "sssensational sojourn": "Hooded",
-    "stainless stained glass": "Murano",
-    "standing egg rock": "Stoneshell",
-    "star bright": "Starlight",
-    "star shower": "Meteor",
-    "starboard bound": "Knarr",
-    "starborn": "Lambovian",
-    "starchy goodness": "Bloatato",
-    "stark strength": "Armament",
-    "stark tundra": "Winter",
-    "stater's stash": "Electrum",
-    "stay frosty": "Everfrost",
-    "stay lit": "Solis",
-    "staying vigilant": "Standstone",
-    "stellar core": "Eridanian",
-    "stellar phenomcyon": "Procyon",
-    "stones of surya": "Solstice",
-    "stonewall": "Fortified",
-    "strawberry nice": "Ichigo",
-    "streaming & gleaming": "Ribbon",
-    "strongest of potions": "Lovesick",
-    "submerged": "Waterwalker",
-    "sudsy shores": "Bubble",
-    "summit scare": "Ghostly Mountain",
-    "sun salute": "Dawnbringer",
-    "sunshine soirée": "Summer",
-    "surveil the vale": "Outrider",
-    "swamps of sadness": "Melancholy",
-    "swift sweeper": "Chimneypuff",
-    "swimming in the ocean": "Neyvee",
-    "swish swoosh": "Smigi",
-    "sykie meadows": "Butterfly",
-    "synergy": "Geminian",
-    "systematic muncher": "Chomp",
-    "t. erra's plea": "Subterranean",
-    "tales of icebrand": "Kotun",
-    "tangled web": "Weaver",
-    "tears of joy": "Vidalia",
-    "tectonica toil": "Sandstorm",
-    "ten score trench": "Bicentennial",
-    "ten tacles": "Tickles",
-    "ten tins": "Tien",
-    "tenacious drop": "Metal Rift",
-    "tentacle terrace": "Snowsquall",
-    "tentacle tickle": "Ikatako",
-    "terrorize": "Scorpionian",
-    "tessa's trek": "Ironwood",
-    "textile test": "Cotton",
-    "the 5th precipice": "Wyrmwood",
-    "the awakening": "Dawn",
-    "the barragening": "Hail",
-    "the bolts of faridat": "Darkling",
-    "the boneyard": "Osteryx",
-    "the bulls": "Taurian",
-    "the composer": "Classical",
-    "the fall": "Autumn",
-    "the fattening": "Feast",
-    "the floe beyond": "Ghostly Glacier",
-    "the great sneeze": "Epoch",
-    "the haunting of wrothmoore": "Ghostly Obsidian",
-    "the life of the party": "Hanno",
-    "the living stone": "Spellmason",
-    "the mark of wrothmoore": "Obsidian",
-    "the muffin man": "Toboggan",
-    "the other side": "Smoke",
-    "the perfect caregiver": "Florea",
-    "the perfect gift": "Giddle",
-    "the sedna mountains": "Emerald",
-    "the shear size": "Puffles",
-    "the skies of faridat": "Kite",
-    "the sky's not the limit": "Stella",
-    "the snugglening": "Cuddlewing",
-    "the springening": "Sakura",
-    "the sweetest scent": "Ambrosia",
-    "the uncertainty antithesis": "Ignite",
-    "the wall of shades": "Shadow",
-    "the warmth of cheer": "Candlecrown",
-    "the wise way": "Gildamane",
-    "the witching hour": "Midnight",
-    "thermodynamic panic": "Heat",
-    "they like to throw things": "Yeti",
-    "third leap year": "Triple Leap Year",
-    "thistlethumb dig": "Mistletoe",
-    "thousand acre woods": "Honeyglow",
-    "tides of winter tidings": "Yule",
-    "time to send a letter": "Gryphus",
-    "time to shred": "Thrasher",
-    "timeless tail": "Blightwing",
-    "tomb of kings": "Pharaoh",
-    "torrential tribulation": "Rain",
-    "tough egg to crack": "Minchi",
-    "tour de cyan": "Aquamarine",
-    "tower of tantalia": "Nectar",
-    "toxic trouble": "Poison",
-    "traditional patterns": "Tebori",
-    "trail of regale": "Regal",
-    "tran-quill-ity": "Tranquil",
-    "transcendent traversal": "Lotus",
-    "treehop time": "Flowerhop",
-    "triad trench": "Fates",
-    "trial dclvi": "Omen",
-    "trial of denial": "Daffadowndilly",
-    "tricksy trickster": "Lokilure",
-    "triple axel": "Aisa",
-    "triple the fun": "Triple Rainbow",
-    "triumph turlough": "Victory",
-    "true unity": "Lovonone",
-    "tuber trouble": "Root",
-    "tumbling along": "Tumblethorn",
-    "tunnels of mashe": "Sanguinite",
-    "turning the tides": "Tidepool",
-    "twice leapt valley": "Double Leap Year",
-    "twilight flight": "Duskwing",
-    "twin rivalry": "Amalgamate",
-    "two beautiful heads": "Grace",
-    "ultramarine scene": "Lapis",
-    "umbral plunge": "Lunar Eclipse",
-    "unbearable tunes": "Sea Shanty",
-    "under orion": "Tutan",
-    "under your spell": "Mesmerus",
-    "unencumbered soar": "Rosegold",
-    "visitation manifestation": "Ghostly Spirit",
-    "vivid virtue": "Violetta",
-    "vocal victory": "Libretto",
-    "waving specialist": "Stage",
-    "wayward wandering": "Spirit",
-    "weaving through": "Woven",
-    "weeping waterfall": "Willow",
-    "well of madness": "Trimera",
-    "west wind warning": "Elysium",
-    "wet and magical": "Aquacorn",
-    "whacky mazes": "Bushwhack",
-    "when life gives you limestones": "Gatren",
-    "whiff of spring": "Niamh",
-    "whimsical miracle": "Whimsical",
-    "whistling woods": "Thistle",
-    "whitbee's valley": "Nosferatu",
-    "whitbee's vision": "Ghostly Nosferatu",
-    "who is behind the masque": "Masque",
-    "wicked sick": "Wick",
-    "wicked waves": "Wavelyte",
-    "wiggleswand way": "Tempest",
-    "wild side": "Motley",
-    "wimbledrip's woe": "Coldforge",
-    "windy and whirly": "Whirlwind",
-    "wings of love": "Loveydovey",
-    "witchitoto plains": "Cyclone",
-    "wood cutter": "Chuck",
-    "wooden way": "Totem",
-    "worse than coal...": "Ghostly Krampus",
-    "wreaths wrath": "Holly",
-    "writer's block bluff": "Muse",
-    "ye olde rescue": "Kampos",
-    "year of the bull": "Teidian",
-    "year of the dragon": "Panlong",
-    "yellow eyed peas": "Chikipea",
-    "yogo gulch": "Sapphire",
-    "you matter": "Darkmatter",
-    "zesty zephyr": "Wind",
-    "zippity-zip-zap": "Zipzap",
-    "zombie juice diet": "Wendigo"
+    "a fun-guy": {
+        "dragon": "Mushry Dragon",
+        "proper": "A Fun-guy"
+    },
+    "a fungus": {
+        "dragon": "Hydnellum Dragon",
+        "proper": "A Fungus"
+    },
+    "a gift in the rift": {
+        "dragon": "Light Rift Dragon",
+        "proper": "A Gift in the Rift"
+    },
+    "a glad dose of adventure": {
+        "dragon": "Rigel Dragon",
+        "proper": "A Glad Dose of Adventure"
+    },
+    "a good scoop": {
+        "dragon": "Lageto Dragon",
+        "proper": "A Good Scoop"
+    },
+    "a guardian's guide": {
+        "dragon": "Quintessence Dragon",
+        "proper": "A Guardian's Guide"
+    },
+    "a lunar tick": {
+        "dragon": "Lunis Dragon",
+        "proper": "A Lunar Tick"
+    },
+    "a magical puff": {
+        "dragon": "Fae Dragon",
+        "proper": "A Magical Puff"
+    },
+    "a malcontent's mutation": {
+        "dragon": "Wrath Dragon",
+        "proper": "A Malcontent's Mutation"
+    },
+    "a molded marker": {
+        "dragon": "Terracotta Dragon",
+        "proper": "A Molded Marker"
+    },
+    "a peek into the future": {
+        "dragon": "Scryer Dragon",
+        "proper": "A Peek Into the Future"
+    },
+    "a prickly pretense": {
+        "dragon": "Xanthium Dragon",
+        "proper": "A Prickly Pretense"
+    },
+    "a quest for food": {
+        "dragon": "Undau Dragon",
+        "proper": "A Quest For Food"
+    },
+    "a rift aground": {
+        "dragon": "Earth Rift Dragon",
+        "proper": "A Rift Aground"
+    },
+    "a star is bred": {
+        "dragon": "Dazzle Dragon",
+        "proper": "A Star is Bred"
+    },
+    "a swamp thing": {
+        "dragon": "Ghostly Moss Dragon",
+        "proper": "A Swamp Thing"
+    },
+    "a tail of two": {
+        "dragon": "Lovey Dragon",
+        "proper": "A Tail of Two"
+    },
+    "a telltale return": {
+        "dragon": "Ghostly Spectre Dragon",
+        "proper": "A Telltale Return"
+    },
+    "a thorn in the side": {
+        "dragon": "Dapplethorn Dragon",
+        "proper": "A Thorn in the Side"
+    },
+    "a true masterpiece": {
+        "dragon": "Canvas Dragon",
+        "proper": "A True Masterpiece"
+    },
+    "achoired taste": {
+        "dragon": "Chorister Dragon",
+        "proper": "Achoired Taste"
+    },
+    "across the acrostic sea": {
+        "dragon": "Char Dragon",
+        "proper": "Across the Acrostic Sea"
+    },
+    "admiral antics": {
+        "dragon": "Trick Dragon",
+        "proper": "Admiral Antics"
+    },
+    "adrenaline rush": {
+        "dragon": "Derecho Dragon",
+        "proper": "Adrenaline Rush"
+    },
+    "adrift in the rift": {
+        "dragon": "Dark Rift Dragon",
+        "proper": "Adrift in the Rift"
+    },
+    "affluent adventure": {
+        "dragon": "Opulent Dragon",
+        "proper": "Affluent Adventure"
+    },
+    "afternoon nap": {
+        "dragon": "Somnig Dragon",
+        "proper": "Afternoon Nap"
+    },
+    "age of alignment": {
+        "dragon": "Solar Eclipse Dragon",
+        "proper": "Age of Alignment"
+    },
+    "akitu's assay": {
+        "dragon": "Spring Dragon",
+        "proper": "Akitu's Assay"
+    },
+    "algae analogy": {
+        "dragon": "Lichen Dragon",
+        "proper": "Algae Analogy"
+    },
+    "allengin pass": {
+        "dragon": "Howl Dragon",
+        "proper": "Allengin Pass"
+    },
+    "alloy analysis": {
+        "dragon": "Embossed Dragon",
+        "proper": "Alloy Analysis"
+    },
+    "alpha in disguise": {
+        "dragon": "Alffa Dragon",
+        "proper": "Alpha in Disguise"
+    },
+    "always in style": {
+        "dragon": "Woolen Dragon",
+        "proper": "Always In Style"
+    },
+    "ami'lya's adventure": {
+        "dragon": "River Dragon",
+        "proper": "Ami'Lya's Adventure"
+    },
+    "amorphous porpoise": {
+        "dragon": "Riptide Dragon",
+        "proper": "Amorphous Porpoise"
+    },
+    "amphibian meridian": {
+        "dragon": "Salamander Dragon",
+        "proper": "Amphibian Meridian"
+    },
+    "an experimental surprise": {
+        "dragon": "Fushi Dragon",
+        "proper": "An Experimental Surprise"
+    },
+    "an unforgettable mug": {
+        "dragon": "Nibwhip Dragon",
+        "proper": "An Unforgettable Mug"
+    },
+    "anayrahm dive": {
+        "dragon": "Trench Dragon",
+        "proper": "Anayrahm Dive"
+    },
+    "anchored adventure": {
+        "dragon": "Squall Dragon",
+        "proper": "Anchored Adventure"
+    },
+    "ancient madness": {
+        "dragon": "Ooze Dragon",
+        "proper": "Ancient Madness"
+    },
+    "ancient pink": {
+        "dragon": "Magnolia Dragon",
+        "proper": "Ancient Pink"
+    },
+    "anger wrangler": {
+        "dragon": "Petunia Dragon",
+        "proper": "Anger Wrangler"
+    },
+    "anti-gravity antics": {
+        "dragon": "Verdigris Dragon",
+        "proper": "Anti-Gravity Antics"
+    },
+    "apparent apparition": {
+        "dragon": "Ghostly Ghost Dragon",
+        "proper": "Apparent Apparition"
+    },
+    "aquatic anathema": {
+        "dragon": "Sailback Dragon",
+        "proper": "Aquatic Anathema"
+    },
+    "arcane missile ": {
+        "dragon": "Arcane Dragon",
+        "proper": "Arcane Missile "
+    },
+    "archetypal acceptance": {
+        "dragon": "Amaryllis Dragon",
+        "proper": "Archetypal Acceptance"
+    },
+    "ardent valley ": {
+        "dragon": "Viridian Dragon",
+        "proper": "Ardent Valley "
+    },
+    "aroma therapy": {
+        "dragon": "Smoulderbrush Dragon",
+        "proper": "Aroma Therapy"
+    },
+    "as long as winter itself": {
+        "dragon": "Longcicle Dragon",
+        "proper": "As Long As Winter Itself"
+    },
+    "astral projection": {
+        "dragon": "Astraline Dragon",
+        "proper": "Astral Projection"
+    },
+    "at the pinnacle": {
+        "dragon": "Apex Dragon",
+        "proper": "At the Pinnacle"
+    },
+    "audrey two": {
+        "dragon": "Ghostly Flower Dragon",
+        "proper": "Audrey Two"
+    },
+    "back in the hat": {
+        "dragon": "Morphimagus Dragon",
+        "proper": "Back in the Hat"
+    },
+    "backflip trip": {
+        "dragon": "Paper Dragon",
+        "proper": "Backflip Trip"
+    },
+    "basking in the basket": {
+        "dragon": "Basket Dragon",
+        "proper": "Basking in the Basket"
+    },
+    "beacons of freedom": {
+        "dragon": "Liberty Dragon",
+        "proper": "Beacons of Freedom"
+    },
+    "beauty and grace": {
+        "dragon": "Swiftgrace Dragon",
+        "proper": "Beauty and Grace"
+    },
+    "beauty in shadow": {
+        "dragon": "Corrupticorn Dragon",
+        "proper": "Beauty in Shadow"
+    },
+    "beeyond mead": {
+        "dragon": "Honeybrew Dragon",
+        "proper": "Beeyond Mead"
+    },
+    "belladonna's bastion": {
+        "dragon": "Nightshade Dragon",
+        "proper": "Belladonna's Bastion"
+    },
+    "below the floe": {
+        "dragon": "Glacier Dragon",
+        "proper": "Below the Floe"
+    },
+    "below zero": {
+        "dragon": "Zero Dragon",
+        "proper": "Below Zero"
+    },
+    "bemine spelunking": {
+        "dragon": "Sweetheart Dragon",
+        "proper": "Bemine Spelunking"
+    },
+    "bessemer's bounty": {
+        "dragon": "Scoria Dragon",
+        "proper": "Bessemer's Bounty"
+    },
+    "best friends forever": {
+        "dragon": "Zumi Dragon",
+        "proper": "Best Friends Forever"
+    },
+    "big-billed beats": {
+        "dragon": "Toco Dragon",
+        "proper": "Big-billed Beats"
+    },
+    "bird of paradise": {
+        "dragon": "Gawk Dragon",
+        "proper": "Bird Of Paradise"
+    },
+    "blessing of wisdom": {
+        "dragon": "Ancestor Dragon",
+        "proper": "Blessing of Wisdom"
+    },
+    "blight blockade": {
+        "dragon": "Fungus Dragon",
+        "proper": "Blight Blockade"
+    },
+    "blossoming": {
+        "dragon": "Blossom Dragon",
+        "proper": "Blossoming"
+    },
+    "blue odyssey": {
+        "dragon": "Celerulean Dragon",
+        "proper": "Blue Odyssey"
+    },
+    "blues chase": {
+        "dragon": "Zaffer Dragon",
+        "proper": "Blues Chase"
+    },
+    "bolt buffet": {
+        "dragon": "Thunderbird Dragon",
+        "proper": "Bolt Buffet"
+    },
+    "book of evil": {
+        "dragon": "Grimoire Dragon",
+        "proper": "Book of Evil"
+    },
+    "boreal brink": {
+        "dragon": "Aurora Dragon",
+        "proper": "Boreal Brink"
+    },
+    "boss stage": {
+        "dragon": "Dungeon Dragon",
+        "proper": "Boss Stage"
+    },
+    "bounceback bluff": {
+        "dragon": "Lightning Rift Dragon",
+        "proper": "Bounceback Bluff"
+    },
+    "bouncy": {
+        "dragon": "PonkiPong Dragon",
+        "proper": "Bouncy"
+    },
+    "bounding around": {
+        "dragon": "Bounteous Dragon",
+        "proper": "Bounding Around"
+    },
+    "brash bargaining": {
+        "dragon": "Begonia Dragon",
+        "proper": "Brash Bargaining"
+    },
+    "brave new vale": {
+        "dragon": "Valor Dragon",
+        "proper": "Brave New Vale"
+    },
+    "breeze floating": {
+        "dragon": "Dandelion Dragon",
+        "proper": "Breeze Floating"
+    },
+    "bright sunlight": {
+        "dragon": "Solary Dragon",
+        "proper": "Bright Sunlight"
+    },
+    "bring it on!": {
+        "dragon": "Ruckus Dragon",
+        "proper": "Bring It On!"
+    },
+    "broken ice shelf": {
+        "dragon": "Iceberg Dragon",
+        "proper": "Broken Ice Shelf"
+    },
+    "brow mountain": {
+        "dragon": "Conifer Dragon",
+        "proper": "Brow Mountain"
+    },
+    "brume bluff": {
+        "dragon": "Wisp Dragon",
+        "proper": "Brume Bluff"
+    },
+    "bryophyte plight": {
+        "dragon": "Moss Dragon",
+        "proper": "Bryophyte Plight"
+    },
+    "bud-dy": {
+        "dragon": "Helianthus Dragon",
+        "proper": "Bud-dy"
+    },
+    "budding bayou": {
+        "dragon": "Sprout Dragon",
+        "proper": "Budding Bayou"
+    },
+    "bug-eyed bloom": {
+        "dragon": "Kroki Dragon",
+        "proper": "Bug-eyed Bloom"
+    },
+    "bullish tendencies": {
+        "dragon": "Auroch Dragon",
+        "proper": "Bullish Tendencies"
+    },
+    "burcadian hooray": {
+        "dragon": "Tansy Dragon",
+        "proper": "Burcadian Hooray"
+    },
+    "cadberry wells": {
+        "dragon": "Rosebud Dragon",
+        "proper": "Cadberry Wells"
+    },
+    "calcified crusade": {
+        "dragon": "Bonescale Dragon",
+        "proper": "Calcified Crusade"
+    },
+    "camping trip": {
+        "dragon": "Scout Dragon",
+        "proper": "Camping Trip"
+    },
+    "canary's revenge": {
+        "dragon": "Ghostly Coal Dragon",
+        "proper": "Canary's Revenge"
+    },
+    "cancelling the apocalypse": {
+        "dragon": "Kaiju Dragon",
+        "proper": "Cancelling the Apocalypse"
+    },
+    "cape calm": {
+        "dragon": "Serenity Dragon",
+        "proper": "Cape Calm"
+    },
+    "carat coulee": {
+        "dragon": "Gold Dragon",
+        "proper": "Carat Coulee"
+    },
+    "carbon craze": {
+        "dragon": "Diamond Dragon",
+        "proper": "Carbon Craze"
+    },
+    "catacombs of ulmek": {
+        "dragon": "Jade Dragon",
+        "proper": "Catacombs of Ulmek"
+    },
+    "caught in the crimson sea": {
+        "dragon": "Shimmer Dragon",
+        "proper": "Caught in the Crimson Sea"
+    },
+    "cauldron canyon": {
+        "dragon": "Soot Dragon",
+        "proper": "Cauldron Canyon"
+    },
+    "cave of caroling": {
+        "dragon": "Twinkle Dragon",
+        "proper": "Cave of Caroling"
+    },
+    "cave of wanderers": {
+        "dragon": "Djinni Dragon",
+        "proper": "Cave of Wanderers"
+    },
+    "caves of ramora": {
+        "dragon": "Glare Dragon",
+        "proper": "Caves of Ramora"
+    },
+    "celebratory expedition": {
+        "dragon": "Party Dragon",
+        "proper": "Celebratory Expedition"
+    },
+    "celestial duality": {
+        "dragon": "Andromedan Dragon",
+        "proper": "Celestial Duality"
+    },
+    "celestial rarity": {
+        "dragon": "Sorarian Dragon",
+        "proper": "Celestial Rarity"
+    },
+    "centrifuge": {
+        "dragon": "Pisceian Dragon",
+        "proper": "Centrifuge"
+    },
+    "chain reaction": {
+        "dragon": "Shackle Dragon",
+        "proper": "Chain Reaction"
+    },
+    "chaotic encounter": {
+        "dragon": "Fire Rift Dragon",
+        "proper": "Chaotic Encounter"
+    },
+    "charged assumptions": {
+        "dragon": "Fulgurite Dragon",
+        "proper": "Charged Assumptions"
+    },
+    "charisma chasm": {
+        "dragon": "Magnetic Dragon",
+        "proper": "Charisma Chasm"
+    },
+    "checking it twice": {
+        "dragon": "Kringle Dragon",
+        "proper": "Checking it Twice"
+    },
+    "cheelei's cove": {
+        "dragon": "Pepper Dragon",
+        "proper": "Cheelei's Cove"
+    },
+    "chilly shellebration": {
+        "dragon": "Coldcoil Dragon",
+        "proper": "Chilly Shellebration"
+    },
+    "chione chasm": {
+        "dragon": "Snowy Bronze Dragon",
+        "proper": "Chione Chasm"
+    },
+    "chione climb": {
+        "dragon": "Snowy Silver Dragon",
+        "proper": "Chione Climb"
+    },
+    "chione peaks": {
+        "dragon": "Snowy Gold Dragon",
+        "proper": "Chione Peaks"
+    },
+    "chiseled cliffs": {
+        "dragon": "Mountain Sun Dragon",
+        "proper": "Chiseled Cliffs"
+    },
+    "chroma chasm": {
+        "dragon": "Iridescent Dragon",
+        "proper": "Chroma Chasm"
+    },
+    "chromatic cave": {
+        "dragon": "Chromacorn Dragon",
+        "proper": "Chromatic Cave"
+    },
+    "clamps": {
+        "dragon": "Cansian Dragon",
+        "proper": "Clamps"
+    },
+    "claws of steel": {
+        "dragon": "Vaul Dragon",
+        "proper": "Claws of Steel"
+    },
+    "clinch location": {
+        "dragon": "Vipera Dragon",
+        "proper": "Clinch Location"
+    },
+    "close shave": {
+        "dragon": "Bearded Dragon",
+        "proper": "Close Shave"
+    },
+    "cloud striker": {
+        "dragon": "Thunderbolt Dragon",
+        "proper": "Cloud Striker"
+    },
+    "clouds of garita": {
+        "dragon": "Snowpocalypse Dragon",
+        "proper": "Clouds of Garita"
+    },
+    "coarse and rough": {
+        "dragon": "Saharus Dragon",
+        "proper": "Coarse and Rough"
+    },
+    "cold light chase": {
+        "dragon": "Firefly Dragon",
+        "proper": "Cold Light Chase"
+    },
+    "cold sweat": {
+        "dragon": "Fever Dragon",
+        "proper": "Cold Sweat"
+    },
+    "colorful ride": {
+        "dragon": "Arcrider Dragon",
+        "proper": "Colorful Ride"
+    },
+    "colorless chasm": {
+        "dragon": "Barite Dragon",
+        "proper": "Colorless Chasm"
+    },
+    "come-bust-out some moves": {
+        "dragon": "Combustion Dragon",
+        "proper": "Come-bust-out Some Moves"
+    },
+    "composed conquest": {
+        "dragon": "Charlatan Dragon",
+        "proper": "Composed Conquest"
+    },
+    "concentrated fire magic": {
+        "dragon": "Infrared Dragon",
+        "proper": "Concentrated Fire Magic"
+    },
+    "conductive conundrum": {
+        "dragon": "Copper Dragon",
+        "proper": "Conductive Conundrum"
+    },
+    "confabulated confectionary": {
+        "dragon": "Ortreat Dragon",
+        "proper": "Confabulated Confectionary"
+    },
+    "conflagration course": {
+        "dragon": "Ember Dragon",
+        "proper": "Conflagration Course"
+    },
+    "conspiracy bluff": {
+        "dragon": "Jetstream Dragon",
+        "proper": "Conspiracy Bluff"
+    },
+    "copse consternation": {
+        "dragon": "Forest Dragon",
+        "proper": "Copse Consternation"
+    },
+    "corn maze": {
+        "dragon": "Teozinte Dragon",
+        "proper": "Corn Maze"
+    },
+    "corrosion excursion": {
+        "dragon": "Rust Dragon",
+        "proper": "Corrosion Excursion"
+    },
+    "corrosive crater": {
+        "dragon": "Acid Dragon",
+        "proper": "Corrosive Crater"
+    },
+    "covert galantry": {
+        "dragon": "Darcowl Dragon",
+        "proper": "Covert Galantry"
+    },
+    "creeper keeper": {
+        "dragon": "Crypt Dragon",
+        "proper": "Creeper Keeper"
+    },
+    "creeping charlie": {
+        "dragon": "Hedera Dragon",
+        "proper": "Creeping Charlie"
+    },
+    "creeping in": {
+        "dragon": "Void Dragon",
+        "proper": "Creeping In"
+    },
+    "creepy crawler": {
+        "dragon": "Chitin Dragon",
+        "proper": "Creepy Crawler"
+    },
+    "crimson canyon": {
+        "dragon": "Garnet Dragon",
+        "proper": "Crimson Canyon"
+    },
+    "crop security": {
+        "dragon": "Sow Dragon",
+        "proper": "Crop Security"
+    },
+    "crunch and munch": {
+        "dragon": "Chipichipi Dragon",
+        "proper": "Crunch and Munch"
+    },
+    "crystal clear chasm": {
+        "dragon": "Quartz Dragon",
+        "proper": "Crystal Clear Chasm"
+    },
+    "curious explorer": {
+        "dragon": "Burrow Dragon",
+        "proper": "Curious Explorer"
+    },
+    "d for delici(ous)": {
+        "dragon": "Delicia Dragon",
+        "proper": "D for Delici(ous)"
+    },
+    "daffadowndilly's cousin": {
+        "dragon": "Narcis Dragon",
+        "proper": "Daffadowndilly's Cousin"
+    },
+    "daily lily": {
+        "dragon": "Daylily Dragon",
+        "proper": "Daily Lily"
+    },
+    "dante's dungeon": {
+        "dragon": "Inferno Dragon",
+        "proper": "Dante's Dungeon"
+    },
+    "dappled tale": {
+        "dragon": "Marbletail Dragon",
+        "proper": "Dappled Tale"
+    },
+    "dare devil": {
+        "dragon": "Fuefuego Dragon",
+        "proper": "Dare Devil"
+    },
+    "dark side of the moon": {
+        "dragon": "Prism Dragon",
+        "proper": "Dark Side of the Moon"
+    },
+    "daylight deprivation": {
+        "dragon": "Rotblossom Dragon",
+        "proper": "Daylight Deprivation"
+    },
+    "death defying": {
+        "dragon": "Macabre Dragon",
+        "proper": "Death Defying"
+    },
+    "debunking spelunking": {
+        "dragon": "Fluorescent Dragon",
+        "proper": "Debunking Spelunking"
+    },
+    "deep dive": {
+        "dragon": "Invento Dragon",
+        "proper": "Deep Dive"
+    },
+    "deep slumber": {
+        "dragon": "Glyph Dragon",
+        "proper": "Deep Slumber"
+    },
+    "delightfully disguised": {
+        "dragon": "Morpho Dragon",
+        "proper": "Delightfully Disguised"
+    },
+    "den development": {
+        "dragon": "Oni Dragon",
+        "proper": "Den Development"
+    },
+    "depression secession": {
+        "dragon": "Cyclamen Dragon",
+        "proper": "Depression Secession"
+    },
+    "desert duds ": {
+        "dragon": "Arid Dragon",
+        "proper": "Desert Duds "
+    },
+    "desert sting": {
+        "dragon": "Mantasu Dragon",
+        "proper": "Desert Sting"
+    },
+    "diggy diggy hole": {
+        "dragon": "Diggy Dragon",
+        "proper": "Diggy Diggy Hole"
+    },
+    "divine starshine": {
+        "dragon": "Nova Dragon",
+        "proper": "Divine Starshine"
+    },
+    "divine vine": {
+        "dragon": "Thicket Dragon",
+        "proper": "Divine Vine"
+    },
+    "do you see what icy": {
+        "dragon": "Clairvoyant Dragon",
+        "proper": "Do You See What Icy"
+    },
+    "doily dash": {
+        "dragon": "Lace Dragon",
+        "proper": "Doily Dash"
+    },
+    "dolphins of the sky": {
+        "dragon": "Lazuli Dragon",
+        "proper": "Dolphins Of The Sky"
+    },
+    "doublehue ditch": {
+        "dragon": "Double Rainbow Dragon",
+        "proper": "Doublehue Ditch"
+    },
+    "doubley alloyed": {
+        "dragon": "Brass Dragon",
+        "proper": "Doubley Alloyed"
+    },
+    "down falls": {
+        "dragon": "Ruin Dragon",
+        "proper": "Down Falls"
+    },
+    "down underground": {
+        "dragon": "Cave Dragon",
+        "proper": "Down Underground"
+    },
+    "down with dissonance": {
+        "dragon": "Harmony Dragon",
+        "proper": "Down with Dissonance"
+    },
+    "dragon dragon": {
+        "dragon": "Dargon Dragon",
+        "proper": "Dragon Dragon"
+    },
+    "dramorian delve": {
+        "dragon": "Mine Dragon",
+        "proper": "Dramorian Delve"
+    },
+    "drape escape": {
+        "dragon": "Satin Dragon",
+        "proper": "Drape Escape"
+    },
+    "dreamcatcher": {
+        "dragon": "Lightmare Dragon",
+        "proper": "Dreamcatcher"
+    },
+    "duality": {
+        "dragon": "Brutiful Dragon",
+        "proper": "Duality"
+    },
+    "dune diving": {
+        "dragon": "Sandscale Dragon",
+        "proper": "Dune Diving"
+    },
+    "dungeon of distractions": {
+        "dragon": "Moonstruck Dragon",
+        "proper": "Dungeon of Distractions"
+    },
+    "dust storm": {
+        "dragon": "Khamsin Dragon",
+        "proper": "Dust Storm"
+    },
+    "ebenezer's enemy": {
+        "dragon": "Ghostly Kringle Dragon",
+        "proper": "Ebenezer's Enemy"
+    },
+    "efflorescent expedition": {
+        "dragon": "Bloom Dragon",
+        "proper": "Efflorescent Expedition"
+    },
+    "eggstraordinary eggventure": {
+        "dragon": "Yolkwing Dragon",
+        "proper": "Eggstraordinary Eggventure"
+    },
+    "electric shuffle": {
+        "dragon": "Techno Dragon",
+        "proper": "Electric Shuffle"
+    },
+    "eliyse's clearing": {
+        "dragon": "Meadow Dragon",
+        "proper": "Eliyse's Clearing"
+    },
+    "emit hguorht pirt a": {
+        "dragon": "Soriak Dragon",
+        "proper": "emiT hguorhT pirT A"
+    },
+    "enamel upgrade": {
+        "dragon": "Porcelain Dragon",
+        "proper": "Enamel Upgrade"
+    },
+    "enrichment en masse": {
+        "dragon": "Avarice Dragon",
+        "proper": "Enrichment En Masse"
+    },
+    "enveloping darkness": {
+        "dragon": "Umbra Dragon",
+        "proper": "Enveloping Darkness"
+    },
+    "ephemeral spire": {
+        "dragon": "Steam Dragon",
+        "proper": "Ephemeral Spire"
+    },
+    "escapades on ice": {
+        "dragon": "Shiver Dragon",
+        "proper": "Escapades On Ice"
+    },
+    "even scales": {
+        "dragon": "Librian Dragon",
+        "proper": "Even Scales"
+    },
+    "event horizon": {
+        "dragon": "Singularity Dragon",
+        "proper": "Event Horizon"
+    },
+    "everburning": {
+        "dragon": "Infinitum Dragon",
+        "proper": "Everburning"
+    },
+    "everflowering fields": {
+        "dragon": "Glowwing Dragon",
+        "proper": "Everflowering Fields"
+    },
+    "exceptional endeavor": {
+        "dragon": "Portent Dragon",
+        "proper": "Exceptional Endeavor"
+    },
+    "experienced piscator": {
+        "dragon": "Chimmit Dragon",
+        "proper": "Experienced Piscator"
+    },
+    "expert of the wild": {
+        "dragon": "Wilderness Dragon",
+        "proper": "Expert of the Wild"
+    },
+    "explosions in the sky": {
+        "dragon": "Firework Dragon",
+        "proper": "Explosions in the Sky"
+    },
+    "extinction exodus": {
+        "dragon": "Trilobite Dragon",
+        "proper": "Extinction Exodus"
+    },
+    "extre extre endeavor": {
+        "dragon": "Herald Dragon",
+        "proper": "Extre Extre Endeavor"
+    },
+    "fair is fair": {
+        "dragon": "Faire Dragon",
+        "proper": "Fair is Fair"
+    },
+    "falling for you": {
+        "dragon": "Frons Dragon",
+        "proper": "Falling for You"
+    },
+    "family time": {
+        "dragon": "Brood Dragon",
+        "proper": "Family Time"
+    },
+    "fancy feet": {
+        "dragon": "Sugarplum Dragon",
+        "proper": "Fancy Feet"
+    },
+    "far-off travels": {
+        "dragon": "Venture Dragon",
+        "proper": "Far-off Travels"
+    },
+    "fear & figments": {
+        "dragon": "Phantom Dragon",
+        "proper": "Fear & Figments"
+    },
+    "fearsome fruits": {
+        "dragon": "Berry Dragon",
+        "proper": "Fearsome Fruits"
+    },
+    "feast or famine": {
+        "dragon": "Scourge Dragon",
+        "proper": "Feast or Famine"
+    },
+    "field of shrooms": {
+        "dragon": "Spore Dragon",
+        "proper": "Field of Shrooms"
+    },
+    "fields of achoo": {
+        "dragon": "Pollen Dragon",
+        "proper": "Fields of Achoo"
+    },
+    "fiercely frosted": {
+        "dragon": "Jadice Dragon",
+        "proper": "Fiercely Frosted"
+    },
+    "fiery forage": {
+        "dragon": "Blazing Dragon",
+        "proper": "Fiery Forage"
+    },
+    "fight or fight": {
+        "dragon": "Dodo Dragon",
+        "proper": "Fight or Fight"
+    },
+    "filigree falls": {
+        "dragon": "Lacewing Dragon",
+        "proper": "Filigree Falls"
+    },
+    "final fever": {
+        "dragon": "Delirium Dragon",
+        "proper": "Final Fever"
+    },
+    "fire hazard": {
+        "dragon": "Ariesian Dragon",
+        "proper": "Fire Hazard"
+    },
+    "fire-flower fashion": {
+        "dragon": "Rubrum Dragon",
+        "proper": "Fire-Flower Fashion"
+    },
+    "firewater": {
+        "dragon": "Ignaqtus Dragon",
+        "proper": "Firewater"
+    },
+    "five score frenzy": {
+        "dragon": "Century Dragon",
+        "proper": "Five Score Frenzy"
+    },
+    "flame and flicker": {
+        "dragon": "Flickerflame Dragon",
+        "proper": "Flame and Flicker"
+    },
+    "flaming starscape": {
+        "dragon": "Antarian Dragon",
+        "proper": "Flaming Starscape"
+    },
+    "flash freeze": {
+        "dragon": "Ice Dragon",
+        "proper": "Flash Freeze"
+    },
+    "flaunting flair": {
+        "dragon": "Snootroot Dragon",
+        "proper": "Flaunting Flair"
+    },
+    "fleetly flittering": {
+        "dragon": "Dartwing Dragon",
+        "proper": "Fleetly Flittering"
+    },
+    "flip the switch": {
+        "dragon": "Moriante Dragon",
+        "proper": "Flip the Switch"
+    },
+    "floral flight": {
+        "dragon": "Bouquet Dragon",
+        "proper": "Floral Flight"
+    },
+    "floral quarrel": {
+        "dragon": "Flower Dragon",
+        "proper": "Floral Quarrel"
+    },
+    "flourishing flora": {
+        "dragon": "Barkskin Dragon",
+        "proper": "Flourishing Flora"
+    },
+    "flower power": {
+        "dragon": "Bellflower Dragon",
+        "proper": "Flower Power"
+    },
+    "flowing riffs": {
+        "dragon": "Drifter Dragon",
+        "proper": "Flowing Riffs"
+    },
+    "flowy and glowy": {
+        "dragon": "Virgonian Dragon",
+        "proper": "Flowy and Glowy"
+    },
+    "fluff bluff": {
+        "dragon": "Frostfluff Dragon",
+        "proper": "Fluff Bluff"
+    },
+    "fluffy jewel": {
+        "dragon": "Buttercup Dragon",
+        "proper": "Fluffy Jewel"
+    },
+    "flying the friendly skies": {
+        "dragon": "Davinese Dragon",
+        "proper": "Flying The Friendly Skies"
+    },
+    "foot drill": {
+        "dragon": "Trepak Dragon",
+        "proper": "Foot Drill"
+    },
+    "forage in the great forest": {
+        "dragon": "Seed Dragon",
+        "proper": "Forage in the Great Forest"
+    },
+    "forever wrapped": {
+        "dragon": "Ghostly Gift Dragon",
+        "proper": "Forever Wrapped"
+    },
+    "forgotten fuels": {
+        "dragon": "Coal Dragon",
+        "proper": "Forgotten Fuels"
+    },
+    "formidable force": {
+        "dragon": "Quantum Dragon",
+        "proper": "Formidable Force"
+    },
+    "fossil folly": {
+        "dragon": "Amber Dragon",
+        "proper": "Fossil Folly"
+    },
+    "fractal fever": {
+        "dragon": "Crystal Dragon",
+        "proper": "Fractal Fever"
+    },
+    "free real estate": {
+        "dragon": "Igluit Dragon",
+        "proper": "Free Real Estate"
+    },
+    "free shell estate": {
+        "dragon": "Scuttle Dragon",
+        "proper": "Free Shell Estate"
+    },
+    "freezey chaos": {
+        "dragon": "Cold Rift Dragon",
+        "proper": "Freezey Chaos"
+    },
+    "freezey-cold flight": {
+        "dragon": "Permafrost Dragon",
+        "proper": "Freezey-Cold Flight"
+    },
+    "frequent flier": {
+        "dragon": "Dittoglide Dragon",
+        "proper": "Frequent Flier"
+    },
+    "from the great beyond": {
+        "dragon": "Nox Dragon",
+        "proper": "From The Great Beyond"
+    },
+    "fruitful feat": {
+        "dragon": "Harvest Dragon",
+        "proper": "Fruitful Feat"
+    },
+    "fulgent foray": {
+        "dragon": "Dazzling Dragon",
+        "proper": "Fulgent Foray"
+    },
+    "furious flurry": {
+        "dragon": "Snow Dragon",
+        "proper": "Furious Flurry"
+    },
+    "fury's foray": {
+        "dragon": "Shield Dragon",
+        "proper": "Fury's Foray"
+    },
+    "garden warden": {
+        "dragon": "Arbor Dragon",
+        "proper": "Garden Warden"
+    },
+    "gardenia's grace": {
+        "dragon": "Garden Dragon",
+        "proper": "Gardenia's Grace"
+    },
+    "gargantuan grasslands": {
+        "dragon": "Plains Dragon",
+        "proper": "Gargantuan Grasslands"
+    },
+    "gaznul gulch": {
+        "dragon": "Wraith Dragon",
+        "proper": "Gaznul Gulch"
+    },
+    "gelndun gutter": {
+        "dragon": "Nightmare Dragon",
+        "proper": "Gelndun Gutter"
+    },
+    "gerias gauntlet": {
+        "dragon": "Azurite Dragon",
+        "proper": "Gerias Gauntlet"
+    },
+    "gerias mines": {
+        "dragon": "Amethyst Dragon",
+        "proper": "Gerias Mines"
+    },
+    "get lucky": {
+        "dragon": "Jackpot Dragon",
+        "proper": "Get Lucky"
+    },
+    "getaway stick": {
+        "dragon": "Ahoy Dragon",
+        "proper": "Getaway Stick"
+    },
+    "getting lost": {
+        "dragon": "Maze Dragon",
+        "proper": "Getting Lost"
+    },
+    "gilded wonder": {
+        "dragon": "Vanguard Dragon",
+        "proper": "Gilded Wonder"
+    },
+    "giving gulch": {
+        "dragon": "Gift Dragon",
+        "proper": "Giving Gulch"
+    },
+    "glacial dig": {
+        "dragon": "Icy Torrent Dragon",
+        "proper": "Glacial Dig"
+    },
+    "glimmer grotto": {
+        "dragon": "Flicker Dragon",
+        "proper": "Glimmer Grotto"
+    },
+    "glimmering gorge": {
+        "dragon": "Glimmerwing Dragon",
+        "proper": "Glimmering Gorge"
+    },
+    "glitter glen": {
+        "dragon": "Scarab Dragon",
+        "proper": "Glitter Glen"
+    },
+    "globe trot": {
+        "dragon": "Terradiem Dragon",
+        "proper": "Globe Trot"
+    },
+    "glochid grounds": {
+        "dragon": "Cactus Dragon",
+        "proper": "Glochid Grounds"
+    },
+    "gloop": {
+        "dragon": "Eww Dragon",
+        "proper": "Gloop"
+    },
+    "glow ‘n' go": {
+        "dragon": "Surge Dragon",
+        "proper": "Glow ‘n' Go"
+    },
+    "glowing descent": {
+        "dragon": "Candescent Dragon",
+        "proper": "Glowing Descent"
+    },
+    "glowing gulch": {
+        "dragon": "Luminous Dragon",
+        "proper": "Glowing Gulch"
+    },
+    "go green every day": {
+        "dragon": "Curlyleaf Dragon",
+        "proper": "Go Green Every Day"
+    },
+    "going nuts": {
+        "dragon": "Glider Dragon",
+        "proper": "Going Nuts"
+    },
+    "gold detector": {
+        "dragon": "Trove Dragon",
+        "proper": "Gold Detector"
+    },
+    "golden foolery": {
+        "dragon": "Pyrite Dragon",
+        "proper": "Golden Foolery"
+    },
+    "golden-brown feathers": {
+        "dragon": "Huddle Dragon",
+        "proper": "Golden-brown Feathers"
+    },
+    "gone caroling": {
+        "dragon": "Sleighbell Dragon",
+        "proper": "Gone Caroling"
+    },
+    "good mawning": {
+        "dragon": "Maw Dragon",
+        "proper": "Good Mawning"
+    },
+    "grand entrance": {
+        "dragon": "Elegant Dragon",
+        "proper": "Grand Entrance"
+    },
+    "gravel gathering": {
+        "dragon": "Gargoyle Dragon",
+        "proper": "Gravel Gathering"
+    },
+    "gravity falls": {
+        "dragon": "Gravity Dragon",
+        "proper": "Gravity Falls"
+    },
+    "green hill havoc": {
+        "dragon": "Sonic Dragon",
+        "proper": "Green Hill Havoc"
+    },
+    "green-eyed guide": {
+        "dragon": "Scorn Dragon",
+        "proper": "Green-eyed Guide"
+    },
+    "group hug": {
+        "dragon": "Lumineux Dragon",
+        "proper": "Group Hug"
+    },
+    "grumpy wumpy": {
+        "dragon": "Greenge Dragon",
+        "proper": "Grumpy Wumpy"
+    },
+    "gulf of the guardian": {
+        "dragon": "Watch Dragon",
+        "proper": "Gulf of the Guardian"
+    },
+    "gulping gully": {
+        "dragon": "Swallowtail Dragon",
+        "proper": "Gulping Gully"
+    },
+    "half-light hunt": {
+        "dragon": "Dusk Dragon",
+        "proper": "Half-light Hunt"
+    },
+    "hall of halitosis": {
+        "dragon": "Cerberus Dragon",
+        "proper": "Hall of Halitosis"
+    },
+    "hall of hedera": {
+        "dragon": "Ivy Dragon",
+        "proper": "Hall of Hedera"
+    },
+    "hall of the ice kings": {
+        "dragon": "Blizzard Dragon",
+        "proper": "Hall of the Ice Kings"
+    },
+    "hanging in there": {
+        "dragon": "Dracabra Dragon",
+        "proper": "Hanging in There"
+    },
+    "hares everywhere": {
+        "dragon": "Ketu Dragon",
+        "proper": "Hares Everywhere"
+    },
+    "hawk's eye": {
+        "dragon": "Sagittarian Dragon",
+        "proper": "Hawk's Eye"
+    },
+    "head in the clouds": {
+        "dragon": "Cumulus Dragon",
+        "proper": "Head in the Clouds"
+    },
+    "headstrong": {
+        "dragon": "Capricornian Dragon",
+        "proper": "Headstrong"
+    },
+    "hearing intensifies": {
+        "dragon": "Oaris Dragon",
+        "proper": "Hearing Intensifies"
+    },
+    "heart of roses": {
+        "dragon": "Glassia Dragon",
+        "proper": "Heart of Roses"
+    },
+    "heart of the swamp": {
+        "dragon": "Etch Dragon",
+        "proper": "Heart Of The Swamp"
+    },
+    "heartbreak hold": {
+        "dragon": "Love Dragon",
+        "proper": "Heartbreak Hold"
+    },
+    "heat wave havoc": {
+        "dragon": "Radiant Dragon",
+        "proper": "Heat Wave Havoc"
+    },
+    "heavy petal": {
+        "dragon": "Peoni Dragon",
+        "proper": "Heavy Petal"
+    },
+    "hemisphere mutineer": {
+        "dragon": "Equinox Dragon",
+        "proper": "Hemisphere Mutineer"
+    },
+    "hemisphere pioneer": {
+        "dragon": "Seasonal Dragon",
+        "proper": "Hemisphere Pioneer"
+    },
+    "herculean effort": {
+        "dragon": "Gold Olympus Dragon",
+        "proper": "Herculean Effort"
+    },
+    "hide & seek": {
+        "dragon": "Leathery Dragon",
+        "proper": "Hide & Seek"
+    },
+    "hiding like snowbody's business": {
+        "dragon": "Snowball Dragon",
+        "proper": "Hiding Like Snowbody's Business"
+    },
+    "high noon rune": {
+        "dragon": "Midday Dragon",
+        "proper": "High Noon Rune"
+    },
+    "highlands havoc": {
+        "dragon": "Lagoon Dragon",
+        "proper": "Highlands Havoc"
+    },
+    "hip and hop": {
+        "dragon": "Wolper Dragon",
+        "proper": "Hip and Hop"
+    },
+    "hive mind": {
+        "dragon": "Busby Dragon",
+        "proper": "Hive Mind"
+    },
+    "holistic hope": {
+        "dragon": "Silverline Dragon",
+        "proper": "Holistic Hope"
+    },
+    "home sweet horror": {
+        "dragon": "Ghostly Oni Dragon",
+        "proper": "Home Sweet Horror"
+    },
+    "hop to it": {
+        "dragon": "Bilby Dragon",
+        "proper": "Hop to It"
+    },
+    "hot air hullabaloo": {
+        "dragon": "Fireflight Dragon",
+        "proper": "Hot Air Hullabaloo"
+    },
+    "hot potato": {
+        "dragon": "Pangolian Dragon",
+        "proper": "Hot Potato"
+    },
+    "howdy": {
+        "dragon": "Country Dragon",
+        "proper": "Howdy"
+    },
+    "howling hunt": {
+        "dragon": "Lycan Dragon",
+        "proper": "Howling Hunt"
+    },
+    "huggie snuggie": {
+        "dragon": "Fluffles Dragon",
+        "proper": "Huggie Snuggie"
+    },
+    "hypersonic frolic": {
+        "dragon": "Comet Dragon",
+        "proper": "Hypersonic Frolic"
+    },
+    "hypoallergenic": {
+        "dragon": "Pollenizer Dragon",
+        "proper": "Hypoallergenic"
+    },
+    "hysterical hype": {
+        "dragon": "Razzle Dragon",
+        "proper": "Hysterical Hype"
+    },
+    "i am root!": {
+        "dragon": "Karroot Dragon",
+        "proper": "I am Root!"
+    },
+    "i see icy icicles": {
+        "dragon": "Icecarade Dragon",
+        "proper": "I See Icy Icicles"
+    },
+    "ice change": {
+        "dragon": "Nature Dragon",
+        "proper": "Ice Change"
+    },
+    "ice cube": {
+        "dragon": "Cubicle Dragon",
+        "proper": "Ice Cube"
+    },
+    "ice shuffle": {
+        "dragon": "Dancey Dragon",
+        "proper": "Ice Shuffle"
+    },
+    "iceberry gobbling": {
+        "dragon": "Krampus Dragon",
+        "proper": "Iceberry Gobbling"
+    },
+    "icebitten": {
+        "dragon": "Frostbite Dragon",
+        "proper": "Icebitten"
+    },
+    "icy encounters ": {
+        "dragon": "Icebound Dragon",
+        "proper": "Icy Encounters "
+    },
+    "icy feathers": {
+        "dragon": "Grandeur Dragon",
+        "proper": "Icy Feathers"
+    },
+    "ignite the sky": {
+        "dragon": "Ignis Dragon",
+        "proper": "Ignite the Sky"
+    },
+    "igniting the fireworks": {
+        "dragon": "Yanghis Dragon",
+        "proper": "Igniting The Fireworks"
+    },
+    "immunity proclivity": {
+        "dragon": "Serket Dragon",
+        "proper": "Immunity Proclivity"
+    },
+    "inception misconception": {
+        "dragon": "Fury Dragon",
+        "proper": "Inception Misconception"
+    },
+    "infinite loop": {
+        "dragon": "Ouroboros Dragon",
+        "proper": "Infinite Loop"
+    },
+    "infinite regression": {
+        "dragon": "Nesting Dragon",
+        "proper": "Infinite Regression"
+    },
+    "ink-redible experience": {
+        "dragon": "Atramento Dragon",
+        "proper": "Ink-redible Experience"
+    },
+    "inky heights": {
+        "dragon": "Sumi Dragon",
+        "proper": "Inky Heights"
+    },
+    "insightful": {
+        "dragon": "Ocular Dragon",
+        "proper": "Insightful"
+    },
+    "intercalary anarchy": {
+        "dragon": "Leap Year Dragon",
+        "proper": "Intercalary Anarchy"
+    },
+    "interesting interest": {
+        "dragon": "Redbeard Dragon",
+        "proper": "Interesting Interest"
+    },
+    "into the bushes": {
+        "dragon": "Tinsel Dragon",
+        "proper": "Into the Bushes"
+    },
+    "intuitive innovation": {
+        "dragon": "Brilliant Dragon",
+        "proper": "Intuitive Innovation"
+    },
+    "ionized guise": {
+        "dragon": "Plasma Dragon",
+        "proper": "Ionized Guise"
+    },
+    "iron will": {
+        "dragon": "Iron Dragon",
+        "proper": "Iron Will"
+    },
+    "island of illusions": {
+        "dragon": "Dream Dragon",
+        "proper": "Island of Illusions"
+    },
+    "isle of indignation": {
+        "dragon": "Ire Dragon",
+        "proper": "Isle of Indignation"
+    },
+    "it came from the clouds": {
+        "dragon": "Flurry Dragon",
+        "proper": "It Came From the Clouds"
+    },
+    "it comes in makeshift boat": {
+        "dragon": "Canna Dragon",
+        "proper": "It Comes In Makeshift Boat"
+    },
+    "it's real glass": {
+        "dragon": "Glasswing Dragon",
+        "proper": "It's Real Glass"
+    },
+    "itsy bitesy": {
+        "dragon": "Vampir Dragon",
+        "proper": "Itsy Bitesy"
+    },
+    "jaws 'n claws": {
+        "dragon": "Exterrean Dragon",
+        "proper": "Jaws 'n Claws"
+    },
+    "jest for the best": {
+        "dragon": "Jester Dragon",
+        "proper": "Jest for the Best"
+    },
+    "jingle jangle": {
+        "dragon": "Festive Dragon",
+        "proper": "Jingle Jangle"
+    },
+    "jubilee spree": {
+        "dragon": "Carnival Dragon",
+        "proper": "Jubilee Spree"
+    },
+    "juicy joy": {
+        "dragon": "Monte Dragon",
+        "proper": "Juicy Joy"
+    },
+    "jungle juggle": {
+        "dragon": "Binky Dragon",
+        "proper": "Jungle Juggle"
+    },
+    "just right gauntlet": {
+        "dragon": "Frostflower Dragon",
+        "proper": "Just Right Gauntlet"
+    },
+    "kamgwa karst": {
+        "dragon": "Tidal Dragon",
+        "proper": "Kamgwa Karst"
+    },
+    "keepsake cavern": {
+        "dragon": "Trinket Dragon",
+        "proper": "Keepsake Cavern"
+    },
+    "kelpy corrale": {
+        "dragon": "Coral Dragon",
+        "proper": "Kelpy Corrale"
+    },
+    "khorasan kame": {
+        "dragon": "Turquoise Dragon",
+        "proper": "Khorasan Kame"
+    },
+    "king of the sea": {
+        "dragon": "Zilla Dragon",
+        "proper": "King Of The Sea"
+    },
+    "knots for naught": {
+        "dragon": "Celtic Dragon",
+        "proper": "Knots for Naught"
+    },
+    "koo hill trek": {
+        "dragon": "Orchid Dragon",
+        "proper": "Koo Hill Trek"
+    },
+    "lake of the abyss": {
+        "dragon": "Lacuna Dragon",
+        "proper": "Lake of the Abyss"
+    },
+    "laki chasm": {
+        "dragon": "Fissure Dragon",
+        "proper": "Laki Chasm"
+    },
+    "land of the unsweetened": {
+        "dragon": "Ghostly Decay Dragon",
+        "proper": "Land of the Unsweetened"
+    },
+    "land without candy": {
+        "dragon": "Decay Dragon",
+        "proper": "Land Without Candy"
+    },
+    "lantern deeps": {
+        "dragon": "Abyss Dragon",
+        "proper": "Lantern Deeps"
+    },
+    "laurel lament": {
+        "dragon": "Garland Dragon",
+        "proper": "Laurel Lament"
+    },
+    "left turn lagoon": {
+        "dragon": "Steel Dragon",
+        "proper": "Left Turn Lagoon"
+    },
+    "lerner's toyshop": {
+        "dragon": "Bronze Dragon",
+        "proper": "Lerner's Toyshop"
+    },
+    "let it snow": {
+        "dragon": "Elkar Dragon",
+        "proper": "Let It Snow"
+    },
+    "let's see this through": {
+        "dragon": "Kwall Dragon",
+        "proper": "Let's See This Through"
+    },
+    "lever physics": {
+        "dragon": "Chaiko Dragon",
+        "proper": "Lever Physics"
+    },
+    "leviathan caverns": {
+        "dragon": "Hydra Dragon",
+        "proper": "Leviathan Caverns"
+    },
+    "libra lark": {
+        "dragon": "Tourmaline Dragon",
+        "proper": "Libra Lark"
+    },
+    "light up": {
+        "dragon": "Lightmatter Dragon",
+        "proper": "Light Up"
+    },
+    "lighting the rift": {
+        "dragon": "Alpenglow Dragon",
+        "proper": "Lighting the Rift"
+    },
+    "lignite night": {
+        "dragon": "Jet Dragon",
+        "proper": "Lignite Night"
+    },
+    "likely a lich": {
+        "dragon": "Ghostly Lichen Dragon",
+        "proper": "Likely a Lich"
+    },
+    "log in the fog": {
+        "dragon": "Bog Dragon",
+        "proper": "Log in the Fog"
+    },
+    "lord of the fjords": {
+        "dragon": "Verglace Dragon",
+        "proper": "Lord of the Fjords"
+    },
+    "loud and unclear": {
+        "dragon": "Quaa Dragon",
+        "proper": "Loud and Unclear"
+    },
+    "lovely cuisine": {
+        "dragon": "Nomnoter Dragon",
+        "proper": "Lovely Cuisine"
+    },
+    "lovestruck": {
+        "dragon": "Cupido Dragon",
+        "proper": "Lovestruck"
+    },
+    "luck in the muck": {
+        "dragon": "Mud Dragon",
+        "proper": "Luck in the Muck"
+    },
+    "lucky day": {
+        "dragon": "Luck Dragon",
+        "proper": "Lucky Day"
+    },
+    "lunar blues": {
+        "dragon": "Blue Moon Dragon",
+        "proper": "Lunar Blues"
+    },
+    "lunar lunacy": {
+        "dragon": "Moon Dragon",
+        "proper": "Lunar Lunacy"
+    },
+    "macabre marrow": {
+        "dragon": "Ghostly Bone Dragon",
+        "proper": "Macabre Marrow"
+    },
+    "madcap muskeg": {
+        "dragon": "Swamp Dragon",
+        "proper": "Madcap Muskeg"
+    },
+    "maelstrom": {
+        "dragon": "Liveloch Dragon",
+        "proper": "Maelstrom"
+    },
+    "magic scales": {
+        "dragon": "Margento Dragon",
+        "proper": "Magic Scales"
+    },
+    "magic scrolls": {
+        "dragon": "Scribe Dragon",
+        "proper": "Magic Scrolls"
+    },
+    "magmatism": {
+        "dragon": "Magma Dragon",
+        "proper": "Magmatism"
+    },
+    "magnet junket": {
+        "dragon": "Lodestone Dragon",
+        "proper": "Magnet Junket"
+    },
+    "make the moss of it": {
+        "dragon": "Mosser Dragon",
+        "proper": "Make the Moss of it"
+    },
+    "malediction": {
+        "dragon": "Curse Dragon",
+        "proper": "Malediction"
+    },
+    "mammu's bargain": {
+        "dragon": "Cumberpatch Dragon",
+        "proper": "Mammu's Bargain"
+    },
+    "manic antics": {
+        "dragon": "Delight Dragon",
+        "proper": "Manic Antics"
+    },
+    "map to the stars": {
+        "dragon": "Starwing Dragon",
+        "proper": "Map to the Stars"
+    },
+    "marigold moon": {
+        "dragon": "Harvest Moon Dragon",
+        "proper": "Marigold Moon"
+    },
+    "maritime mission": {
+        "dragon": "Limulimu Dragon",
+        "proper": "Maritime Mission"
+    },
+    "master key": {
+        "dragon": "Keyper Dragon",
+        "proper": "Master Key"
+    },
+    "mega metamorphosis": {
+        "dragon": "Chrysalis Dragon",
+        "proper": "Mega Metamorphosis"
+    },
+    "megastellar mission": {
+        "dragon": "Rayleian Dragon",
+        "proper": "Megastellar Mission"
+    },
+    "memories of winter": {
+        "dragon": "Reminiscence Dragon",
+        "proper": "Memories of Winter"
+    },
+    "mercurial madness": {
+        "dragon": "Quicksilver Dragon",
+        "proper": "Mercurial Madness"
+    },
+    "merry cherry": {
+        "dragon": "Cherrie Dragon",
+        "proper": "Merry Cherry"
+    },
+    "mesmeric mausoleum": {
+        "dragon": "Hypnotic Dragon",
+        "proper": "Mesmeric Mausoleum"
+    },
+    "miasma menace": {
+        "dragon": "Fog Dragon",
+        "proper": "Miasma Menace"
+    },
+    "mighty roar": {
+        "dragon": "Leonian Dragon",
+        "proper": "Mighty Roar"
+    },
+    "mind over matter": {
+        "dragon": "Psyche Dragon",
+        "proper": "Mind Over Matter"
+    },
+    "mineral mire": {
+        "dragon": "Mesolite Dragon",
+        "proper": "Mineral Mire"
+    },
+    "misadventure time": {
+        "dragon": "Misfortune Dragon",
+        "proper": "Misadventure Time"
+    },
+    "misfortune marsh": {
+        "dragon": "Clover Dragon",
+        "proper": "Misfortune Marsh"
+    },
+    "mogok mania": {
+        "dragon": "Ruby Dragon",
+        "proper": "Mogok Mania"
+    },
+    "mollusca marina": {
+        "dragon": "Conch Dragon",
+        "proper": "Mollusca Marina"
+    },
+    "molten motive": {
+        "dragon": "Lava Dragon",
+        "proper": "Molten Motive"
+    },
+    "monster mimicry": {
+        "dragon": "Faux Dragon",
+        "proper": "Monster Mimicry"
+    },
+    "moonlit garden": {
+        "dragon": "Tulip Dragon",
+        "proper": "Moonlit Garden"
+    },
+    "morbid molten motive": {
+        "dragon": "Ghostly Lava Dragon",
+        "proper": "Morbid Molten Motive"
+    },
+    "mort's moratorium": {
+        "dragon": "Stoneheart Dragon",
+        "proper": "Mort's Moratorium"
+    },
+    "mosh pit": {
+        "dragon": "Punk Dragon",
+        "proper": "Mosh Pit"
+    },
+    "murphy's ode": {
+        "dragon": "Nebula Dragon",
+        "proper": "Murphy's Ode"
+    },
+    "mystical marshmallow": {
+        "dragon": "Fluffydoodle Dragon",
+        "proper": "Mystical Marshmallow"
+    },
+    "nadia's nursery": {
+        "dragon": "Rose Dragon",
+        "proper": "Nadia's Nursery"
+    },
+    "neverblue woods": {
+        "dragon": "Evergreen Dragon",
+        "proper": "Neverblue Woods"
+    },
+    "nevermore cavern": {
+        "dragon": "Spectre Dragon",
+        "proper": "Nevermore Cavern"
+    },
+    "new year flight": {
+        "dragon": "Neoteric Dragon",
+        "proper": "New Year Flight"
+    },
+    "newsflash": {
+        "dragon": "Shadowflash Dragon",
+        "proper": "Newsflash"
+    },
+    "nib nursery": {
+        "dragon": "Cocoahollow Dragon",
+        "proper": "Nib Nursery"
+    },
+    "nice and cozy": {
+        "dragon": "Sugarmitten Dragon",
+        "proper": "Nice and Cozy"
+    },
+    "night flight": {
+        "dragon": "Nightbloom Dragon",
+        "proper": "Night Flight"
+    },
+    "nimble narrows": {
+        "dragon": "Nimbus Dragon",
+        "proper": "Nimble Narrows"
+    },
+    "no salt here": {
+        "dragon": "Saccharine Dragon",
+        "proper": "No Salt Here"
+    },
+    "noble peril": {
+        "dragon": "Palladium Dragon",
+        "proper": "Noble Peril"
+    },
+    "noisy neighbour": {
+        "dragon": "Malefice Dragon",
+        "proper": "Noisy Neighbour"
+    },
+    "nope rope": {
+        "dragon": "Funis Dragon",
+        "proper": "Nope Rope"
+    },
+    "nor'easter beaster": {
+        "dragon": "Regift Dragon",
+        "proper": "Nor'easter Beaster"
+    },
+    "nori cove": {
+        "dragon": "Seaweed Dragon",
+        "proper": "Nori Cove"
+    },
+    "northern chills": {
+        "dragon": "Arctic Dragon",
+        "proper": "Northern Chills"
+    },
+    "not a grump nor a heel": {
+        "dragon": "Burglehoo Dragon",
+        "proper": "Not a Grump Nor a Heel"
+    },
+    "noxious nuzzles": {
+        "dragon": "Okenite Dragon",
+        "proper": "Noxious Nuzzles"
+    },
+    "oasis to-go": {
+        "dragon": "Oasian Dragon",
+        "proper": "Oasis To-Go"
+    },
+    "oceanic portals": {
+        "dragon": "Water Rift Dragon",
+        "proper": "Oceanic Portals"
+    },
+    "odin's pride": {
+        "dragon": "Sparkles Dragon",
+        "proper": "Odin's Pride"
+    },
+    "oh shiny": {
+        "dragon": "Aurum Dragon",
+        "proper": "Oh Shiny"
+    },
+    "olivine's ordeal": {
+        "dragon": "Peridot Dragon",
+        "proper": "Olivine's Ordeal"
+    },
+    "olympian struggle": {
+        "dragon": "Bronze Olympus Dragon",
+        "proper": "Olympian Struggle"
+    },
+    "ominous wishes": {
+        "dragon": "Efreet Dragon",
+        "proper": "Ominous Wishes"
+    },
+    "on the rocks": {
+        "dragon": "Construct Dragon",
+        "proper": "On The Rocks"
+    },
+    "once and floral": {
+        "dragon": "Floristry Dragon",
+        "proper": "Once and Floral"
+    },
+    "one for all": {
+        "dragon": "Bastion Dragon",
+        "proper": "One For All"
+    },
+    "one prickly pear": {
+        "dragon": "Razortail Dragon",
+        "proper": "One Prickly Pear"
+    },
+    "one shell of a dragon": {
+        "dragon": "Crackle Dragon",
+        "proper": "One Shell of a Dragon"
+    },
+    "opalescent operation": {
+        "dragon": "Opal Dragon",
+        "proper": "Opalescent Operation"
+    },
+    "out of spite": {
+        "dragon": "Spite Dragon",
+        "proper": "Out of Spite"
+    },
+    "overly attached": {
+        "dragon": "Smitten Dragon",
+        "proper": "Overly Attached"
+    },
+    "painted hills": {
+        "dragon": "Spritely Dragon",
+        "proper": "Painted Hills"
+    },
+    "paired pulsars": {
+        "dragon": "Bizurian Dragon",
+        "proper": "Paired Pulsars"
+    },
+    "palagos islands": {
+        "dragon": "Frostfire Dragon",
+        "proper": "Palagos Islands"
+    },
+    "pan galactic gargle": {
+        "dragon": "Arcturian Dragon",
+        "proper": "Pan Galactic Gargle"
+    },
+    "pancake plunder": {
+        "dragon": "Nether Dragon",
+        "proper": "Pancake Plunder"
+    },
+    "pandora's box": {
+        "dragon": "Ghostly Trinket Dragon",
+        "proper": "Pandora's Box"
+    },
+    "paradise palisade": {
+        "dragon": "Halo Dragon",
+        "proper": "Paradise Palisade"
+    },
+    "partner in crime": {
+        "dragon": "Entwined Dragon",
+        "proper": "Partner In Crime"
+    },
+    "partners in magic": {
+        "dragon": "Prestina Dragon",
+        "proper": "Partners in Magic"
+    },
+    "passage of prophecy": {
+        "dragon": "Oracle Dragon",
+        "proper": "Passage of Prophecy"
+    },
+    "pearlescent": {
+        "dragon": "Nacre Dragon",
+        "proper": "Pearlescent"
+    },
+    "penalty claws": {
+        "dragon": "Shaper Dragon",
+        "proper": "Penalty Claws"
+    },
+    "perfectly balanced": {
+        "dragon": "Brizoni Dragon",
+        "proper": "Perfectly Balanced"
+    },
+    "pet teacher": {
+        "dragon": "Professo Dragon",
+        "proper": "Pet Teacher"
+    },
+    "phantasm adrift": {
+        "dragon": "Ghast Dragon",
+        "proper": "Phantasm Adrift"
+    },
+    "phantasm chasm": {
+        "dragon": "Mirage Dragon",
+        "proper": "Phantasm Chasm"
+    },
+    "philosopher's dragon": {
+        "dragon": "Pond Dragon",
+        "proper": "Philosopher's Dragon"
+    },
+    "phoenix edict": {
+        "dragon": "Ash Dragon",
+        "proper": "Phoenix Edict"
+    },
+    "photosynthetic folly": {
+        "dragon": "Leaf Dragon",
+        "proper": "Photosynthetic Folly"
+    },
+    "pi roh's paradise": {
+        "dragon": "Blazing Gale Dragon",
+        "proper": "Pi Roh's Paradise"
+    },
+    "picnic time": {
+        "dragon": "Pouke Dragon",
+        "proper": "Picnic Time"
+    },
+    "pillar of autumn": {
+        "dragon": "Fomhar Dragon",
+        "proper": "Pillar of Autumn"
+    },
+    "pincer power": {
+        "dragon": "Antumbra Dragon",
+        "proper": "Pincer Power"
+    },
+    "plaaaaaaaaains": {
+        "dragon": "Zombie Dragon",
+        "proper": "Plaaaaaaaaains"
+    },
+    "plate the game": {
+        "dragon": "Plate Dragon",
+        "proper": "Plate The Game"
+    },
+    "plot twist": {
+        "dragon": "Prestige Dragon",
+        "proper": "Plot Twist"
+    },
+    "plunder strike": {
+        "dragon": "Thunder Dragon",
+        "proper": "Plunder Strike"
+    },
+    "plunder thunder": {
+        "dragon": "Loot Dragon",
+        "proper": "Plunder Thunder"
+    },
+    "polaris plummet": {
+        "dragon": "Polarian Dragon",
+        "proper": "Polaris Plummet"
+    },
+    "poltergeist heist": {
+        "dragon": "Ghost Dragon",
+        "proper": "Poltergeist Heist"
+    },
+    "poltergeist pine": {
+        "dragon": "Ghostly Evergreen Dragon",
+        "proper": "Poltergeist Pine"
+    },
+    "polyhue palms": {
+        "dragon": "Rainbow Dragon",
+        "proper": "Polyhue Palms"
+    },
+    "port enthusiast": {
+        "dragon": "Aperture Dragon",
+        "proper": "Port Enthusiast"
+    },
+    "posh and glamorous": {
+        "dragon": "Poshwing Dragon",
+        "proper": "Posh and Glamorous"
+    },
+    "post pumpermelon": {
+        "dragon": "Melovine Dragon",
+        "proper": "Post Pumpermelon"
+    },
+    "power overwhelming": {
+        "dragon": "Abraxas Dragon",
+        "proper": "Power Overwhelming"
+    },
+    "powerful mojo": {
+        "dragon": "Greymatter Dragon",
+        "proper": "Powerful Mojo"
+    },
+    "powerful presence": {
+        "dragon": "Hyperion Dragon",
+        "proper": "Powerful Presence"
+    },
+    "preserved in time": {
+        "dragon": "Lyuba Dragon",
+        "proper": "Preserved In Time"
+    },
+    "pretty power": {
+        "dragon": "Pearlescent Dragon",
+        "proper": "Pretty Power"
+    },
+    "prophetic pursuit": {
+        "dragon": "Apocalypse Dragon",
+        "proper": "Prophetic Pursuit"
+    },
+    "prowess immeasurable": {
+        "dragon": "Solarflare Dragon",
+        "proper": "Prowess Immeasurable"
+    },
+    "pumpermelon imposter": {
+        "dragon": "Plumpkin Dragon",
+        "proper": "Pumpermelon Imposter"
+    },
+    "pumpermelon pull": {
+        "dragon": "Ironwrought Dragon",
+        "proper": "Pumpermelon Pull"
+    },
+    "pumping metal": {
+        "dragon": "Lunk Dragon",
+        "proper": "Pumping Metal"
+    },
+    "pumpkin patch": {
+        "dragon": "Gourd Dragon",
+        "proper": "Pumpkin Patch"
+    },
+    "pupolar": {
+        "dragon": "Snowdrop Dragon",
+        "proper": "Pupolar"
+    },
+    "purple royale": {
+        "dragon": "Aubergine Dragon",
+        "proper": "Purple Royale"
+    },
+    "pursuit of love": {
+        "dragon": "Pricklefluff Dragon",
+        "proper": "Pursuit of Love"
+    },
+    "putrid plunge": {
+        "dragon": "Sulfur Dragon",
+        "proper": "Putrid Plunge"
+    },
+    "questionable heights": {
+        "dragon": "Air Rift Dragon",
+        "proper": "Questionable Heights"
+    },
+    "quite the appetite": {
+        "dragon": "Gulletail Dragon",
+        "proper": "Quite the Appetite"
+    },
+    "raining presents": {
+        "dragon": "Jamjam Dragon",
+        "proper": "Raining Presents"
+    },
+    "ray of rage": {
+        "dragon": "Gamma Dragon",
+        "proper": "Ray of Rage"
+    },
+    "razor ramble": {
+        "dragon": "Bramble Dragon",
+        "proper": "Razor Ramble"
+    },
+    "reaching for the scarlet moon": {
+        "dragon": "Iden Dragon",
+        "proper": "Reaching For The Scarlet Moon"
+    },
+    "reef research": {
+        "dragon": "Humuhumu Dragon",
+        "proper": "Reef Research"
+    },
+    "refraction extraction": {
+        "dragon": "Bismuth Dragon",
+        "proper": "Refraction Extraction"
+    },
+    "remember november": {
+        "dragon": "Topaz Dragon",
+        "proper": "Remember November"
+    },
+    "resolute ritual": {
+        "dragon": "Hakahaka Dragon",
+        "proper": "Resolute Ritual"
+    },
+    "retrieve & retreat": {
+        "dragon": "Labradorite Dragon",
+        "proper": "Retrieve & Retreat"
+    },
+    "reverie quarry": {
+        "dragon": "Daydream Dragon",
+        "proper": "Reverie Quarry"
+    },
+    "ribgate": {
+        "dragon": "Dortal Dragon",
+        "proper": "Ribgate"
+    },
+    "riddle rabble": {
+        "dragon": "Iron Blossom Dragon",
+        "proper": "Riddle Rabble"
+    },
+    "ride eternal": {
+        "dragon": "Chrome Dragon",
+        "proper": "Ride Eternal"
+    },
+    "riff master": {
+        "dragon": "Heavy Metal Dragon",
+        "proper": "Riff Master"
+    },
+    "rift fire mire": {
+        "dragon": "Promethium Dragon",
+        "proper": "Rift Fire Mire"
+    },
+    "rift innovations": {
+        "dragon": "Plant Rift Dragon",
+        "proper": "Rift Innovations"
+    },
+    "righteous relaxation": {
+        "dragon": "Frond Dragon",
+        "proper": "Righteous Relaxation"
+    },
+    "ringing wrangle": {
+        "dragon": "Jingle Dragon",
+        "proper": "Ringing Wrangle"
+    },
+    "riptide rush": {
+        "dragon": "Manomano Dragon",
+        "proper": "Riptide Rush"
+    },
+    "robotics": {
+        "dragon": "Machina Dragon",
+        "proper": "Robotics"
+    },
+    "rock the boat": {
+        "dragon": "Euryale Dragon",
+        "proper": "Rock the Boat"
+    },
+    "rocky horror tincture show": {
+        "dragon": "Ghostly Poison Dragon",
+        "proper": "Rocky Horror Tincture Show"
+    },
+    "roll for initiative": {
+        "dragon": "Exandrew Dragon",
+        "proper": "Roll for Initiative"
+    },
+    "rolling and rollicking": {
+        "dragon": "Sprite Dragon",
+        "proper": "Rolling and Rollicking"
+    },
+    "rolling in the waves": {
+        "dragon": "Spinky Dragon",
+        "proper": "Rolling in the Waves"
+    },
+    "rootmoot": {
+        "dragon": "Tree Dragon",
+        "proper": "Rootmoot"
+    },
+    "rorrim rock": {
+        "dragon": "Mirror Dragon",
+        "proper": "Rorrim Rock"
+    },
+    "rosa rubiginosa": {
+        "dragon": "Divi Dragon",
+        "proper": "Rosa Rubiginosa"
+    },
+    "royal presence": {
+        "dragon": "Orlena Dragon",
+        "proper": "Royal Presence"
+    },
+    "rudna's rollick": {
+        "dragon": "Silver Dragon",
+        "proper": "Rudna's Rollick"
+    },
+    "ruins of war": {
+        "dragon": "Barbarous Dragon",
+        "proper": "Ruins of War"
+    },
+    "run through the vines": {
+        "dragon": "Woodvine Dragon",
+        "proper": "Run Through the Vines"
+    },
+    "runic river": {
+        "dragon": "Stygian Dragon",
+        "proper": "Runic River"
+    },
+    "sail the high seas": {
+        "dragon": "Yarr Dragon",
+        "proper": "Sail The High Seas"
+    },
+    "sandakloz's surprise": {
+        "dragon": "Reindeer Dragon",
+        "proper": "Sandakloz's Surprise"
+    },
+    "sandara's sojourn": {
+        "dragon": "Sand Dragon",
+        "proper": "Sandara's Sojourn"
+    },
+    "sandy canyon": {
+        "dragon": "Quicksand Dragon",
+        "proper": "Sandy Canyon"
+    },
+    "sandy peaks": {
+        "dragon": "Alayzem Dragon",
+        "proper": "Sandy Peaks"
+    },
+    "scalding stretch": {
+        "dragon": "Scorch Dragon",
+        "proper": "Scalding Stretch"
+    },
+    "scaredy cave": {
+        "dragon": "Voltaic Dragon",
+        "proper": "Scaredy Cave"
+    },
+    "scarlet sprint": {
+        "dragon": "Flash Dragon",
+        "proper": "Scarlet Sprint"
+    },
+    "scene maker": {
+        "dragon": "Vibe Dragon",
+        "proper": "Scene Maker"
+    },
+    "scorched ice": {
+        "dragon": "Blue Fire Dragon",
+        "proper": "Scorched Ice"
+    },
+    "sea you later": {
+        "dragon": "Mylio Dragon",
+        "proper": "Sea You Later"
+    },
+    "seaside shellslide": {
+        "dragon": "Honuhonu Dragon",
+        "proper": "Seaside Shellslide"
+    },
+    "sediment impediment": {
+        "dragon": "Geode Dragon",
+        "proper": "Sediment Impediment"
+    },
+    "seeking thrills": {
+        "dragon": "Corsair Dragon",
+        "proper": "Seeking Thrills"
+    },
+    "seismic trick": {
+        "dragon": "Quake Dragon",
+        "proper": "Seismic Trick"
+    },
+    "serpent of the sea": {
+        "dragon": "Valeodon Dragon",
+        "proper": "Serpent of the Sea"
+    },
+    "serpentine point": {
+        "dragon": "Ragnarok Dragon",
+        "proper": "Serpentine Point"
+    },
+    "setse sighting": {
+        "dragon": "Shining Dragon",
+        "proper": "Setse Sighting"
+    },
+    "shaded shelter": {
+        "dragon": "Sunscorch Dragon",
+        "proper": "Shaded Shelter"
+    },
+    "shadowy visitor": {
+        "dragon": "Kage Dragon",
+        "proper": "Shadowy Visitor"
+    },
+    "sharp insights": {
+        "dragon": "Tusk Dragon",
+        "proper": "Sharp Insights"
+    },
+    "sharply appointed": {
+        "dragon": "Rhinotorch Dragon",
+        "proper": "Sharply Appointed"
+    },
+    "shell scheme": {
+        "dragon": "Ovalith Dragon",
+        "proper": "Shell Scheme"
+    },
+    "shi nee's saga": {
+        "dragon": "Molten Dragon",
+        "proper": "Shi Nee's Saga"
+    },
+    "shimmering slough": {
+        "dragon": "Pearl Dragon",
+        "proper": "Shimmering Slough"
+    },
+    "shine on": {
+        "dragon": "Starshine Dragon",
+        "proper": "Shine On"
+    },
+    "shiny start": {
+        "dragon": "Plumewing Dragon",
+        "proper": "Shiny Start"
+    },
+    "shock and aww": {
+        "dragon": "Surprise Dragon",
+        "proper": "Shock and Aww"
+    },
+    "shock rock": {
+        "dragon": "Spark Dragon",
+        "proper": "Shock Rock"
+    },
+    "shocked and rattled": {
+        "dragon": "Shockproof Dragon",
+        "proper": "Shocked and Rattled"
+    },
+    "shocked and shaken": {
+        "dragon": "Bouldershock Dragon",
+        "proper": "Shocked and Shaken"
+    },
+    "shrouded in mystery": {
+        "dragon": "Eldritch Dragon",
+        "proper": "Shrouded in Mystery"
+    },
+    "sickengen's den": {
+        "dragon": "Platinum Dragon",
+        "proper": "Sickengen's Den"
+    },
+    "sights unseen": {
+        "dragon": "Cyclops Dragon",
+        "proper": "Sights Unseen"
+    },
+    "silica valley": {
+        "dragon": "Glass Dragon",
+        "proper": "Silica Valley"
+    },
+    "silverfalls gorge": {
+        "dragon": "Eve Dragon",
+        "proper": "Silverfalls Gorge"
+    },
+    "silvery peaks": {
+        "dragon": "Silver Olympus Dragon",
+        "proper": "Silvery Peaks"
+    },
+    "six-fingered lake": {
+        "dragon": "Bogberry Dragon",
+        "proper": "Six-Fingered Lake"
+    },
+    "skeletal pedestal": {
+        "dragon": "Bone Dragon",
+        "proper": "Skeletal Pedestal"
+    },
+    "sleigh ride": {
+        "dragon": "Ornamental Dragon",
+        "proper": "Sleigh Ride"
+    },
+    "slippery companion": {
+        "dragon": "Enfis Dragon",
+        "proper": "Slippery Companion"
+    },
+    "slither hither": {
+        "dragon": "Kann Dragon",
+        "proper": "Slither Hither"
+    },
+    "slow & steady": {
+        "dragon": "Snapper Dragon",
+        "proper": "Slow & Steady"
+    },
+    "slow show": {
+        "dragon": "Grove Dragon",
+        "proper": "Slow Show"
+    },
+    "slow-moving summit": {
+        "dragon": "Plateau Dragon",
+        "proper": "Slow-Moving Summit"
+    },
+    "smash valley": {
+        "dragon": "Malachite Dragon",
+        "proper": "Smash Valley"
+    },
+    "smithy snafu": {
+        "dragon": "Forge Dragon",
+        "proper": "Smithy Snafu"
+    },
+    "smog bog": {
+        "dragon": "Miasma Dragon",
+        "proper": "Smog Bog"
+    },
+    "smoke on the boulder": {
+        "dragon": "Smolder Dragon",
+        "proper": "Smoke on the Boulder"
+    },
+    "snap back": {
+        "dragon": "Crawler Dragon",
+        "proper": "Snap Back"
+    },
+    "snap back to reality": {
+        "dragon": "Mesmer Dragon",
+        "proper": "Snap Back to Reality"
+    },
+    "snooze no more": {
+        "dragon": "Snooz Dragon",
+        "proper": "Snooze No More"
+    },
+    "snoring": {
+        "dragon": "Lullaby Dragon",
+        "proper": "Snoring"
+    },
+    "snow day": {
+        "dragon": "Thundersnow Dragon",
+        "proper": "Snow Day"
+    },
+    "snow pawtrol": {
+        "dragon": "Snopaw Dragon",
+        "proper": "Snow Pawtrol"
+    },
+    "snowdrift dive": {
+        "dragon": "Snowbrush Dragon",
+        "proper": "Snowdrift Dive"
+    },
+    "soaring heights": {
+        "dragon": "Seraph Dragon",
+        "proper": "Soaring Heights"
+    },
+    "sol strike": {
+        "dragon": "Sunstruck Dragon",
+        "proper": "Sol Strike"
+    },
+    "solar controller": {
+        "dragon": "Sun Dragon",
+        "proper": "Solar Controller"
+    },
+    "solar power": {
+        "dragon": "Nubis Dragon",
+        "proper": "Solar Power"
+    },
+    "solo summit": {
+        "dragon": "Mountain Dragon",
+        "proper": "Solo Summit"
+    },
+    "something catchy": {
+        "dragon": "Angler Dragon",
+        "proper": "Something Catchy"
+    },
+    "song of the siren": {
+        "dragon": "Alure Dragon",
+        "proper": "Song Of The Siren"
+    },
+    "sonoluminescence": {
+        "dragon": "Spectrapod Dragon",
+        "proper": "Sonoluminescence"
+    },
+    "soothing waters": {
+        "dragon": "Infernus Dragon",
+        "proper": "Soothing Waters"
+    },
+    "spark in the dark": {
+        "dragon": "Hidden Bolt Dragon",
+        "proper": "Spark in the Dark"
+    },
+    "sparkflow connection": {
+        "dragon": "Current Dragon",
+        "proper": "Sparkflow Connection"
+    },
+    "sparkle startle": {
+        "dragon": "Glitz Dragon",
+        "proper": "Sparkle Startle"
+    },
+    "speckled spelunking": {
+        "dragon": "Jasper Dragon",
+        "proper": "Speckled Spelunking"
+    },
+    "spectral spruce": {
+        "dragon": "Ghostly Tree Dragon",
+        "proper": "Spectral Spruce"
+    },
+    "speedy sense": {
+        "dragon": "Dash Dragon",
+        "proper": "Speedy Sense"
+    },
+    "spikey": {
+        "dragon": "Pikeleaf Dragon",
+        "proper": "Spikey"
+    },
+    "spiky spire brier": {
+        "dragon": "Thorn Dragon",
+        "proper": "Spiky Spire Brier"
+    },
+    "spiraling storm": {
+        "dragon": "Vortex Dragon",
+        "proper": "Spiraling Storm"
+    },
+    "splash zone": {
+        "dragon": "Jumpiplop Dragon",
+        "proper": "Splash Zone"
+    },
+    "splish splash": {
+        "dragon": "Aquarian Dragon",
+        "proper": "Splish Splash"
+    },
+    "spring bringer": {
+        "dragon": "Pixie Dragon",
+        "proper": "Spring bringer"
+    },
+    "spring to action": {
+        "dragon": "Bumi Dragon",
+        "proper": "Spring to Action"
+    },
+    "squall shoal": {
+        "dragon": "Storm Dragon",
+        "proper": "Squall Shoal"
+    },
+    "squash": {
+        "dragon": "Squish Dragon",
+        "proper": "Squash"
+    },
+    "sssensational sojourn": {
+        "dragon": "Hooded Dragon",
+        "proper": "Sssensational Sojourn"
+    },
+    "stainless stained glass": {
+        "dragon": "Murano Dragon",
+        "proper": "Stainless Stained Glass"
+    },
+    "standing egg rock": {
+        "dragon": "Stoneshell Dragon",
+        "proper": "Standing Egg Rock"
+    },
+    "star bright": {
+        "dragon": "Starlight Dragon",
+        "proper": "Star Bright"
+    },
+    "star shower": {
+        "dragon": "Meteor Dragon",
+        "proper": "Star Shower"
+    },
+    "starboard bound": {
+        "dragon": "Knarr Dragon",
+        "proper": "Starboard Bound"
+    },
+    "starborn": {
+        "dragon": "Lambovian Dragon",
+        "proper": "Starborn"
+    },
+    "starchy goodness": {
+        "dragon": "Bloatato Dragon",
+        "proper": "Starchy Goodness"
+    },
+    "stark strength": {
+        "dragon": "Armament Dragon",
+        "proper": "Stark Strength"
+    },
+    "stark tundra": {
+        "dragon": "Winter Dragon",
+        "proper": "Stark Tundra"
+    },
+    "stater's stash": {
+        "dragon": "Electrum Dragon",
+        "proper": "Stater's Stash"
+    },
+    "stay frosty": {
+        "dragon": "Everfrost Dragon",
+        "proper": "Stay Frosty"
+    },
+    "stay lit": {
+        "dragon": "Solis Dragon",
+        "proper": "Stay Lit"
+    },
+    "staying vigilant": {
+        "dragon": "Standstone Dragon",
+        "proper": "Staying Vigilant"
+    },
+    "stellar core": {
+        "dragon": "Eridanian Dragon",
+        "proper": "Stellar Core"
+    },
+    "stellar phenomcyon": {
+        "dragon": "Procyon Dragon",
+        "proper": "Stellar Phenomcyon"
+    },
+    "stones of surya": {
+        "dragon": "Solstice Dragon",
+        "proper": "Stones of Surya"
+    },
+    "stonewall": {
+        "dragon": "Fortified Dragon",
+        "proper": "Stonewall"
+    },
+    "strawberry nice": {
+        "dragon": "Ichigo Dragon",
+        "proper": "Strawberry Nice"
+    },
+    "streaming & gleaming": {
+        "dragon": "Ribbon Dragon",
+        "proper": "Streaming & Gleaming"
+    },
+    "strongest of potions": {
+        "dragon": "Lovesick Dragon",
+        "proper": "Strongest of Potions"
+    },
+    "submerged": {
+        "dragon": "Waterwalker Dragon",
+        "proper": "Submerged"
+    },
+    "sudsy shores": {
+        "dragon": "Bubble Dragon",
+        "proper": "Sudsy Shores"
+    },
+    "summit scare": {
+        "dragon": "Ghostly Mountain Dragon",
+        "proper": "Summit Scare"
+    },
+    "sun salute": {
+        "dragon": "Dawnbringer Dragon",
+        "proper": "Sun Salute"
+    },
+    "sunshine soirée": {
+        "dragon": "Summer Dragon",
+        "proper": "Sunshine Soirée"
+    },
+    "surveil the vale": {
+        "dragon": "Outrider Dragon",
+        "proper": "Surveil the Vale"
+    },
+    "swamps of sadness": {
+        "dragon": "Melancholy Dragon",
+        "proper": "Swamps of Sadness"
+    },
+    "swift sweeper": {
+        "dragon": "Chimneypuff Dragon",
+        "proper": "Swift Sweeper"
+    },
+    "swimming in the ocean": {
+        "dragon": "Neyvee Dragon",
+        "proper": "Swimming In The Ocean"
+    },
+    "swish swoosh": {
+        "dragon": "Smigi Dragon",
+        "proper": "Swish Swoosh"
+    },
+    "sykie meadows": {
+        "dragon": "Butterfly Dragon",
+        "proper": "Sykie Meadows"
+    },
+    "synergy": {
+        "dragon": "Geminian Dragon",
+        "proper": "Synergy"
+    },
+    "systematic muncher": {
+        "dragon": "Chomp Dragon",
+        "proper": "Systematic Muncher"
+    },
+    "t. erra's plea": {
+        "dragon": "Subterranean Dragon",
+        "proper": "T. Erra's Plea"
+    },
+    "tales of icebrand": {
+        "dragon": "Kotun Dragon",
+        "proper": "Tales of Icebrand"
+    },
+    "tangled web": {
+        "dragon": "Weaver Dragon",
+        "proper": "Tangled Web"
+    },
+    "tears of joy": {
+        "dragon": "Vidalia Dragon",
+        "proper": "Tears of Joy"
+    },
+    "tectonica toil": {
+        "dragon": "Sandstorm Dragon",
+        "proper": "Tectonica Toil"
+    },
+    "ten score trench": {
+        "dragon": "Bicentennial Dragon",
+        "proper": "Ten Score Trench"
+    },
+    "ten tacles": {
+        "dragon": "Tickles Dragon",
+        "proper": "Ten Tacles"
+    },
+    "ten tins": {
+        "dragon": "Tien Dragon",
+        "proper": "Ten Tins"
+    },
+    "tenacious drop": {
+        "dragon": "Metal Rift Dragon",
+        "proper": "Tenacious Drop"
+    },
+    "tentacle terrace": {
+        "dragon": "Snowsquall Dragon",
+        "proper": "Tentacle Terrace"
+    },
+    "tentacle tickle": {
+        "dragon": "Ikatako Dragon",
+        "proper": "Tentacle Tickle"
+    },
+    "terrorize": {
+        "dragon": "Scorpionian Dragon",
+        "proper": "Terrorize"
+    },
+    "tessa's trek": {
+        "dragon": "Ironwood Dragon",
+        "proper": "Tessa's Trek"
+    },
+    "textile test": {
+        "dragon": "Cotton Dragon",
+        "proper": "Textile Test"
+    },
+    "the 5th precipice": {
+        "dragon": "Wyrmwood Dragon",
+        "proper": "The 5th Precipice"
+    },
+    "the awakening": {
+        "dragon": "Dawn Dragon",
+        "proper": "The Awakening"
+    },
+    "the barragening": {
+        "dragon": "Hail Dragon",
+        "proper": "The Barragening"
+    },
+    "the bolts of faridat": {
+        "dragon": "Darkling Dragon",
+        "proper": "The Bolts of Faridat"
+    },
+    "the boneyard": {
+        "dragon": "Osteryx Dragon",
+        "proper": "The Boneyard"
+    },
+    "the bulls": {
+        "dragon": "Taurian Dragon",
+        "proper": "The Bulls"
+    },
+    "the composer": {
+        "dragon": "Classical Dragon",
+        "proper": "The Composer"
+    },
+    "the fall": {
+        "dragon": "Autumn Dragon",
+        "proper": "The Fall"
+    },
+    "the fattening": {
+        "dragon": "Feast Dragon",
+        "proper": "The Fattening"
+    },
+    "the floe beyond": {
+        "dragon": "Ghostly Glacier Dragon",
+        "proper": "The Floe Beyond"
+    },
+    "the great sneeze": {
+        "dragon": "Epoch Dragon",
+        "proper": "The Great Sneeze"
+    },
+    "the haunting of wrothmoore": {
+        "dragon": "Ghostly Obsidian Dragon",
+        "proper": "The Haunting of Wrothmoore"
+    },
+    "the life of the party": {
+        "dragon": "Hanno Dragon",
+        "proper": "The Life of the Party"
+    },
+    "the living stone": {
+        "dragon": "Spellmason Dragon",
+        "proper": "The Living Stone"
+    },
+    "the mark of wrothmoore": {
+        "dragon": "Obsidian Dragon",
+        "proper": "The Mark of Wrothmoore"
+    },
+    "the muffin man": {
+        "dragon": "Toboggan Dragon",
+        "proper": "The Muffin Man"
+    },
+    "the other side": {
+        "dragon": "Smoke Dragon",
+        "proper": "The Other Side"
+    },
+    "the perfect caregiver": {
+        "dragon": "Florea Dragon",
+        "proper": "The Perfect Caregiver"
+    },
+    "the perfect gift": {
+        "dragon": "Giddle Dragon",
+        "proper": "The Perfect Gift"
+    },
+    "the sedna mountains": {
+        "dragon": "Emerald Dragon",
+        "proper": "The Sedna Mountains"
+    },
+    "the shear size": {
+        "dragon": "Puffles Dragon",
+        "proper": "The Shear Size"
+    },
+    "the skies of faridat": {
+        "dragon": "Kite Dragon",
+        "proper": "The Skies of Faridat"
+    },
+    "the sky's not the limit": {
+        "dragon": "Stella Dragon",
+        "proper": "The Sky's Not the Limit"
+    },
+    "the snugglening": {
+        "dragon": "Cuddlewing Dragon",
+        "proper": "The Snugglening"
+    },
+    "the springening": {
+        "dragon": "Sakura Dragon",
+        "proper": "The Springening"
+    },
+    "the sweetest scent": {
+        "dragon": "Ambrosia Dragon",
+        "proper": "The Sweetest Scent"
+    },
+    "the uncertainty antithesis": {
+        "dragon": "Ignite Dragon",
+        "proper": "The Uncertainty Antithesis"
+    },
+    "the wall of shades": {
+        "dragon": "Shadow Dragon",
+        "proper": "The Wall of Shades"
+    },
+    "the warmth of cheer": {
+        "dragon": "Candlecrown Dragon",
+        "proper": "The Warmth of Cheer"
+    },
+    "the wise way": {
+        "dragon": "Gildamane Dragon",
+        "proper": "The Wise Way"
+    },
+    "the witching hour": {
+        "dragon": "Midnight Dragon",
+        "proper": "The Witching Hour"
+    },
+    "thermodynamic panic": {
+        "dragon": "Heat Dragon",
+        "proper": "Thermodynamic Panic"
+    },
+    "they like to throw things": {
+        "dragon": "Yeti Dragon",
+        "proper": "They Like To Throw Things"
+    },
+    "third leap year": {
+        "dragon": "Triple Leap Year Dragon",
+        "proper": "Third Leap Year"
+    },
+    "thistlethumb dig": {
+        "dragon": "Mistletoe Dragon",
+        "proper": "Thistlethumb Dig"
+    },
+    "thousand acre woods": {
+        "dragon": "Honeyglow Dragon",
+        "proper": "Thousand Acre Woods"
+    },
+    "tides of winter tidings": {
+        "dragon": "Yule Dragon",
+        "proper": "Tides of Winter Tidings"
+    },
+    "time to send a letter": {
+        "dragon": "Gryphus Dragon",
+        "proper": "Time to Send a Letter"
+    },
+    "time to shred": {
+        "dragon": "Thrasher Dragon",
+        "proper": "Time to Shred"
+    },
+    "timeless tail": {
+        "dragon": "Blightwing Dragon",
+        "proper": "Timeless Tail"
+    },
+    "tis but a scratch": {
+        "dragon": "Darkarm Dragon",
+        "proper": "Tis but a Scratch"
+    },
+    "tomb of kings": {
+        "dragon": "Pharaoh Dragon",
+        "proper": "Tomb of Kings"
+    },
+    "torrential tribulation": {
+        "dragon": "Rain Dragon",
+        "proper": "Torrential Tribulation"
+    },
+    "tough egg to crack": {
+        "dragon": "Minchi Dragon",
+        "proper": "Tough Egg to Crack"
+    },
+    "tour de cyan": {
+        "dragon": "Aquamarine Dragon",
+        "proper": "Tour de Cyan"
+    },
+    "tower of tantalia": {
+        "dragon": "Nectar Dragon",
+        "proper": "Tower of Tantalia"
+    },
+    "toxic trouble": {
+        "dragon": "Poison Dragon",
+        "proper": "Toxic Trouble"
+    },
+    "traditional patterns": {
+        "dragon": "Tebori Dragon",
+        "proper": "Traditional Patterns"
+    },
+    "trail of regale": {
+        "dragon": "Regal Dragon",
+        "proper": "Trail of Regale"
+    },
+    "tran-quill-ity": {
+        "dragon": "Tranquil Dragon",
+        "proper": "Tran-quill-ity"
+    },
+    "transcendent traversal": {
+        "dragon": "Lotus Dragon",
+        "proper": "Transcendent Traversal"
+    },
+    "treehop time": {
+        "dragon": "Flowerhop Dragon",
+        "proper": "Treehop Time"
+    },
+    "triad trench": {
+        "dragon": "Fates Dragon",
+        "proper": "Triad Trench"
+    },
+    "trial dclvi": {
+        "dragon": "Omen Dragon",
+        "proper": "Trial DCLVI"
+    },
+    "trial of denial": {
+        "dragon": "Daffadowndilly Dragon",
+        "proper": "Trial Of Denial"
+    },
+    "tricksy trickster": {
+        "dragon": "Lokilure Dragon",
+        "proper": "Tricksy Trickster"
+    },
+    "triple axel": {
+        "dragon": "Aisa Dragon",
+        "proper": "Triple Axel"
+    },
+    "triple the fun": {
+        "dragon": "Triple Rainbow Dragon",
+        "proper": "Triple The Fun"
+    },
+    "triumph turlough": {
+        "dragon": "Victory Dragon",
+        "proper": "Triumph Turlough"
+    },
+    "true unity": {
+        "dragon": "Lovonone Dragon",
+        "proper": "True Unity"
+    },
+    "tuber trouble": {
+        "dragon": "Root Dragon",
+        "proper": "Tuber Trouble"
+    },
+    "tumbling along": {
+        "dragon": "Tumblethorn Dragon",
+        "proper": "Tumbling Along"
+    },
+    "tunnels of mashe": {
+        "dragon": "Sanguinite Dragon",
+        "proper": "Tunnels of Mashe"
+    },
+    "turning the tides": {
+        "dragon": "Tidepool Dragon",
+        "proper": "Turning the Tides"
+    },
+    "twice leapt valley": {
+        "dragon": "Double Leap Year Dragon",
+        "proper": "Twice Leapt Valley"
+    },
+    "twilight flight": {
+        "dragon": "Duskwing Dragon",
+        "proper": "Twilight Flight"
+    },
+    "twin rivalry": {
+        "dragon": "Amalgamate Dragon",
+        "proper": "Twin Rivalry"
+    },
+    "two beautiful heads": {
+        "dragon": "Grace Dragon",
+        "proper": "Two Beautiful Heads"
+    },
+    "ultramarine scene": {
+        "dragon": "Lapis Dragon",
+        "proper": "Ultramarine Scene"
+    },
+    "umbral plunge": {
+        "dragon": "Lunar Eclipse Dragon",
+        "proper": "Umbral Plunge"
+    },
+    "unbearable tunes": {
+        "dragon": "Sea Shanty Dragon",
+        "proper": "Unbearable Tunes"
+    },
+    "under orion": {
+        "dragon": "Tutan Dragon",
+        "proper": "Under Orion"
+    },
+    "under your spell": {
+        "dragon": "Mesmerus Dragon",
+        "proper": "Under Your Spell"
+    },
+    "unencumbered soar": {
+        "dragon": "Rosegold Dragon",
+        "proper": "Unencumbered Soar"
+    },
+    "visitation manifestation": {
+        "dragon": "Ghostly Spirit Dragon",
+        "proper": "Visitation Manifestation"
+    },
+    "vivid virtue": {
+        "dragon": "Violetta Dragon",
+        "proper": "Vivid Virtue"
+    },
+    "vocal victory": {
+        "dragon": "Libretto Dragon",
+        "proper": "Vocal Victory"
+    },
+    "waving specialist": {
+        "dragon": "Stage Dragon",
+        "proper": "Waving Specialist"
+    },
+    "wayward wandering": {
+        "dragon": "Spirit Dragon",
+        "proper": "Wayward Wandering"
+    },
+    "weaving through": {
+        "dragon": "Woven Dragon",
+        "proper": "Weaving Through"
+    },
+    "weeping waterfall": {
+        "dragon": "Willow Dragon",
+        "proper": "Weeping Waterfall"
+    },
+    "well of madness": {
+        "dragon": "Trimera Dragon",
+        "proper": "Well of Madness"
+    },
+    "west wind warning": {
+        "dragon": "Elysium Dragon",
+        "proper": "West Wind Warning"
+    },
+    "wet and magical": {
+        "dragon": "Aquacorn Dragon",
+        "proper": "Wet and Magical"
+    },
+    "whacky mazes": {
+        "dragon": "Bushwhack Dragon",
+        "proper": "Whacky Mazes"
+    },
+    "when life gives you limestones": {
+        "dragon": "Gatren Dragon",
+        "proper": "When Life Gives You Limestones"
+    },
+    "whiff of spring": {
+        "dragon": "Niamh Dragon",
+        "proper": "Whiff of Spring"
+    },
+    "whimsical miracle": {
+        "dragon": "Whimsical Dragon",
+        "proper": "Whimsical Miracle"
+    },
+    "whistling woods": {
+        "dragon": "Thistle Dragon",
+        "proper": "Whistling Woods"
+    },
+    "whitbee's valley": {
+        "dragon": "Nosferatu Dragon",
+        "proper": "Whitbee's Valley"
+    },
+    "whitbee's vision": {
+        "dragon": "Ghostly Nosferatu Dragon",
+        "proper": "Whitbee's Vision"
+    },
+    "who is behind the masque": {
+        "dragon": "Masque Dragon",
+        "proper": "Who Is Behind The Masque"
+    },
+    "wicked sick": {
+        "dragon": "Wick Dragon",
+        "proper": "Wicked Sick"
+    },
+    "wicked waves": {
+        "dragon": "Wavelyte Dragon",
+        "proper": "Wicked Waves"
+    },
+    "wiggleswand way": {
+        "dragon": "Tempest Dragon",
+        "proper": "Wiggleswand Way"
+    },
+    "wild side": {
+        "dragon": "Motley Dragon",
+        "proper": "Wild Side"
+    },
+    "wimbledrip's woe": {
+        "dragon": "Coldforge Dragon",
+        "proper": "Wimbledrip's Woe"
+    },
+    "windy and whirly": {
+        "dragon": "Whirlwind Dragon",
+        "proper": "Windy and Whirly"
+    },
+    "wings of love": {
+        "dragon": "Loveydovey Dragon",
+        "proper": "Wings of Love"
+    },
+    "witchitoto plains": {
+        "dragon": "Cyclone Dragon",
+        "proper": "Witchitoto Plains"
+    },
+    "wood cutter": {
+        "dragon": "Chuck Dragon",
+        "proper": "Wood Cutter"
+    },
+    "wooden way": {
+        "dragon": "Totem Dragon",
+        "proper": "Wooden Way"
+    },
+    "worse than coal...": {
+        "dragon": "Ghostly Krampus Dragon",
+        "proper": "Worse Than Coal..."
+    },
+    "wreaths wrath": {
+        "dragon": "Holly Dragon",
+        "proper": "Wreaths Wrath"
+    },
+    "writer's block bluff": {
+        "dragon": "Muse Dragon",
+        "proper": "Writer's Block Bluff"
+    },
+    "ye olde rescue": {
+        "dragon": "Kampos Dragon",
+        "proper": "Ye Olde Rescue"
+    },
+    "year of the bull": {
+        "dragon": "Teidian Dragon",
+        "proper": "Year of the Bull"
+    },
+    "year of the dragon": {
+        "dragon": "Panlong Dragon",
+        "proper": "Year of the Dragon"
+    },
+    "yellow eyed peas": {
+        "dragon": "Chikipea Dragon",
+        "proper": "Yellow Eyed Peas"
+    },
+    "yogo gulch": {
+        "dragon": "Sapphire Dragon",
+        "proper": "Yogo Gulch"
+    },
+    "you matter": {
+        "dragon": "Darkmatter Dragon",
+        "proper": "You Matter"
+    },
+    "zesty zephyr": {
+        "dragon": "Wind Dragon",
+        "proper": "Zesty Zephyr"
+    },
+    "zippity-zip-zap": {
+        "dragon": "Zipzap Dragon",
+        "proper": "Zippity-zip-zap"
+    },
+    "zombie juice diet": {
+        "dragon": "Wendigo Dragon",
+        "proper": "Zombie Juice Diet"
+    }
 }

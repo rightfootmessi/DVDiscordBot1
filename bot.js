@@ -269,8 +269,8 @@ client.on('messageCreate', async (message) => {
                 var questname = prettyString(args, " ");
                 if (!questname) message.channel.send("You must give me a quest name to look for!");
                 else {
-                    let dragon = questTable[questname.toLowerCase()];
-                    if (dragon) message.channel.send(`Use a(n) **${dragon}** to complete the quest "${questname}"`);
+                    let answer = questTable[questname.toLowerCase()];
+                    if (answer) message.channel.send(`Use a(n) **${answer.dragon}** to complete the quest "${answer.proper}"`);
                     else message.channel.send(`"${questname}" is not a recognized quest name (did you type it correctly?)`);
                 }
             }
@@ -1331,40 +1331,37 @@ roundRate = function(rawRate) {
 }
 
 loadQuests = () => {
-    // TODO FIX SCRAPER
-    questTable = JSON.parse(fs.readFileSync('questsBackup.json'));
-    console.log(`Loaded ${Object.keys(questTable).length} quests MANUALLY!`);
-    for (k in questTable) if (questTable[k].indexOf("Dragon") == -1) questTable[k] += " Dragon";
-    questsLoaded = true;
-
-	// https.get('https://dragonvale.fandom.com/wiki/Quests', (res) => {
-	// 	console.log("Received " + res.statusCode + " status code for quest request");
-	// 	var body = [];
-	// 	res.on('data', (chunk) => {
-	// 		body.push(chunk);
-	// 	}).on('end', () => {
-	// 		body = Buffer.concat(body).toString();
-	// 		const $ = cheerio.load(body);
-    //         fs.writeFileSync('questspage.html', $('body').html(), (err) => {});
-	// 		var questsTableHTML = $('#DataTables_Table_0');
-	// 		var entries = questsTableHTML.find('tbody').first();
-	// 		var numLoaded = 0;
-    //         console.log(`Found ${questsTableHTML.length} questsTableHTML entries`);
-	// 		entries.children('tr').each((i, elem) => {
-	// 			if (i > 0) {
-	// 				var qName = $(elem).children('td').eq(0).text().trim().toLowerCase();
-	// 				var qDragon = $(elem).children('td').eq(2).text().trim();
-                    
-	// 				questTable[qName] = qDragon;
-	// 				numLoaded++;
-	// 			}
-	// 		});
-	// 		console.log(numLoaded + " quests loaded!");
-	// 		questsLoaded = true;
-	// 	}).on('error', (e) => {
-	// 		console.error("An error occurred, quests could not be loaded.\nFull error:\n" + e);
-	// 	});
-	// });
+    https.get('https://dragonvale.fandom.com/wiki/Data:Quests.json?action=raw', (res) => {
+        console.log(`Received ${res.statusCode} status code for quest request`);
+        var body = [];
+        res.on('data', (chunk) => {
+            body.push(chunk);
+        }).on('end', () => {
+            questTable = {};
+            body = Buffer.concat(body).toString();
+            json = JSON.parse(body);
+            json = json.quests;
+            var numLoaded = 0;
+            for (dragon in json) {
+                numLoaded++;
+                questName = json[dragon]["Name"];
+                if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
+                questTable[questName.toLowerCase()] = {"dragon": dragon, "proper": questName};
+            }
+            console.log(`${numLoaded} quests loaded!`);
+            questsLoaded = true;
+            fs.writeFile('questsBackup.json', JSON.stringify(questTable, null, 4), err => {
+                if (err) console.log(`Error when saving quests to backup file; ${err}`);
+                else console.log(`Quests table successfully saved to backup file`);
+            });
+        });
+    }).on('error', (e) => {
+        console.log(`Error trying to fetch quests from wiki: ${e}`);
+        questTable = JSON.parse(fs.readFileSync('questsBackup.json'));
+        console.log(`Loaded ${Object.keys(questTable).length} quests MANUALLY!`);
+        for (k in questTable) if (questTable[k].dragon.indexOf("Dragon") == -1) questTable[k].dragon += " Dragon";
+        questsLoaded = true;
+    });
 }
 
 /*

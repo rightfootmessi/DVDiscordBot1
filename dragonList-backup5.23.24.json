@@ -28,6 +28,7 @@
         "Aquamarine Dragon",
         "Aquarian Dragon",
         "Arbor Dragon",
+        "Arcane Dragon",
         "Arcrider Dragon",
         "Arctic Dragon",
         "Arcturian Dragon",
@@ -47,6 +48,7 @@
         "Barbarous Dragon",
         "Barite Dragon",
         "Barkskin Dragon",
+        "Basket Dragon",
         "Bastion Dragon",
         "Bearded Dragon",
         "Begonia Dragon",
@@ -160,6 +162,7 @@
         "Dargon Dragon",
         "Dark Dragon",
         "Dark Rift Dragon",
+        "Darkarm Dragon",
         "Darkling Dragon",
         "Darkmatter Dragon",
         "Dartwing Dragon",
@@ -333,6 +336,7 @@
         "Herald Dragon",
         "Hidden Bolt Dragon",
         "Holly Dragon",
+        "Honeybrew Dragon",
         "Honeyglow Dragon",
         "Honuhonu Dragon",
         "Hooded Dragon",
@@ -372,6 +376,7 @@
         "Jadice Dragon",
         "Jamjam Dragon",
         "Jasper Dragon",
+        "Jester Dragon",
         "Jet Dragon",
         "Jetstream Dragon",
         "Jingle Dragon",
@@ -552,6 +557,7 @@
         "Plant Dragon",
         "Plant Rift Dragon",
         "Plasma Dragon",
+        "Plate Dragon",
         "Plateau Dragon",
         "Platinum Dragon",
         "Plumewing Dragon",
@@ -963,5 +969,8 @@
         "Plant Dragon",
         "Water Dragon"
     ],
-    "newDrags": []
+    "newDrags": [
+        "Arcane Dragon",
+        "Darkarm Dragon"
+    ]
 }
