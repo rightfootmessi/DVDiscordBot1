@@ -199,6 +199,10 @@
         "dragon": "Viridian Dragon",
         "proper": "Ardent Valley "
     },
+    "arglwyddes y llyn": {
+        "dragon": "Nimue Dragon",
+        "proper": "Arglwyddes y Llyn"
+    },
     "aroma therapy": {
         "dragon": "Smoulderbrush Dragon",
         "proper": "Aroma Therapy"
@@ -3110,6 +3114,10 @@
     "whacky mazes": {
         "dragon": "Bushwhack Dragon",
         "proper": "Whacky Mazes"
+    },
+    "what sword": {
+        "dragon": "Kingstone Dragon",
+        "proper": "What Sword"
     },
     "when life gives you limestones": {
         "dragon": "Gatren Dragon",

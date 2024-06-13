@@ -1,4 +1,4 @@
-const {Discord, Client, GatewayIntentBits, SnowflakeUtil} = require('discord.js');
+const {Discord, Client, GatewayIntentBits, SnowflakeUtil, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder} = require('discord.js');
 const client = new Client(
     {
         intents: [
@@ -33,7 +33,8 @@ const sprintf = require('sprintf-js').sprintf;
 
 const cmdPrefix = 'd!';
 
-const helpMsg = `Command list (prefix all commands with \`${cmdPrefix}\`):\n`
+// if odd # of cmds, give the extra to msg2 since msg1 also has the header
+const helpMsg1 = `Command list (prefix all commands with \`${cmdPrefix}\`):\n`
                 + "- `breed <dragon>` - find out how to breed a dragon\n"
 				+ "- `elements <dragon>` - get the breeding elements (aka hidden elements) of a dragon\n"
 				+ "- `evolve <dragon>` - find the evolution requirements for a dragon\n"
@@ -41,10 +42,11 @@ const helpMsg = `Command list (prefix all commands with \`${cmdPrefix}\`):\n`
                 + "- `guide [guide]` - retrieves a guide, or lists all available guides if none specified (alias: `guides`)\n"
 				+ "- `image <dragon> <adult|juvenile|baby|egg> [qualifier]` - get a PNG image of the dragon; defaults to adult if no stage specified; valid qualifiers can be listed using `d!image flags`  (aliases: `picture`, `img`, `pic`)\n"
                 + "- `odds <dragon>` - lists the breeding odds of the specified dragon in each cave, including cloning rates (aliases: `chances`, `percents`)\n"
-				+ "- `quest <quest>` - get the correct dragon to send on a quest\n"
+                + "- `parent <dragon> [normal|fast|coop|rift|runic] [noclone]` - lists the 10 breeding combinations with the highest odds of resulting in the specified dragon in the specified cave; omitting the cave argument defaults to the normal cave; add the `noclone` to exclude all combinations that involve the dragon as a parent (aliases: `parents`, `combo`)\n";
+const helpMsg2 = "- `quest <quest>` - get the correct dragon to send on a quest\n"
 				+ "- `rates <dragon> [# of boosts OR 'rift']` - get the earning rates of a dragon\n"
-                + "- `result <dragon1>,<dragon2> <d:hh:mm:ss|hh:mm:ss> [fast|runic]` - given 2 parent dragons and the resulting timer, find the potential dragons that can result from the breed. (aliases: `results`, `fakeouts`)\n"
-				+ "- `sandbox <dragon1>,<dragon2> [beb] [fast]` - open the sandbox for the specified breeding combo (alias: `dvbox`)\n"
+                + "- `result <dragon1>,<dragon2> <d:hh:mm:ss|hh:mm:ss> [normal|fast|coop|runic]` - given 2 parent dragons and the resulting timer, find the potential dragons that can result from the breed; if a cave is not specified, the normal breeding cave is assumed (aliases: `results`, `fakeouts`)\n"
+				+ "- `sandbox <dragon1>,<dragon2> [normal|fast|coop|rift|runic]` - displays all possible results of the specified breeding combo (alias: `dvbox`, `sim`, `breedsim`)\n"
 				+ "- `timer <dragon name>` - get the breeding times of the dragon\n"
                 + "- `uses <dragon name>` - get all dragons that include the specified dragon in its breeding combination\n"
 				+ "- `wiki <dragon name OR item>` - get the link to a dragon's wiki page, or displays the wiki's search results if the argument is another item\n"
@@ -94,7 +96,10 @@ cache: {
 */
 var dvboxCache = {
     normal: {},
-    fast: {}
+    upgraded: {},
+    cooperative: {},
+    rift: {},
+    runic: {}
 };
 /*
 dvboxCache: {
@@ -108,15 +113,31 @@ dvboxCache: {
     }
 }
 */
+var comboCache = {
+    clone: {
+        normal: {},
+        upgraded: {},
+        cooperative: {},
+        rift: {},
+        runic: {}
+    },
+    no_clone: {
+        normal: {},
+        upgraded: {},
+        cooperative: {},
+        rift: {},
+        runic: {}
+    }
+};
 var oddsCache = {};
 /*
 oddsCache: {
-    dragpn: string,
+    dragon: string,
     // etc.
 }
 */
 
-let worker = new Worker('./dvboxreader.js');
+// let worker = new Worker('./dvboxreader.js');
 let qotd_worker = new Worker('./qotd.js');
 
 function post_qotd(data) {
@@ -187,7 +208,7 @@ client.on('messageCreate', async (message) => {
 
         // BEGIN APRIL FOOLS CODE (UNCOMMENT IT ON APRIL 1ST, then reduce odds to 0.01 afterward)
         
-        if (Math.random() < 0.01 && !['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'pet', 'mod', 'help', 'random'].includes(cmd)) {
+        if (Math.random() < 0.01 && !['lodestoned', 'smoulderbrushed', 'smoulderbushed', 'pet', 'mod', 'help', 'random', 'aurora'].includes(cmd)) {
             let funnyGifs = [
                 'https://media.discordapp.net/attachments/626181797696503818/808742119874625598/minilodestonedpost.gif',
                 'https://cdn.discordapp.com/attachments/559733837643382794/791547901884891176/magik.gif',
@@ -200,7 +221,20 @@ client.on('messageCreate', async (message) => {
             ];
             message.channel.send(funnyGifs[Math.floor(Math.random() * funnyGifs.length)]);
             await sleep(3000);
-            let emote = ['<:dv_owobowos:803676880850780160>', '<:dv_ikastarko:870846746190831677>', '<:dv_loveheart:722966875952382002>'][Math.floor(Math.random() * 3)];
+            let emote = [
+                '<:dv_owobowos:803676880850780160>', 
+                '<:dv_ikastarko:870846746190831677>', 
+                '<:dv_loveheart:722966875952382002>', 
+                '<:dv_blazinglol:936305959104577536>', 
+                '<a:dv_dargondance:1076889334181019719>', 
+                '<a:dv_partyparrot:437051709542498306>', 
+                '<:dv_radiantgrin:1039696923457769552>', 
+                '<:dv_ruckuswink:1148974493155463178>', 
+                '<:dv_serenityface:1248792574265790616>', 
+                '<:dv_surgeswag:1129224403557822686>', 
+                '<:dv_berryhehe:894608501735817267>'
+            ];
+            emote = emote[Math.floor(Math.random() * emote.length)];
             message.channel.send(`Just kidding! Sorry about that friend ${emote}`);
             await sleep(500);
         }
@@ -230,12 +264,12 @@ client.on('messageCreate', async (message) => {
         //     if (message.channel.type != 'dm' && message.guild.name == 'DragonVale' && (message.channel.id != 626182769256693770 && message.channel.id != 818011940160405534) && message.channel.id != 276384829593878529) return; // bot-commands, oracle-test, mod-chat
         // }
 
-        if (args.includes("monolith") && !(cmd === 'result' || cmd === 'results' || cmd === 'fakeouts') && !(cmd === 'sandbox' || cmd === 'dvbox')) {
+        if (args.includes("monolith") && !(cmd === 'result' || cmd === 'results' || cmd === 'fakeouts') && !(cmd === 'sandbox' || cmd === 'dvbox' || cmd === 'sim' || cmd === 'breedsim')) {
             if (isNaN(args[args.indexOf("monolith") + 1])) {
                 message.channel.send("Your query contains a monolith dragon, but you did not specify which. Please re-enter the query using `Monolith #`, where `#` is replaced by the number of the monolith dragon.");
                 return;
             }
-        } else if (args.includes("snowflake") && !(cmd === 'result' || cmd === 'results' || cmd === 'fakeouts') && !(cmd === 'sandbox' || cmd === 'dvbox')) {
+        } else if (args.includes("snowflake") && !(cmd === 'result' || cmd === 'results' || cmd === 'fakeouts') && !(cmd === 'sandbox' || cmd === 'dvbox' || cmd === 'sim' || cmd === 'breedsim')) {
             if (isNaN(args[args.indexOf("snowflake") + 1])) {
                 message.channel.send("Your query contains a snowflake dragon, but you did not specify which. Please re-enter the query using `Snowflake #`, where `#` is replaced by the number of the snowflake dragon.");
                 return;
@@ -491,6 +525,92 @@ client.on('messageCreate', async (message) => {
                     });
                 }
             }
+        } else if (cmd === 'parent' || cmd === 'parents' || cmd === 'combo') {
+            if (cmdInWrongChannel(message)) return;
+            if (args.length == 0) {
+                message.channel.send("You must specify a dragon!");
+                return;
+            }
+            var cave = 'normal';
+            var last = args.pop();
+            var includeClone = true;
+            if (last === 'noclone') {
+                includeClone = false;
+                last = args.pop();
+            }
+            if (['normal', 'fast', 'coop', 'social', 'cooperative', 'rift', 'runic'].includes(last)) cave = last;
+            else args.push(last);
+            if (cave === 'fast') cave = 'upgraded';
+            else if (cave === 'social' || cave == 'coop') cave = 'cooperative';
+
+            var dragon = prettyString(args, " ");
+            if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
+            if (!dragonList.includes(dragon)) message.channel.send(`Unrecognized dragon name "${dragon}" (did you spell it correctly?)`);
+            else if (dragon in comboCache[includeClone ? "clone" : "no_clone"][cave]) message.channel.send(comboCache[includeClone ? "clone" : "no_clone"][cave][dragon]);
+            else {
+                var msgRef = await message.channel.send("Fetching data from DVBox, please wait a moment... (this message will be edited once the content is ready)");
+                let d_fmt = dragon.replace(/ /g, "_").replace("_Dragon", "").toLowerCase();
+                // query that INCLUDES cloning
+                https.get(`https://dvbox.bin.sh/api-v1/parents.cgi?dragon=${d_fmt}&cave=${cave}&limit=10`, (res) => {
+                    console.log(`Received ${res.statusCode} status code for DVBox request`);
+                    var body = [];
+                    res.on('data', (chunk) => {
+                        body.push(chunk);
+                    }).on('end', () => {
+                        body = Buffer.concat(body).toString();
+                        json = JSON.parse(body);
+                        json = json.filter(combo => combo.d1 != null);
+                        if (json.length > 0) {
+                            let k = 1;
+                            let cloneEmbed = new EmbedBuilder()
+                                .setColor(0xFF00FF)
+                                .setTitle(`Top 10 breeding combos for __${dragon}__ in the ${cave} cave (*includes* cloning):`)
+                                .addFields(json.slice(0, 10).map(combo => ({
+                                        name: `${k++}. ${combo.odds}% - ${combo.d1} Dragon x ${combo.d2} Dragon`,
+                                        value: `${combo.offspring} possible results | ${combo.time_fmt} average breed time`
+                                    }))
+                                );
+                            comboCache.clone[cave][dragon] = {content: "The following information is provided by the DragonVale Sandbox. Be sure to thank them!", embeds: [cloneEmbed]};
+                            if (includeClone) msgRef.edit(comboCache.clone[cave][dragon]);
+                        } else {
+                            let returnMsg = `ERROR: DVBox reports no possible combinations that will result in ${dragon} in the ${cave} cave at this time. This could be due to cave restrictions or attempting to breed outside the dragon's period of availability.`;
+                            msgRef.edit(returnMsg);
+                            comboCache.clone[cave][dragon] = returnMsg;
+                            comboCache.no_clone[cave][dragon] = returnMsg;
+                        }
+                    });
+                });
+                // query that EXCLUDES cloning
+                https.get(`https://dvbox.bin.sh/api-v1/parents.cgi?dragon=${d_fmt}&cave=${cave}&limit=10&novel=1`, (res) => {
+                    console.log(`Received ${res.statusCode} status code for DVBox request`);
+                    var body = [];
+                    res.on('data', (chunk) => {
+                        body.push(chunk);
+                    }).on('end', () => {
+                        body = Buffer.concat(body).toString();
+                        json = JSON.parse(body);
+                        json = json.filter(combo => combo.d1 != null);
+                        if (json.length > 0) {
+                            let k = 1;
+                            let noCloneEmbed = new EmbedBuilder()
+                                .setColor(0xFF00FF)
+                                .setTitle(`Top 10 breeding combos for __${dragon}__ in the ${cave} cave (*excludes* cloning):`)
+                                .addFields(json.slice(0, 10).map(combo => ({
+                                        name: `${k++}. ${combo.odds}% - ${combo.d1} Dragon x ${combo.d2} Dragon`,
+                                        value: `${combo.offspring} possible results | ${combo.time_fmt} average breed time`
+                                    }))
+                                );
+                            comboCache.no_clone[cave][dragon] = {content: "The following information is provided by the DragonVale Sandbox. Be sure to thank them!", embeds: [noCloneEmbed]};
+                            if (!includeClone) msgRef.edit(comboCache.no_clone[cave][dragon]);
+                        } else {
+                            let returnMsg = `According to DVBox, it is not possible to obtain ${dragon} in the ${cave} cave without parent breeding at this time.`;
+                            if (!includeClone) msgRef.edit(returnMsg);
+                            // is already set if there are no valid combos even with parent breeding, so don't overwrite that message
+                            if (!(dragon in comboCache.no_clone[cave])) comboCache.no_clone[cave][dragon] = returnMsg;
+                        }
+                    });
+                });
+            }
         } else if (cmd === 'rates') {
             if (cmdInWrongChannel(message)) return;
             var rift = false;
@@ -553,10 +673,12 @@ client.on('messageCreate', async (message) => {
                 message.channel.send(`Usage: \`${cmdPrefix}result <dragon1>,<dragon2> <d:hh:mm:ss|hh:mm:ss> [fast|runic]\``);
                 return;
             }
-            var fast = false, runic = false, last = args.pop();
-            if (last === 'fast') fast = true;
-            else if (last === 'runic') runic = true;
+            var cave = 'normal';
+            var last = args.pop();
+            if (['normal', 'fast', 'coop', 'social', 'cooperative', 'runic'].includes(last)) cave = last;
             else args.push(last);
+            if (cave === 'fast') cave = 'upgraded';
+            else if (cave === 'social' || cave == 'coop') cave = 'cooperative';
             
             var times = args.pop().split(":");
             var days = 0, hrs = 0, mins = 0, secs = 0;
@@ -574,7 +696,7 @@ client.on('messageCreate', async (message) => {
                 message.channel.send("Your timer could not be parsed. Please write the timer as either `d:hh:mm:ss` or `hh:mm:ss`.");
                 return;
             }
-            var timeInt = (secs + (60 * mins) + (3600 * hrs) + (86400 * days)) * (runic ? 4 : 1);
+            var timeInt = (secs + (60 * mins) + (3600 * hrs) + (86400 * days));// * (runic ? 4 : 1);
             var timer = fmt_dhms(timeInt);
 
             var parents = args.join(" ").split(",");
@@ -593,70 +715,231 @@ client.on('messageCreate', async (message) => {
                     else if (d2 == 'Snowflake Dragon') message.channel.send("Your query contains a snowflake dragon, but you did not specify which. Please re-enter the query using `Snowflake #`, where `#` is replaced by the number of the snowflake dragon.");
                     else message.channel.send(`Unrecognized dragon name "${d2}" (did you spell it correctly?)`);
                 } else {
+                    var msgRef = await message.channel.send("Fetching data from DVBox, please wait a moment... (this message will be edited once the content is ready)");
+                    
                     resultsMsg = () => {
-                        var timerList = dvboxCache[fast ? "fast" : "normal"][d1 + "|" + d2];
+                        var resultsList = dvboxCache[cave][`${d1}|${d2}`];
 
-                        if (timerList.noParent) {
-                            message.channel.send(`${timerList.noParent} has not yet been added to DVBox. Please try a different query.`);
+                        if (resultsList.error) {
+                            msgRef.edit("ERROR: DVBox does not recognize one of the dragons you listed. If you're querying with a newly released dragon, please allow some time for DVBox to update and try again later, or try a different query.");
                             return;
-                        } else if (timerList.error) {
-                            message.channel.send(`${d1} and ${d2} cannot be bred together. Please try a different query.`);
+                        } 
+                        if (resultsList.length == 0) {
+                            msgRef.edit("DVBox reports no possible outcomes for this breeding pair. Check to see if your parents are incompatible types (e.g. opposing elementals or non-breedable dragons).");
                             return;
                         }
-                        
+
                         var exactMatches = [];
-                        var approxMatches = [];
-                        for (const key in timerList) {
-                            if (timerList[key] == timeInt) exactMatches.push(key);
-                            else if (timeInt < timerList[key] && timerList[key] <= timeInt + (runic ? 480 : 120)) approxMatches.push(key);
-                        }
-                        var returnMessage = "";
-                        if (exactMatches.length > 0) returnMessage += (`A timer of ${(runic ? `${times.join(":")} in runic caves` : timer)} when breeding ${d1} x ${d2} exactly matches: **${exactMatches.join("**, **").replace(/_/g, " ")}`);
-                        if (approxMatches.length > 0) returnMessage += (((returnMessage.length == 0) ? `A timer of ${timer + (runic ? ` (${times.join(":")} in runic cave)` : "")} when breeding ${d1} x ${d2} is *within 2 minutes* of: **` : "\nThis timer is also within 1 minute of: **") + approxMatches.join("**, **").replace(/_/g, " "));
-                        if (returnMessage.length > 0) returnMessage += "**\nNOTE: Some of the listed dragons may not be available at this time. Check the dragonarium to confirm availability.";
-                        else returnMessage = (`No matches found for timer ${(runic ? times.join(":") + " in runic caves" : timer)} when breeding ${d1} x ${d2}`);
-                        message.channel.send(returnMessage);
-                    }
+                        var closeMatches = [];
 
-                    if ((d1 + "|" + d2) in dvboxCache[fast ? "fast" : "normal"]) {
+                        for (i = 0; i < resultsList.length; i++) {
+                            child = resultsList[i];
+                            if (timeInt == child.time_sec) exactMatches.push(`**${child.name + " Dragon"}** (${child.odds}%)`);
+                            else if (Math.abs(child.time_sec - timeInt) < 120) closeMatches.push(`**${child.name + " Dragon"}** (${child.odds}%)`);
+                        }
+                        let returnMsg = ``;
+                        if (exactMatches.length > 0) {
+                            returnMsg += `A timer of ${timer} when breeding ${d1} x ${d2} in the ${cave} cave exactly matches: ${exactMatches.join(", ")}\n`;
+                        }
+                        if (closeMatches.length > 0) {
+                            returnMsg += `A timer of ${timer} when breeding ${d1} x ${d2} in the ${cave} cave *is within 2 minutes of*: ${closeMatches.join(", ")}\n`;
+                        }
+                        if (exactMatches.length == 0 && closeMatches == 0) {
+                            returnMsg = `No matches found for timer ${timer} when breeding ${d1} x ${d2}.`;
+                        } else {
+                            returnMsg += "NOTE 1: Some of the listed dragons may not be available at this time. Check the dragonarium to confirm availability.\n";
+                            returnMsg += "NOTE 2: the provided odds are an accurate approximation, but does not account for a few factors such as parent level. Your actual results may differ slightly.";
+                        }
+                        msgRef.edit(returnMsg);
+                        
+                    }
+                    
+                    if (`${d1}|${d2}` in dvboxCache[cave]) {
                         resultsMsg();
                     } else {
-                        var link = d1.replace(/ /g, "_") + "|" + d2.replace(/ /g, "_");
-                        if (fast) link += "|fast";
-                        worker.once('message', timerList => {
-                            dvboxCache[fast ? "fast" : "normal"][d1 + "|" + d2] = timerList;
-                            resultsMsg();
+                        let d1_fmt = d1.replace(/ /g, "_").replace("_Dragon", "").toLowerCase();
+                        let d2_fmt = d2.replace(/ /g, "_").replace("_Dragon", "").toLowerCase();
+                        https.get(`https://dvbox.bin.sh/api-v1/breed.cgi?d1=${d1_fmt}&d2=${d2_fmt}&cave=${cave}&sort=odds-descending`, (res) => {
+                            console.log(`Received ${res.statusCode} status code for DVBox request`);
+                            var body = [];
+                            res.on('data', (chunk) => {
+                                body.push(chunk);
+                            }).on('end', () => {
+                                body = Buffer.concat(body).toString();
+                                json = JSON.parse(body);
+                                // sort first by odds descending then by name ascending
+                                json.sort(dvBoxSorters.odds);
+                                dvboxCache[cave][`${d1}|${d2}`] = json;
+                                resultsMsg();
+                            });
                         });
-                        worker.postMessage(link);
                     }
                 }
             }
-        } else if (cmd === 'sandbox' || cmd === 'dvbox') {
+        } else if (cmd === 'sandbox' || cmd === 'dvbox' || cmd === 'sim' || cmd === 'breedsim') {
             if (cmdInWrongChannel(message)) return;
-            if (args.length == 0) message.channel.send("The DragonVale Sandbox (or dvbox, for short) can be found at https://dvbox.bin.sh/. Note that DVBox is fanmade and may not be entirely up-to-date. In addition, please note that while the results and timers shown are accurate, the breeding odds provided are incorrect.");
+            if (args.length == 0) {
+                message.channel.send("The DragonVale Sandbox (or dvbox, for short) can be found at https://dvbox.bin.sh/. Note that DVBox is fanmade and needs to be manually updated by its creator in response to changes in the game. GREAT NEWS: the sandbox has been rewritten to provide much more accurate approximations of breeding odds!");
+                return;
+            }
+            var cave = 'normal';
+            var last = args.pop();
+            if (['normal', 'fast', 'coop', 'social', 'cooperative', 'rift', 'runic'].includes(last)) cave = last;
+            else args.push(last);
+            if (cave === 'fast') cave = 'upgraded';
+            else if (cave === 'social' || cave == 'coop') cave = 'cooperative';
+
+            var parents = args.join(" ").split(",");
+            if (parents.length != 2) message.channel.send("You must specify 2 dragons for the parents.");
             else {
-                let fast = args.slice(-2).includes('fast');
-                let beb = args.slice(-2).includes('beb');
-                if (fast) args.splice(args.indexOf('fast'), 1);
-                if (beb) args.splice(args.indexOf('beb'), 1);
-                
-                var parents = args.join(" ").split(",");
-                if (parents.length != 2) message.channel.send("You must specify 2 dragons for the parents.");
-                else {
-                    var d1 = prettyString(parents[0].trim().split(" "), " ");
-                    if (d1.indexOf("Dragon") == -1) d1 += " Dragon";
-                    var d2 = prettyString(parents[1].trim().split(" "), " ");
-                    if (d2.indexOf("Dragon") == -1) d2 += " Dragon";
-                    if (d1.includes('Monolith') || d1.includes('Snowflake') || d2.includes('Monolith') || d2.includes('Snowflake')) message.channel.send("It looks like you're trying to breed with a Monolith and/or Snowflake. Unfortunately you will have to manually enter your query at https://dvbox.bin.sh/, as there is no way to specify the number of the dragon in the URL. Sorry!");
-                    else if (!dragonList.includes(d1)) message.channel.send(`Unrecognized dragon name "${d1}" (did you spell it correctly?)`);
-                    else if (!dragonList.includes(d2)) message.channel.send(`Unrecognized dragon name "${d2}" (did you spell it correctly?)`);
-                    else {
-                        var imgLink = "https://dvbox.bin.sh/#";
-                        imgLink += "d1=" + d1.replace(/ /g, "").replace("Dragon", "").toLowerCase();
-                        imgLink += ";d2=" + d2.replace(/ /g, "").replace("Dragon", "").toLowerCase();
-                        if (beb) imgLink += ";beb=1";
-                        if (fast) imgLink += ";fast=1";
-                        message.channel.send(`See the breeding results of ${d1} x ${d2} at: ${imgLink}`);
+                var d1 = prettyString(parents[0].trim().split(" "), " ");
+                if (d1.indexOf("Dragon") == -1) d1 += " Dragon";
+                var d2 = prettyString(parents[1].trim().split(" "), " ");
+                if (d2.indexOf("Dragon") == -1) d2 += " Dragon";
+                if (!dragonList.includes(d1)) {
+                    if (d1 == 'Monolith Dragon') message.channel.send("Your query contains a monolith dragon, but you did not specify which. Please re-enter the query using `Monolith #`, where `#` is replaced by the number of the monolith dragon.");
+                    else if (d1 == 'Snowflake Dragon') message.channel.send("Your query contains a snowflake dragon, but you did not specify which. Please re-enter the query using `Snowflake #`, where `#` is replaced by the number of the snowflake dragon.");
+                    else message.channel.send(`Unrecognized dragon name "${d1}" (did you spell it correctly?)`);
+                } else if (!dragonList.includes(d2)) {
+                    if (d2 == 'Monolith Dragon') message.channel.send("Your query contains a monolith dragon, but you did not specify which. Please re-enter the query using `Monolith #`, where `#` is replaced by the number of the monolith dragon.");
+                    else if (d2 == 'Snowflake Dragon') message.channel.send("Your query contains a snowflake dragon, but you did not specify which. Please re-enter the query using `Snowflake #`, where `#` is replaced by the number of the snowflake dragon.");
+                    else message.channel.send(`Unrecognized dragon name "${d2}" (did you spell it correctly?)`);
+                } else {
+                    var msgRef = await message.channel.send("Fetching data from DVBox, please wait a moment... (this message will be edited once the content is ready)");
+                    
+                    resultsMsg = async () => {
+                        var resultsList = [...dvboxCache[cave][`${d1}|${d2}`]];
+
+                        if (resultsList.error) {
+                            msgRef.edit("ERROR: DVBox does not recognize one of the dragons you listed. If you're querying with a newly released dragon, please allow some time for DVBox to update and try again later, or try a different query.");
+                            return;
+                        } 
+                        if (resultsList.length == 0) {
+                            msgRef.edit("DVBox reports no possible outcomes for this breeding pair. Check to see if your parents are incompatible types (e.g. opposing elementals or non-breedable dragons).");
+                            return;
+                        }
+
+                        let idNum = Date.now();
+                        let prevId = `prev${idNum}`;
+                        let nextId = `next${idNum}`;
+                        let selectId = `select${idNum}`;
+
+                        const btnPrev = new ButtonBuilder().setStyle(ButtonStyle.Secondary).setLabel('<').setCustomId(prevId);
+                        const btnNext = new ButtonBuilder().setStyle(ButtonStyle.Secondary).setLabel(`11-${Math.min(resultsList.length, 20)} >`).setCustomId(nextId);
+
+                        const selectSort = (defaultOption) => {
+                            return new StringSelectMenuBuilder()
+                            .setCustomId(selectId)
+                            .addOptions(
+                                new StringSelectMenuOptionBuilder()
+                                    .setLabel('Sort by Odds')
+                                    .setDescription('Sort by odds (descending), then name (alphabetical)')
+                                    .setValue('odds')
+                                    .setDefault(defaultOption === 'odds'),
+                                new StringSelectMenuOptionBuilder()
+                                    .setLabel('Sort by Name')
+                                    .setDescription('Sort by name (alphabetical), then odds (descending)')
+                                    .setValue('name')
+                                    .setDefault(defaultOption === 'name'),
+                                new StringSelectMenuOptionBuilder()
+                                    .setLabel('Sort by Timer')
+                                    .setDescription('Sort by timer (ascending), then odds (descending)')
+                                    .setValue('time')
+                                    .setDefault(defaultOption === 'time')
+                            );
+                        }
+
+                        const generateEmbed = idx => {
+                            const current = resultsList.slice(idx, idx+10);
+                            
+                            let k = 1;
+                            return new EmbedBuilder()
+                                .setColor(0x0099FF)
+                                .setTitle(`Showing results ${idx+1}-${idx+current.length} out of ${resultsList.length}:`)
+                                .addFields(current.map(child => ({
+                                        name: `${idx + k++}. ${child.name} Dragon`,
+                                        value: `Timer = ${child.time_fmt} | Odds = ${child.odds}%`
+                                    }))
+                                );
+                        }
+
+                        let needsOnePage = resultsList.length <= 10;
+
+                        await msgRef.edit({
+                            embeds: [generateEmbed(0)],
+                            components: [
+                                ...(needsOnePage ? [] : [new ActionRowBuilder().addComponents(btnNext)]),
+                                ...([new ActionRowBuilder().addComponents(selectSort('odds'))])
+                            ]
+                        })
+
+                        const collector = msgRef.createMessageComponentCollector({
+                            filter: ({user}) => user.id === message.author.id
+                        });
+
+                        let currentIndex = 0;
+                        let currentSort = 'odds';
+                        let timeToExpire = 120 * 1000;
+
+                        let expire = setTimeout(() => {
+                            msgRef.edit({
+                                embeds: [generateEmbed(currentIndex)],
+                                components: []
+                            });
+                        }, timeToExpire);
+
+                        collector.on('collect', interaction => {
+                            if (interaction.customId === prevId) currentIndex -= 10;
+                            else if (interaction.customId === nextId) currentIndex += 10;
+                            else {
+                                let newSort = interaction.values[0];
+                                if (!(newSort === currentSort)) {
+                                    currentSort = newSort;
+                                    resultsList.sort(dvBoxSorters[currentSort]);
+                                }
+                            }
+                            btnPrev.setLabel(`< ${currentIndex-9}-${currentIndex}`);
+                            btnNext.setLabel(`${currentIndex+11}-${Math.min(resultsList.length, currentIndex+20)} >`);
+                            interaction.update({
+                                embeds: [generateEmbed(currentIndex)],
+                                components: [
+                                    ...(needsOnePage ? [] : [new ActionRowBuilder().addComponents(currentIndex ? [btnPrev] : []).addComponents(currentIndex + 10 < resultsList.length ? [btnNext] : [] )]),
+                                    ...([new ActionRowBuilder().addComponents(selectSort(currentSort))])
+                                ]
+                            });
+                            // refreshes the timeout countdown before the buttons are removed
+                            clearTimeout(expire);
+                            expire = setTimeout(() => {
+                                msgRef.edit({
+                                    embeds: [generateEmbed(currentIndex)],
+                                    components: []
+                                });
+                            }, timeToExpire);
+                        });
+
+                        msgRef.edit(`Here are the results for breeding **${d1}** x **${d2}** in the **${cave} cave**. Use the buttons below the list to turn the pages (if applicable) and/or change the sorting order of the list.\nNOTE: the provided odds are an accurate approximation, but does not account for a few factors such as parent level; your actual results may differ slightly. This information is provided by the DragonVale Sandbox. Be sure to thank them!`);
+                        
+                    }
+                    
+                    if (`${d1}|${d2}` in dvboxCache[cave]) {
+                        resultsMsg();
+                    } else {
+                        let d1_fmt = d1.replace(/ /g, "_").replace("_Dragon", "").toLowerCase();
+                        let d2_fmt = d2.replace(/ /g, "_").replace("_Dragon", "").toLowerCase();
+                        https.get(`https://dvbox.bin.sh/api-v1/breed.cgi?d1=${d1_fmt}&d2=${d2_fmt}&cave=${cave}&sort=odds-descending`, (res) => {
+                            console.log(`Received ${res.statusCode} status code for DVBox request`);
+                            var body = [];
+                            res.on('data', (chunk) => {
+                                body.push(chunk);
+                            }).on('end', () => {
+                                body = Buffer.concat(body).toString();
+                                json = JSON.parse(body);
+                                // sort first by odds descending then by name ascending
+                                json.sort(dvBoxSorters.odds);
+                                dvboxCache[cave][`${d1}|${d2}`] = json;
+                                resultsMsg();
+                            });
+                        });
                     }
                 }
             }
@@ -706,8 +989,9 @@ client.on('messageCreate', async (message) => {
                 } else message.channel.send('https://dragonvale.fandom.com/wiki/' + dragon.replace(/\s\d/, "").replace(/ /g, "_"));
             }
         } else if (cmd === '' || cmd === 'help') {	
-            if (cmdInWrongChannel(message)) return;	
-            message.channel.send(helpMsg);
+            if (cmdInWrongChannel(message)) return;
+            message.channel.send(helpMsg1);
+            message.channel.send(helpMsg2);
         } else if (cmd === 'mod' && hasModAccess(message)) {
             console.log(`${message.author.tag} ran mod cmd ${message.content.toLowerCase()}`);
             if (args.length == 0) {
@@ -719,12 +1003,12 @@ client.on('messageCreate', async (message) => {
                         + "- `unflag <dragon> <primaries/evolutions/enhanced/dayNight/hiding>` - remove the specified flag from the dragon\n"
                         + "- `getflags <dragon>` - gets all flags on the specified dragon\n"
                         + "- `guide <add/remove> <name> [contents]` - add/remove a guide\n"
-                        + "- `qotd <viewlist/add/remove> <position> <asker> <anon> <question>` - Adds/removes an upcoming QOTD, or lists all pending questions\n"
+                        + "- `qotd <viewlist/add/edit/remove> <position> <asker> <anon> <question>` - Adds/removes an upcoming QOTD, or lists all pending questions\n"
                         + "- `clearcache` - clear the bot's cache (useful after updating the wiki)\n"
                         + "- `dljson` - sends a downloadable copy of my dragon list as a json file\n"
                         + "- `uljson` - upload a new dragon list json file for me to use (note: the file's name *must* be `dragonList.json`!)\n"
                         + "- `purge <# of messages>` - clears the specified number of most recent messages from the channel it's used in\n"
-                        + "- `cleanthread <id>` - removes any user from the specified thread who has not sent a message in it for the past 30 days, or is no longer in the server";
+                        + "- `cleanthread <id> [# days] [list] [remove]` - counts the number of users who have not sent a message in the specified thread in the specified number of days; adding the `list` argument DMs you with the names of these users, and/or adding the `remove` argument kicks them all from the thread";
                 message.channel.send(helpMsg);
             } else {
                 const modCmd = args.shift();
@@ -986,7 +1270,12 @@ client.on('messageCreate', async (message) => {
                         let idx = 0;
                         while (qotdData.queue.length > 0) {
                             let next = qotdData.queue.shift();
-                            response += `**#${qotdData.num++} (pos ${idx++}):** ${next.question} *[asked by ${next.asker}${next.anon ? " anonymously" : ""}]*\n`;
+                            let nextLine = `**#${qotdData.num++} (pos ${idx++}):** ${next.question} *[asked by ${next.asker}${next.anon ? " anonymously" : ""}]*\n`
+                            if (response.length + nextLine.length > 2000) {
+                                message.channel.send(response);
+                                response = nextLine;
+                            }
+                            else response += nextLine;
                         }
                         message.channel.send(response);
                     } else if (subCmd === 'add') {
@@ -1021,7 +1310,7 @@ client.on('messageCreate', async (message) => {
                         qotdData.queue.splice(pos, 0, qObj);
                         console.log(qotdData.queue.length);
                         fs.writeFile('qotdlist.json', JSON.stringify(qotdData, null, 4), (err) => {
-                            if (err) message.channel.send("An unexpected error occurred and the guide file could not be updated.");
+                            if (err) message.channel.send("An unexpected error occurred and the QOTD file could not be updated.");
                             else {
                                 message.channel.send(`Added new QOTD at position ${pos} in queue: "${qContents}" *(asked by ${asker}, with anon = ${anon})*\n\nConfirm the new queue is correct using \`${cmdPrefix}mod qotd viewlist\`.`);
                                 qotd_worker.postMessage({cmd: 'loadfile'});
@@ -1042,7 +1331,7 @@ client.on('messageCreate', async (message) => {
                                 let removed = qotdData.queue.splice(pos, 1)[0];
                                 console.log(qotdData.queue.length);
                                 fs.writeFile('qotdlist.json', JSON.stringify(qotdData, null, 4), (err) => {
-                                    if (err) message.channel.send("An unexpected error occurred and the guide file could not be updated.");
+                                    if (err) message.channel.send("An unexpected error occurred and the QOTD file could not be updated.");
                                     else {
                                         message.channel.send(`Removed QOTD at position ${pos} from queue: "${removed.question}" *(asked by ${removed.asker}, with anon = ${removed.anon})*\n\nConfirm the new queue is correct using \`${cmdPrefix}mod qotd viewlist\`.`);
                                         qotd_worker.postMessage({cmd: 'loadfile'});
@@ -1050,8 +1339,34 @@ client.on('messageCreate', async (message) => {
                                 });
                             }
                         }
+                    } else if (subCmd === 'edit') {
+                        if (args.length <= 1) {
+                            message.channel.send(`Too few arguments! \`${cmdPrefix}mod qotd edit <position> <question>\``);
+                        } else {
+                            let pos = parseInt(args.shift());
+                            if (!Number.isInteger(pos) || pos < 0) {
+                                message.channel.send("Error: position should be a nonnegative integer!");
+                                return;
+                            } else if (pos >= qotdData.queue.length) {
+                                message.channel.send(`Error: position ${pos} is out of the queue boundaries!`);
+                            } else {
+                                let numChars = args.join(" ").length;
+                                let qContents = message.content.replace(/\s{2,}/g, ' ').replace(/@/g, '').slice(cmdPrefix.length).trim().slice(-numChars);
+                                let qObj = qotdData.queue[pos];
+                                let oldQ = qObj.question;
+                                qObj.question = qContents;
+                                qotdData.queue[pos] = qObj;
+                                fs.writeFile('qotdlist.json', JSON.stringify(qotdData, null, 4), (err) => {
+                                    if (err) message.channel.send("An unexpected error occurred and the QOTD file could not be updated.");
+                                    else {
+                                        message.channel.send(`Edited QOTD at position ${pos} in queue: Old question was "${oldQ}"; new question is "${qContents}"\n\nConfirm the new queue is correct using \`${cmdPrefix}mod qotd viewlist\`.`);
+                                        qotd_worker.postMessage({cmd: 'loadfile'});
+                                    }
+                                });
+                            }
+                        }
                     } else {
-                        message.channel.send(`Command usage: \`${cmdPrefix}mod qotd <viewlist/add/remove> <position> <asker> <anon> <question>\``);
+                        message.channel.send(`Command usage: \`${cmdPrefix}mod qotd <viewlist/add/edit/remove> <position> <asker> <anon> <question>\``);
                     }
                 } else if (modCmd === 'clearcache') {
                     questTable = {};
@@ -1059,13 +1374,32 @@ client.on('messageCreate', async (message) => {
                     cache = {};
                     dvboxCache = {
                         normal: {},
-                        fast: {}
+                        upgraded: {},
+                        cooperative: {},
+                        rift: {},
+                        runic: {}
+                    };
+                    comboCache = {
+                        clone: {
+                            normal: {},
+                            upgraded: {},
+                            cooperative: {},
+                            rift: {},
+                            runic: {}
+                        },
+                        no_clone: {
+                            normal: {},
+                            upgraded: {},
+                            cooperative: {},
+                            rift: {},
+                            runic: {}
+                        }
                     };
                     oddsCache = {};
                     readMonolithWikiPage();
                     readSnowflakeWikiPage();
-                    worker.terminate();
-                    worker = new Worker('./dvboxreader.js');
+                    // worker.terminate();
+                    // worker = new Worker('./dvboxreader.js');
                     message.channel.send("Cache cleared. Information given should now reflect the most recent wiki changes.");
                 } else if (modCmd === 'dljson') {
                     message.author.send({content: "Here is my current `dragonList.json` file.", files: ["./dragonList.json"]});
@@ -1141,28 +1475,109 @@ client.on('messageCreate', async (message) => {
                         return;
                     }
                     let threadId = args[0];
+                    let days = 30;
+                    let shouldList = false;
+                    let shouldRemove = false;
+                    if (args.length > 1) {
+                        if (!isNaN(parseInt(args[1]))) days = parseInt(args[1]); // only sets if not NaN
+                        console.log(`parse = ${parseInt(args[1])} => days = ${days}`);
+                        if (days == 0 || days == NaN) days = 30; // just in case
+                        shouldList = args.includes('list');
+                        shouldRemove = args.includes('remove');
+                    }
                     // Get all members of thread
                     let thread = message.guild.channels.cache.get(threadId);
                     if (thread) {
                         if (thread.isThread()) {
+                            message.channel.send(`Checking for inactive users in ${thread.name} over the last ${days} days. Flags: list=${shouldList}, remove=${shouldRemove}`);
                             // For each member:
                             // - get last message
                             // - if message was sent >30 days ago, remove user from thread
                             let threadMems = await thread.members.fetch();
                             let time = new Date();
-                            time.setDate(time.getDate() - 30);
-                            let snowflake = SnowflakeUtil.generate({timestamp: time});
-                            let threadMsgs = await thread.messages.fetch({limit: 1000, after: snowflake}); // TODO limit caps at 100 - use helper function lots_of_messages_getter
-                            console.log(`Found ${threadMsgs.size} messages in \`${thread.name}\` after ${time.toLocaleString()}`);
-                            threadMems.each(user => {
-                                if (user != null) {
-                                    if (user.guildMember != null) { // if else, maybe means they aren't in the server?
-                                        //if (user.user.username.indexOf('_') > -1) console.log(user.guildMember.nickname);
+                            time.setDate(time.getDate() - days);
+                            msgs = await getThreadMsgsAfterDate(thread, time);
+                            let idsFound = new Set();
+                            msgs.forEach((obj) => {
+                                idsFound.add(obj.author);
+                            });
+                            console.log(`Found ${idsFound.size} unique users in ${msgs.length} messages`);
+                            let notInMostRecent = [];
+                            threadMems.each(mem => {
+                                if (!idsFound.has(mem.id)) {
+                                    if (mem.user && !mem.user.bot) {
+                                        if (!isStaffMember(mem.guildMember)) notInMostRecent.push(mem);
                                     }
                                 }
-                                // else if (user.guildMember.nickname.charAt(0) == 'a') console.log(user.guildMember.nickname);
                             });
-                            // message.channel.send(`Found ${testFilterOnCache.size}/${threadMems.cache.size} members in \`${thread.name}\` passing test filter`);
+                            message.channel.send(`${notInMostRecent.length}/${threadMems.size} thread members sent no messages in the thread in the past ${days} days.`);
+                            if (shouldList) {
+                                let dmToMod = `Here are the usernames of all ${notInMostRecent.length} members of thread "${thread.name}" who have not sent a message in it in over ${days} days:`;
+                                notInMostRecent.forEach(mem => {
+                                    dmToMod += `\n\`${mem.user.username}\``;
+                                });
+                                message.channel.send(dmToMod);
+                            }
+                            if (shouldRemove) {
+                                thread.send(`NOTICE: Cleaning the thread member list. Removing ${notInMostRecent.length} users who have not sent a message here in the past ${days} days. Apologies in advance for the spam! <:dv_owobowos:803676880850780160>`);
+                                notInMostRecent.forEach(async (mem) => {
+                                    await mem.remove(`Removed from thread: "${thread.name}" for inactivity. Please rejoin if you wish to continue using it.`);
+                                });
+                            }
+                            /*
+  '1232461688712728668' => <ref *100> Message {
+    channelId: '1181506798549741688',
+    guildId: '233370210617262080',
+    id: '1232461688712728668',
+    createdTimestamp: 1713912164620,
+    type: 19,
+    system: false,
+    content: 'Hi <:dv_blizzardderp:894608775451934770>',
+    author: User {
+      id: '1035028526086225951',
+      bot: false,
+      system: false,
+      flags: [UserFlagsBitField],
+      username: 'shadowninjja',
+      discriminator: '0',
+      avatar: '112b35c2e2125d0ba9233d862820fdb4',
+      banner: null,
+      accentColor: null
+    },
+    pinned: false,
+    tts: false,
+    nonce: null,
+    embeds: [],
+    components: [],
+    attachments: Collection(0) [Map] {},
+    stickers: Collection(0) [Map] {},
+    position: 8863,
+    roleSubscriptionData: null,
+    editedTimestamp: null,
+    reactions: ReactionManager { message: [Circular *100] },
+    mentions: MessageMentions {
+      everyone: false,
+      users: [Collection [Map]],
+      roles: Collection(0) [Map] {},
+      _members: null,
+      _channels: null,
+      _parsedUsers: null,
+      crosspostedChannels: Collection(0) [Map] {},
+      repliedUser: [User]
+    },
+    webhookId: null,
+    groupActivityApplication: null,
+    applicationId: null,
+    activity: null,
+    flags: MessageFlagsBitField { bitfield: 0 },
+    reference: {
+      channelId: '1181506798549741688',
+      guildId: '233370210617262080',
+      messageId: '1232439490237300736'
+    },
+    interaction: null
+  }
+                            */
                         } else {
                             message.channel.send(`ID ${threadId} is for channel \`${thread.name}\`, which is not a thread!`);
                         }
@@ -1183,11 +1598,12 @@ client.on('messageCreate', async (message) => {
         } else if (cmd === 'lodestoned') {
             message.channel.send({files: ["lodestoned.jpg"]});
         } else if (cmd === 'random') {
-            let unmodifiedList = dragonList.slice(0);
-            for (i = 0; i < 5; i++) unmodifiedList.push("Oracle Dragon"); // hehe xd
-            message.channel.send(`Your *totally* randomly selected dragon is: **${unmodifiedList[Math.floor(Math.random() * unmodifiedList.length)]}**`);
+            let rand = Math.random();
+            let notRigged = 0.10;
+            dragon = rand < notRigged ? "Oracle Dragon" : dragonList[Math.floor(dragonList.length * (rand-notRigged)/(1-notRigged))];
+            message.channel.send(`Your *totally* randomly selected dragon is: **${dragon}**`);
         } else if (cmd === 'smoulderbrushed' || cmd === 'smoulderbushed') {
-            message.channel.send("I just got a freaking Smoulderbush for the 30 day event gift. Is this a sick joke...? I didn't spend 30 days playing this event for a freaking SMOULDERBUSH DRAGON. I'm so mad this isn't even funny.");
+            message.channel.send("I just got a freaking Smoulderbush for the 30 day event gift. Is this a sick joke...? I didn't spend 30 days playing this event for a freaking SMOULDERBUSH DRAGON. I'm so mad this isn't even funny. <:dv_fiREEEEE:894997064574963723>");
         } else {
             if (cmdInWrongChannel(message)) return;
             message.channel.send(`Unknown command. Type \`${cmdPrefix}help\` for a list of commands.`);
@@ -1199,6 +1615,33 @@ client.on('messageCreate', async (message) => {
     }
 	
 });
+
+async function getThreadMsgsAfterDate(thread, time) {
+    let snowflake = SnowflakeUtil.generate({timestamp: time});
+    let mostRecentMsg = (await thread.messages.fetch({limit: 1})).first();
+    console.log(`Most recent message was sent at ${(new Date(mostRecentMsg.createdTimestamp)).toLocaleString()}`);
+    let msgsObj = [];
+    let fetchMore = true;
+    while (fetchMore) {
+        let threadMsgs = await thread.messages.fetch({limit: 100, after: snowflake});
+        threadMsgs.reverse().each(message => {
+            msgsObj.push({
+                "time": message.createdTimestamp,
+                "author": message.author.id
+            });
+        });
+        let lastFetched = msgsObj[msgsObj.length - 1];
+        let newTime = new Date(lastFetched.time);
+        console.log(`Most recent fetch of this batch was sent at ${newTime.toLocaleString()}`);
+        if (lastFetched) fetchMore = mostRecentMsg.createdTimestamp != lastFetched.time;
+        else fetchMore = false; // only happens if the first fetch yields no messages, i.e. nothing sent at all in the specified timeframe
+        console.log(`fetchMore = ${fetchMore}`);
+        snowflake = SnowflakeUtil.generate({timestamp: newTime});
+    }
+    console.log(`Found ${msgsObj.length} messages in \`${thread.name}\` after ${time.toLocaleString()}`);
+
+    return msgsObj;
+}
 
 fetchFromWiki = function(dragon, message, callback) {
     var dragon_ = dragon.replace(/ /g, "_");
@@ -1246,6 +1689,10 @@ function fmt_dhms(t) {
 
 hasModAccess = (message) => (message.guild.id == "233370210617262080" && message.member.roles.cache.some(r => r.name === "Mod Wizard")) || message.member.id == "295625585299030016";
 
+isStaffMember = (guildMember) => {
+    return guildMember.roles.cache.some(r => ["Owner Wizard", "Admin Wizard", "Mod Wizard", "Helper Dragon"].includes(r.name));
+};
+
 cmdInWrongChannel = function(message) {
     // (DragonVale server only) prevent non-meme commands from being executed outside appropriate channels
     if (message.channel.type == 'dm') return false;
@@ -1280,29 +1727,33 @@ isEvolution = (dName) => evolutions.includes(dName);
 isNew = (dName) => newDrags.includes(dName);
 isEpic = (element) => !["Plant", "Fire", "Earth", "Cold", "Lightning", "Water", "Air", "Metal", "Light", "Dark", "Rift"].includes(element);
 
-// TODO convert this to use after snowflake instead of 
-async function lots_of_messages_getter(channel, limit = 500) {
-    const sum_messages = [];
-    let last_id;
-
-    while (true) {
-        const options = { limit: 100 };
-        if (last_id) {
-            options.before = last_id;
-        }
-
-        const messages = await channel.fetchMessages(options);
-        sum_messages.push(...messages.array());
-        last_id = messages.last().id;
-
-        if (messages.size != 100 || sum_messages >= limit) {
-            break;
-        }
+const dvBoxSorters = {
+    odds: (a, b) => {
+        if (a.odds > b.odds) return -1;
+        else if (a.odds < b.odds) return 1;
+        else if (a.name < b.name) return -1;
+        else if (a.name > b.name) return 1;
+        else return 0;
+    },
+    name: (a, b) => {
+        if (a.name < b.name) return -1;
+        else if (a.name > b.name) return 1;
+        else if (a.odds > b.odds) return -1;
+        else if (a.odds < b.odds) return 1;
+        else if (a.time_sec < b.time_sec) return -1;
+        else if (a.time_sec > b.time_sec) return 1;
+        else return 0;
+    },
+    time: (a, b) => {
+        if (a.time_sec < b.time_sec) return -1;
+        else if (a.time_sec > b.time_sec) return 1;
+        else if (a.odds > b.odds) return -1;
+        else if (a.odds < b.odds) return 1;
+        else if (a.name < b.name) return -1;
+        else if (a.name > b.name) return 1;
+        else return 0;
     }
-
-    return sum_messages;
-}
-
+};
 
 getSpacing = (baseLength, int) => Array(baseLength - int.toString().length).fill(" ").join("");
 

@@ -390,6 +390,7 @@
         "Ketu Dragon",
         "Keyper Dragon",
         "Khamsin Dragon",
+        "Kingstone Dragon",
         "Kite Dragon",
         "Knarr Dragon",
         "Kotun Dragon",
@@ -512,6 +513,7 @@
         "Nightmare Dragon",
         "Nightshade Dragon",
         "Nimbus Dragon",
+        "Nimue Dragon",
         "Nomnoter Dragon",
         "Nosferatu Dragon",
         "Nova Dragon",
@@ -971,6 +973,6 @@
     ],
     "newDrags": [
         "Arcane Dragon",
-        "Darkarm Dragon"
+        "Nimue Dragon"
     ]
 }
