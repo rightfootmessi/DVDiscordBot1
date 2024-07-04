@@ -1319,6 +1319,10 @@
         "dragon": "Busby Dragon",
         "proper": "Hive Mind"
     },
+    "hold on tight": {
+        "dragon": "Kelpie Dragon",
+        "proper": "Hold on Tight"
+    },
     "holistic hope": {
         "dragon": "Silverline Dragon",
         "proper": "Holistic Hope"
@@ -2343,6 +2347,10 @@
         "dragon": "Kage Dragon",
         "proper": "Shadowy Visitor"
     },
+    "shape of armor": {
+        "dragon": "Armor Dragon",
+        "proper": "Shape of Armor"
+    },
     "sharp insights": {
         "dragon": "Tusk Dragon",
         "proper": "Sharp Insights"
@@ -2354,6 +2362,10 @@
     "shell scheme": {
         "dragon": "Ovalith Dragon",
         "proper": "Shell Scheme"
+    },
+    "shelly belly": {
+        "dragon": "Shelly Dragon",
+        "proper": "Shelly Belly"
     },
     "shi nee's saga": {
         "dragon": "Molten Dragon",
@@ -2646,6 +2658,10 @@
     "stellar phenomcyon": {
         "dragon": "Procyon Dragon",
         "proper": "Stellar Phenomcyon"
+    },
+    "stink of ink": {
+        "dragon": "Redfrill Dragon",
+        "proper": "Stink of Ink"
     },
     "stones of surya": {
         "dragon": "Solstice Dragon",

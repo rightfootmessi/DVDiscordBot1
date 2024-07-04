@@ -1862,18 +1862,37 @@ readWikiPage = (dragon, $) => {
 		breedResponse += " *Note: This dragon is not available right now (per the wiki, which may not be fully up to date - check the Dragonarium to confirm)!*";
 	}
 	cache[dragon]["breedCombo"] = breedResponse;
+
+    /* IMPORTANT: CHECK WHICH VERSION OF THE DRAGONBOX THIS PAGE USES */
+    var isOldDragonbox = $(".dragonbox").first().find('tr').eq(8).children().eq(0).text().trim() === "Elements";
 	// Elements
     var elems = [];
-    $(".dragonbox").first().find('tr').eq(8).children().eq(1).children().each((i, elem) => {
-        elems.push($(elem).attr('title').split(" ")[0]);
-    });
+    if (isOldDragonbox) {
+        $(".dragonbox").first().find('tr').eq(8).children().eq(1).children().each((i, elem) => {
+            elems.push($(elem).attr('title').split(" ")[0]);
+        });
+    } else {
+        $(".dragonbox").first().find('tr').eq(10).children().eq(1).children().each((i, elem) => {
+            let title = $(elem).children().first().attr('title');
+            if (title) elems.push($(elem).children().first().attr('title').split(" ")[0]);
+        });
+    }
 	var hiddenElems = [];
-	$(".dragonbox").first().find('tr').eq(17).children('td').first().children().each((i, elem) => {
-		var imgName = $(elem).children().first().attr('data-image-name');
-		if (!imgName.includes("Iconb")) {
-			hiddenElems.push(imgName.split(" ")[1].replace(".png", ""));
-		}
-	});
+    if (isOldDragonbox) {
+        $(".dragonbox").first().find('tr').eq(17).children('td').first().children().each((i, elem) => {
+            var imgName = $(elem).children().first().attr('data-image-name');
+            if (!imgName.includes("Iconb")) {
+                hiddenElems.push(imgName.split(" ")[1].replace(".png", ""));
+            }
+        });
+    } else {
+        $(".dragonbox").first().find('tr').eq(17).children('td').first().children().each((i, elem) => {
+            var imgName = $(elem).children().first().children().first().attr('data-image-name');
+            if (!imgName.includes("Iconb")) {
+                hiddenElems.push(imgName.split(" ")[1].replace(".png", ""));
+            }
+        });
+    }
 	var elemsResponse = `${dragon} has the ${prettyString(elems, ", ")} elements on its profile.\n`;
     elemsResponse += (hiddenElems.length == 10) ? dragon + " adds all 10 elements when breeding (often called a *pseudo*)." : (hiddenElems.length > 0) ? dragon + " adds the " + prettyString(hiddenElems, ", ") + " elements when breeding." : "Error: The wiki is missing the breeding elements of the " + dragon;
 	cache[dragon]["elements"] = elemsResponse;
@@ -1893,32 +1912,60 @@ readWikiPage = (dragon, $) => {
 	evoResult += "It normally costs 100 gems to evolve a dragon, but during events where the " + dragon + " is available to purchase it may instead cost 1000 event currency."
 	cache[dragon]["evolve"] = evoResult;
 	// Rates
-	var maxBoosts = $(".dragonbox").first().find('tr').eq(9).children().eq(1).find('img').length - 1;
+    var maxBoosts;
+    if (isOldDragonbox) {
+        maxBoosts = $(".dragonbox").first().find('tr').eq(9).children().eq(1).find('img').length - 1;
+    } else {
+        maxBoosts = $("#Earning_Rates").parent().next().next().children().first().children().eq(1).children().first().children().length / 2;
+    }
 
-	var firstElemIconName = $(".dragonbox").first().find('tr').eq(8).children('td').first().children().first().children().first().attr('data-image-name');
-	var isGemstone = firstElemIconName.includes("Gemstone") || firstElemIconName.includes("Crystalline");
+    var firstElemIconName, isGemstone;
+	if (isOldDragonbox) {
+        firstElemIconName = $(".dragonbox").first().find('tr').eq(8).children('td').first().children().first().children().first().attr('data-image-name');
+        isGemstone = firstElemIconName.includes("Gemstone") || firstElemIconName.includes("Crystalline");
+    } else {
+        firstElemIconName = $(".dragonbox").first().find('tr').eq(10).children('td').first().children().first().children().first().children().first().attr('data-image-name');
+        isGemstone = firstElemIconName.includes("Gemstone") || firstElemIconName.includes("Crystalline");
+    }
 	if (!isGemstone) {
 		var isEpicDragon = false;
-		$(".dragonbox").first().find('tr').eq(8).children('td').first().children().each((i, elem) => {
-			var imgName = $(elem).children().first().attr('data-image-name');
-			if (!imgName.includes("Iconb")) {
-				var element = imgName.split(" ")[1].replace(".png", "");
-				if (isEpic(element)) isEpicDragon = true;
-			}
-		});
+        if (isOldDragonbox) {
+            $(".dragonbox").first().find('tr').eq(8).children('td').first().children().each((i, elem) => {
+                var imgName = $(elem).children().first().attr('data-image-name');
+                if (!imgName.includes("Iconb")) {
+                    var element = imgName.split(" ")[1].replace(".png", "");
+                    if (isEpic(element)) isEpicDragon = true;
+                }
+            });
+        } else {
+            $(".dragonbox").first().find('tr').eq(10).children('td').first().children().each((i, elem) => {
+                var imgName = $(elem).children().first().children().first().attr('data-image-name');
+                if (!imgName.includes("Iconb")) {
+                    var element = imgName.split(" ")[1].replace(".png", "");
+                    if (isEpic(element)) isEpicDragon = true;
+                }
+            });
+        }
 		cache[dragon]["rates"]["isEpic"] = isEpicDragon;
 
 		for (boosts = 0; boosts <= maxBoosts; boosts++) {
 			var rates = [];
 			var title = $("#Earning_Rates").length ? $("#Earning_Rates") : $("#Earning_Rate");
-			title.parent().next().next().children().first().children().eq(1).children().each((i, elem) => {
-				let num = Math.ceil(parseInt($(elem).text().trim()) * (1 + 0.3 * boosts));
-				rates[i] = (!isNaN(num)) ? roundRate(num) : "---";
-			});
-			title.parent().next().next().children().first().children().eq(3).children().each((i, elem) => {
-				let num = Math.ceil(parseInt($(elem).text().trim()) * (1 + 0.3 * boosts));
-				rates[i+10] = (!isNaN(num)) ? roundRate(num) : "---";
-			});
+            if (isOldDragonbox) {
+                title.parent().next().next().children().first().children().eq(1).children().each((i, elem) => {
+                    let num = Math.ceil(parseInt($(elem).text().trim()) * (1 + 0.3 * boosts));
+                    rates[i] = (!isNaN(num)) ? roundRate(num) : "---";
+                });
+                title.parent().next().next().children().first().children().eq(3).children().each((i, elem) => {
+                    let num = Math.ceil(parseInt($(elem).text().trim()) * (1 + 0.3 * boosts));
+                    rates[i+10] = (!isNaN(num)) ? roundRate(num) : "---";
+                });
+            } else {
+                for (i = 1; i <= 20; i++) {
+                    let num = Math.ceil(parseInt(title.parent().next().next().children().first().children().eq(1).children().eq(i).html()) * (1 + 0.3 * boosts));
+                    rates[i-1] = (!isNaN(num)) ? roundRate(num) : "---";
+                }
+            }
 			var table = "```| Lvl : DC/min | Lvl : DC/min |"
 					   + "\n|-----:--------|-----:--------|";
 			for (i = 0; i < 10; i++) {
@@ -1980,8 +2027,14 @@ readWikiPage = (dragon, $) => {
 	cache[dragon]["rates"]["maxBoosts"] = maxBoosts;
 	cache[dragon]["isGemstone"] = isGemstone;
 	// Timer
-	var regTimer = $(".dragonbox").first().find('tr').eq(5).children().last().text().trim();
-	var upTimer = $(".dragonbox").first().find('tr').eq(6).children().last().text().trim();
+    var regTimer, upTimer;
+    if (isOldDragonbox) {
+        regTimer = $(".dragonbox").first().find('tr').eq(5).children().last().text().trim();
+        upTimer = $(".dragonbox").first().find('tr').eq(6).children().last().text().trim();
+    } else {
+        regTimer = $(".dragonbox").first().find('tr').eq(6).children().last().text().trim();
+        upTimer = $(".dragonbox").first().find('tr').eq(7).children().last().text().trim();
+    }
 	cache[dragon]["timer"] = "The breeding times of " + dragon + " are **" + regTimer + "** (regular cave) or **" + upTimer + "** (upgraded cave).";
     // Uses (now including quest name)
     var uses = [];
@@ -1993,82 +2046,89 @@ readWikiPage = (dragon, $) => {
     var questName = $(".dragonbox").first().find('tr').eq(13).children('td').first().text().trim();
     cache[dragon]["uses"] += (questName != 'N/A') ? `\n\nCorresponding Quest: *${questName}*` : `\n\n${dragon} has no corresponding quest.`;
 	// Pictures
-	const dragonNoSpace = dragon.replace(/ /g, '');
-	cache[dragon]["pictures"]["normal"] = {};
-	cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='" + dragonNoSpace + "Adult']").first().attr('src');
-	cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='" + dragonNoSpace + "Juvenile']").first().attr('src');
-	cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='" + dragonNoSpace + "Baby']").first().attr('src');
-	cache[dragon]["pictures"]["egg"] = $("[alt='" + dragonNoSpace + "Egg']").first().attr('data-src');
-	if (elders.includes(dragon)) {
-        cache[dragon]["pictures"]["normal"]["elder"] = $("[alt='" + dragonNoSpace + "Elder']").first().attr('src');
-        cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='" + dragonNoSpace + "Baby']").first().attr('data-src');
-    }
-	if (enhanced.includes(dragon)) {
-		if (dragon == "Eldritch Dragon") {
-			cache[dragon]["pictures"]["barbarous"] = $("[alt='EldritchDragonAdultBarbarous']").first().attr('data-src');
-			cache[dragon]["pictures"]["charlatan"] = $("[alt='EldritchDragonAdultCharlatan']").first().attr('data-src');
-			cache[dragon]["pictures"]["macabre"] = $("[alt='EldritchDragonAdultMacabre']").first().attr('data-src');
-			cache[dragon]["pictures"]["scourge"] = $("[alt='EldritchDragonAdultScourge']").first().attr('data-src');
-		} else if (dayNight.includes(dragon)) {
-			cache[dragon]["pictures"]["enhanced"] = $("[alt='" + dragonNoSpace + "AdultEnhanced']").first().attr('data-src');
-			cache[dragon]["pictures"]["nightenhanced"] = $("[alt='" + dragonNoSpace + "AdultNightEnhanced']").first().attr('data-src');
-		} else {
-			cache[dragon]["pictures"]["organic"] = $("[alt='" + dragonNoSpace + "AdultOrganic']").first().attr('data-src');
-			cache[dragon]["pictures"]["conjured"] = $("[alt='" + dragonNoSpace + "AdultConjured']").first().attr('data-src');
-		}
-	}
-	if (dayNight.includes(dragon)) {
-		cache[dragon]["pictures"]["night"] = {};
-		if (dragon == "Lycan Dragon") {
-			cache[dragon]["pictures"]["night"]["adult"] = $("[alt='LycanDragonAdultFullMoon']").first().attr('data-src');
-			cache[dragon]["pictures"]["night"]["juvenile"] = $("[alt='LycanDragonJuvenileFullMoon']").first().attr('data-src');
-			cache[dragon]["pictures"]["night"]["baby"] = $("[alt='LycanDragonBabyFullMoon']").first().attr('data-src');
-		} else {
-			cache[dragon]["pictures"]["night"]["adult"] = $("[alt='" + dragonNoSpace + "AdultNight']").first().attr('data-src');
-			cache[dragon]["pictures"]["night"]["juvenile"] = $("[alt='" + dragonNoSpace + "JuvenileNight']").first().attr('data-src');
-			cache[dragon]["pictures"]["night"]["baby"] = $("[alt='" + dragonNoSpace + "BabyNight']").first().attr('data-src');
-		}
-	}
-    if (hiding.includes(dragon)) cache[dragon]["pictures"]["hiding"] = $("[alt='" + dragonNoSpace + "Hiding']").first().attr('data-src');
-    if (dragon == "Seasonal Dragon") {
-        cache[dragon]["pictures"]["summer"] = {};
-        cache[dragon]["pictures"]["autumn"] = {};
-        cache[dragon]["pictures"]["winter"] = {};
-        cache[dragon]["pictures"]["spring"] = {};
-        cache[dragon]["pictures"]["summer"]["adult"] = $("[alt='SummerSeasonalDragonAdult']").first().attr('data-src');
-        cache[dragon]["pictures"]["summer"]["juvenile"] = $("[alt='SummerSeasonalDragonJuvenile']").first().attr('data-src');
-        cache[dragon]["pictures"]["summer"]["baby"] = $("[alt='SummerSeasonalDragonBaby']").first().attr('data-src');
-        cache[dragon]["pictures"]["autumn"]["adult"] = $("[alt='AutumnSeasonalDragonAdult']").first().attr('data-src');
-        cache[dragon]["pictures"]["autumn"]["juvenile"] = $("[alt='AutumnSeasonalDragonJuvenile']").first().attr('data-src');
-        cache[dragon]["pictures"]["autumn"]["baby"] = $("[alt='AutumnSeasonalDragonBaby']").first().attr('data-src');
-        cache[dragon]["pictures"]["winter"]["adult"] = $("[alt='WinterSeasonalDragonAdult']").first().attr('data-src');
-        cache[dragon]["pictures"]["winter"]["juvenile"] = $("[alt='WinterSeasonalDragonJuvenile']").first().attr('data-src');
-        cache[dragon]["pictures"]["winter"]["baby"] = $("[alt='WinterSeasonalDragonBaby']").first().attr('data-src');
-        cache[dragon]["pictures"]["spring"]["adult"] = $("[alt='SpringSeasonalDragonAdult']").first().attr('src');
-        cache[dragon]["pictures"]["spring"]["juvenile"] = $("[alt='SpringSeasonalDragonJuvenile']").first().attr('src');
-        cache[dragon]["pictures"]["spring"]["baby"] = $("[alt='SpringSeasonalDragonBaby']").first().attr('src');
-    } else if (dragon == "Snowball Dragon") {
-        cache[dragon]["pictures"]["snowman"] = $("[alt='SnowballDragonSnowman']").first().attr('data-src');
-    } else if (dragon == "Giddle Dragon") {
-        cache[dragon]["pictures"]["wrapped"] = $("[alt='GiddleDragonWrapped']").first().attr('data-src');
-    } else if (dragon == "Dargon Dragon") {
-        cache[dragon]["pictures"]["bush"] = $("[alt='DargonDragonAdultBush']").first().attr('data-src');
-    }
-    // Edge cases for dragons whose images work weirdly
-    if (dragon == "Dark Dragon") {
-        cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='DarkDragonAdultOld']").first().attr('src');
-        cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='DarkDragonJuvenileOld']").first().attr('src');
-        cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='DarkDragonBabyOld']").first().attr('data-src');
-    } else if (dragon == "Flower Dragon") {
-        cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='FlowerDragonAdult']").first().attr('data-src');
-        cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='FlowerDragonJuvenile']").first().attr('data-src');
-        cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='FlowerDragonBaby']").first().attr('data-src');
-        cache[dragon]["pictures"]["egg"] = $("[alt='FlowerDragonRiftEgg']").first().attr('data-src');
-    } else if (dragon == "Meteor Dragon") {
-        cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='MeteorDragonAdult']").first().attr('data-src');
-        cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='MeteorDragonJuvenile']").first().attr('data-src');
-        cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='MeteorDragonBaby']").first().attr('data-src');
-        cache[dragon]["pictures"]["egg"] = $("[alt='MeteorDragonRiftEgg']").first().attr('data-src');
+    cache[dragon]["pictures"]["normal"] = {};
+    if (isOldDragonbox) {
+        const dragonNoSpace = dragon.replace(/ /g, '');
+        cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='" + dragonNoSpace + "Adult']").first().attr('src');
+        cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='" + dragonNoSpace + "Juvenile']").first().attr('src');
+        cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='" + dragonNoSpace + "Baby']").first().attr('src');
+        cache[dragon]["pictures"]["egg"] = $("[alt='" + dragonNoSpace + "Egg']").first().attr('data-src');
+        if (elders.includes(dragon)) {
+            cache[dragon]["pictures"]["normal"]["elder"] = $("[alt='" + dragonNoSpace + "Elder']").first().attr('src');
+            cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='" + dragonNoSpace + "Baby']").first().attr('data-src');
+        }
+        if (enhanced.includes(dragon)) {
+            if (dragon == "Eldritch Dragon") {
+                cache[dragon]["pictures"]["barbarous"] = $("[alt='EldritchDragonAdultBarbarous']").first().attr('data-src');
+                cache[dragon]["pictures"]["charlatan"] = $("[alt='EldritchDragonAdultCharlatan']").first().attr('data-src');
+                cache[dragon]["pictures"]["macabre"] = $("[alt='EldritchDragonAdultMacabre']").first().attr('data-src');
+                cache[dragon]["pictures"]["scourge"] = $("[alt='EldritchDragonAdultScourge']").first().attr('data-src');
+            } else if (dayNight.includes(dragon)) {
+                cache[dragon]["pictures"]["enhanced"] = $("[alt='" + dragonNoSpace + "AdultEnhanced']").first().attr('data-src');
+                cache[dragon]["pictures"]["nightenhanced"] = $("[alt='" + dragonNoSpace + "AdultNightEnhanced']").first().attr('data-src');
+            } else {
+                cache[dragon]["pictures"]["organic"] = $("[alt='" + dragonNoSpace + "AdultOrganic']").first().attr('data-src');
+                cache[dragon]["pictures"]["conjured"] = $("[alt='" + dragonNoSpace + "AdultConjured']").first().attr('data-src');
+            }
+        }
+        if (dayNight.includes(dragon)) {
+            cache[dragon]["pictures"]["night"] = {};
+            if (dragon == "Lycan Dragon") {
+                cache[dragon]["pictures"]["night"]["adult"] = $("[alt='LycanDragonAdultFullMoon']").first().attr('data-src');
+                cache[dragon]["pictures"]["night"]["juvenile"] = $("[alt='LycanDragonJuvenileFullMoon']").first().attr('data-src');
+                cache[dragon]["pictures"]["night"]["baby"] = $("[alt='LycanDragonBabyFullMoon']").first().attr('data-src');
+            } else {
+                cache[dragon]["pictures"]["night"]["adult"] = $("[alt='" + dragonNoSpace + "AdultNight']").first().attr('data-src');
+                cache[dragon]["pictures"]["night"]["juvenile"] = $("[alt='" + dragonNoSpace + "JuvenileNight']").first().attr('data-src');
+                cache[dragon]["pictures"]["night"]["baby"] = $("[alt='" + dragonNoSpace + "BabyNight']").first().attr('data-src');
+            }
+        }
+        if (hiding.includes(dragon)) cache[dragon]["pictures"]["hiding"] = $("[alt='" + dragonNoSpace + "Hiding']").first().attr('data-src');
+        if (dragon == "Seasonal Dragon") {
+            cache[dragon]["pictures"]["summer"] = {};
+            cache[dragon]["pictures"]["autumn"] = {};
+            cache[dragon]["pictures"]["winter"] = {};
+            cache[dragon]["pictures"]["spring"] = {};
+            cache[dragon]["pictures"]["summer"]["adult"] = $("[alt='SummerSeasonalDragonAdult']").first().attr('data-src');
+            cache[dragon]["pictures"]["summer"]["juvenile"] = $("[alt='SummerSeasonalDragonJuvenile']").first().attr('data-src');
+            cache[dragon]["pictures"]["summer"]["baby"] = $("[alt='SummerSeasonalDragonBaby']").first().attr('data-src');
+            cache[dragon]["pictures"]["autumn"]["adult"] = $("[alt='AutumnSeasonalDragonAdult']").first().attr('data-src');
+            cache[dragon]["pictures"]["autumn"]["juvenile"] = $("[alt='AutumnSeasonalDragonJuvenile']").first().attr('data-src');
+            cache[dragon]["pictures"]["autumn"]["baby"] = $("[alt='AutumnSeasonalDragonBaby']").first().attr('data-src');
+            cache[dragon]["pictures"]["winter"]["adult"] = $("[alt='WinterSeasonalDragonAdult']").first().attr('data-src');
+            cache[dragon]["pictures"]["winter"]["juvenile"] = $("[alt='WinterSeasonalDragonJuvenile']").first().attr('data-src');
+            cache[dragon]["pictures"]["winter"]["baby"] = $("[alt='WinterSeasonalDragonBaby']").first().attr('data-src');
+            cache[dragon]["pictures"]["spring"]["adult"] = $("[alt='SpringSeasonalDragonAdult']").first().attr('src');
+            cache[dragon]["pictures"]["spring"]["juvenile"] = $("[alt='SpringSeasonalDragonJuvenile']").first().attr('src');
+            cache[dragon]["pictures"]["spring"]["baby"] = $("[alt='SpringSeasonalDragonBaby']").first().attr('src');
+        } else if (dragon == "Snowball Dragon") {
+            cache[dragon]["pictures"]["snowman"] = $("[alt='SnowballDragonSnowman']").first().attr('data-src');
+        } else if (dragon == "Giddle Dragon") {
+            cache[dragon]["pictures"]["wrapped"] = $("[alt='GiddleDragonWrapped']").first().attr('data-src');
+        } else if (dragon == "Dargon Dragon") {
+            cache[dragon]["pictures"]["bush"] = $("[alt='DargonDragonAdultBush']").first().attr('data-src');
+        }
+        // Edge cases for dragons whose images work weirdly
+        if (dragon == "Dark Dragon") {
+            cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='DarkDragonAdultOld']").first().attr('src');
+            cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='DarkDragonJuvenileOld']").first().attr('src');
+            cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='DarkDragonBabyOld']").first().attr('data-src');
+        } else if (dragon == "Flower Dragon") {
+            cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='FlowerDragonAdult']").first().attr('data-src');
+            cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='FlowerDragonJuvenile']").first().attr('data-src');
+            cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='FlowerDragonBaby']").first().attr('data-src');
+            cache[dragon]["pictures"]["egg"] = $("[alt='FlowerDragonRiftEgg']").first().attr('data-src');
+        } else if (dragon == "Meteor Dragon") {
+            cache[dragon]["pictures"]["normal"]["adult"] = $("[alt='MeteorDragonAdult']").first().attr('data-src');
+            cache[dragon]["pictures"]["normal"]["juvenile"] = $("[alt='MeteorDragonJuvenile']").first().attr('data-src');
+            cache[dragon]["pictures"]["normal"]["baby"] = $("[alt='MeteorDragonBaby']").first().attr('data-src');
+            cache[dragon]["pictures"]["egg"] = $("[alt='MeteorDragonRiftEgg']").first().attr('data-src');
+        }
+    } else {
+        cache[dragon]["pictures"]["normal"]["adult"] = $(`[alt='Adult ${dragon}']`).first().attr('src');
+        cache[dragon]["pictures"]["normal"]["juvenile"] = $(`[alt='Juvenile ${dragon}']`).first().attr('src');
+        cache[dragon]["pictures"]["normal"]["baby"] = $(`[alt='Baby ${dragon}']`).first().attr('src');
+        cache[dragon]["pictures"]["egg"] = $(`[alt='${dragon} Egg']`).first().attr('data-src');
     }
 }
 
