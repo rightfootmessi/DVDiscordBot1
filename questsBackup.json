@@ -303,6 +303,10 @@
         "dragon": "Zaffer Dragon",
         "proper": "Blues Chase"
     },
+    "body plan dragon": {
+        "dragon": "Sipho Dragon",
+        "proper": "Body Plan Dragon"
+    },
     "bolt buffet": {
         "dragon": "Thunderbird Dragon",
         "proper": "Bolt Buffet"
@@ -1027,6 +1031,10 @@
         "dragon": "Amber Dragon",
         "proper": "Fossil Folly"
     },
+    "four shark power": {
+        "dragon": "Quadruple Leap Year Dragon",
+        "proper": "Four Shark Power"
+    },
     "fractal fever": {
         "dragon": "Crystal Dragon",
         "proper": "Fractal Fever"
@@ -1110,6 +1118,10 @@
     "getting lost": {
         "dragon": "Maze Dragon",
         "proper": "Getting Lost"
+    },
+    "ghost noodle": {
+        "dragon": "Leviathan Dragon",
+        "proper": "Ghost Noodle"
     },
     "gilded wonder": {
         "dragon": "Vanguard Dragon",
@@ -1775,6 +1787,10 @@
         "dragon": "Tulip Dragon",
         "proper": "Moonlit Garden"
     },
+    "mop the joke": {
+        "dragon": "Moppey Dragon",
+        "proper": "Mop the Joke"
+    },
     "morbid molten motive": {
         "dragon": "Ghostly Lava Dragon",
         "proper": "Morbid Molten Motive"
@@ -2362,6 +2378,10 @@
     "shell scheme": {
         "dragon": "Ovalith Dragon",
         "proper": "Shell Scheme"
+    },
+    "shellfish grin": {
+        "dragon": "Grin Dragon",
+        "proper": "Shellfish Grin"
     },
     "shelly belly": {
         "dragon": "Shelly Dragon",
@@ -3250,5 +3270,33 @@
     "zombie juice diet": {
         "dragon": "Wendigo Dragon",
         "proper": "Zombie Juice Diet"
+    },
+    "rebooting": {
+        "dragon": "Aquatech Dragon",
+        "proper": "Rebooting"
+    },
+    "it's all ogre": {
+        "dragon": "Ogre Dragon",
+        "proper": "It's All Ogre"
+    },
+    "bad juju": {
+        "dragon": "Hex Dragon",
+        "proper": "Bad Juju"
+    },
+    "no barking": {
+        "dragon": "Treebark Dragon",
+        "proper": "No Barking"
+    },
+    "fairy you": {
+        "dragon": "Feiya Dragon",
+        "proper": "Fairy You"
+    },
+    "four in one": {
+        "dragon": "Quamera Dragon",
+        "proper": "Four in One"
+    },
+    "": {
+        "dragon": "Nottub Dragon",
+        "proper": ""
     }
 }
