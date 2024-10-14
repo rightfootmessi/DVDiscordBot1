@@ -247,6 +247,10 @@ client.on('messageCreate', async (message) => {
                 return;
             }
             let serverId = args.shift();
+            if (!serverId) {
+                message.channel.send("I need a server ID!");
+                return;
+            }
             serverId = (serverId.toLowerCase() == 'dv') ? '233370210617262080' : serverId;
             let server = client.guilds.cache.get(serverId);
             if (server) {
@@ -997,8 +1001,7 @@ client.on('messageCreate', async (message) => {
             if (args.length == 0) {
                 const helpMsg = `Mod command list: (prefix all commands with \`${cmdPrefix}mod\`)\n`
                         + "- `viewlist [primaries/evolutions/enhanced/dayNight/hiding]` - sends my stored list of dragons to your DMs; optionally specify a flag to only be sent dragons matching that flag, otherwise I send the whole list (warning: it's long)\n"
-                        + "- `add <dragon>` - add dragon to dragon list\n"
-                        + "- `remove <dragon>` - remove dragon from list\n"
+                        + "- `dragon <add/remove> <dragon>` - add/remove dragon to dragon list\n"
                         + "- `flag <dragon> <primaries/evolutions/enhanced/dayNight/hiding>` - add the specified flag to the dragon\n"
                         + "- `unflag <dragon> <primaries/evolutions/enhanced/dayNight/hiding>` - remove the specified flag from the dragon\n"
                         + "- `getflags <dragon>` - gets all flags on the specified dragon\n"
@@ -1026,48 +1029,51 @@ client.on('messageCreate', async (message) => {
                         if (msg.length > 0) message.author.send(msg);
                         message.channel.send("I have sent my list of dragons to your DMs.");
                     } else message.channel.send("There are no dragons with this flag!");
-                } else if (modCmd === 'add') {
-                    var dragon = prettyString(args, " ");
-                    if (!dragon) {
-                        message.channel.send("You must specify a dragon!");
-                        return;
-                    }
-                    if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
-                    
-                    if (dragonList.includes(dragon)) {
-                        message.channel.send(dragon + " is already in my list.");
-                        return;
-                    }
-        
-                    dragonList.push(dragon);
-                    dragonList.sort();
-                    newDrags.push(dragon);
-                    newDrags.sort();
-                    fs.writeFile('dragonList.json', JSON.stringify(fullData, null, 4), (err) => {
-                        if (err) message.channel.send("An unexpected error occurred and the dragon list could not be updated.");
-                        else message.channel.send(`${dragon} was added to the list and automatically flagged as \`new\`. If this was a mistake, type \`${cmdPrefix}mod remove ${dragon}\` to remove it."`);
-                    });
-                } else if (modCmd === 'remove') {
-                    var dragon = prettyString(args, " ");
-                    if (!dragon) {
-                        message.channel.send("You must specify a dragon!");
-                        return;
-                    }
-                    if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
-                    
-                    if (!dragonList.includes(dragon)) {
-                        message.channel.send(dragon + " is already not in my list.");
-                        return;
-                    }
-
-                    dragonList.splice(dragonList.indexOf(dragon), 1);
-                    fs.writeFile('dragonList.json', JSON.stringify(fullData, null, 4), (err) => {
-                        if (err) message.channel.send("An unexpected error occurred and the dragon list could not be updated.");
-                        else {
-                            message.channel.send(dragon + " was removed from the list. If this was a mistake, type `" + cmdPrefix + "mod add " + dragon + "` to re-add it.");
-                            delete cache[dragon];
+                } else if (modCmd === 'dragon') {
+                    const subCmd = args.shift();
+                    if (subCmd === 'add') {
+                        var dragon = prettyString(args, " ");
+                        if (!dragon) {
+                            message.channel.send("You must specify a dragon!");
+                            return;
                         }
-                    });
+                        if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
+                        
+                        if (dragonList.includes(dragon)) {
+                            message.channel.send(`${dragon} is already in my list.`);
+                            return;
+                        }
+            
+                        dragonList.push(dragon);
+                        dragonList.sort();
+                        newDrags.push(dragon);
+                        newDrags.sort();
+                        fs.writeFile('dragonList.json', JSON.stringify(fullData, null, 4), (err) => {
+                            if (err) message.channel.send("An unexpected error occurred and the dragon list could not be updated.");
+                            else message.channel.send(`${dragon} was added to the list and automatically flagged as \`new\`. If this was a mistake, type \`${cmdPrefix}mod dragon remove ${dragon}\` to remove it."`);
+                        });
+                    } else if (subCmd === 'remove') {
+                        var dragon = prettyString(args, " ");
+                        if (!dragon) {
+                            message.channel.send("You must specify a dragon!");
+                            return;
+                        }
+                        if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
+                        
+                        if (!dragonList.includes(dragon)) {
+                            message.channel.send(`${dragon} is already not in my list.`);
+                            return;
+                        }
+    
+                        dragonList.splice(dragonList.indexOf(dragon), 1);
+                        fs.writeFile('dragonList.json', JSON.stringify(fullData, null, 4), (err) => {
+                            if (err) message.channel.send("An unexpected error occurred and the dragon list could not be updated.");
+                            else {
+                                message.channel.send(`${dragon} was removed from the list. If this was a mistake, type \`${cmdPrefix}mod dragon add ${dragon}\` to re-add it."`);
+                                delete cache[dragon];
+                            }
+                        });
+                    } 
                 } else if (modCmd === 'flag') {
                     var flag = args.pop();
                     var dragon = prettyString(args, " ");
@@ -1795,7 +1801,7 @@ loadQuests = () => {
             var numLoaded = 0;
             for (dragon in json) {
                 numLoaded++;
-                questName = json[dragon]["Name"];
+                questName = json[dragon]["Name"].trim();
                 if (dragon.indexOf("Dragon") == -1) dragon += " Dragon";
                 questTable[questName.toLowerCase()] = {"dragon": dragon, "proper": questName};
             }

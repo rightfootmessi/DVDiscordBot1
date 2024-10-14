@@ -8,6 +8,7 @@
         "Air Rift Dragon",
         "Aisa Dragon",
         "Alayzem Dragon",
+        "Alchemy Dragon",
         "Alffa Dragon",
         "Alpenglow Dragon",
         "Alure Dragon",
@@ -46,6 +47,7 @@
         "Aurum Dragon",
         "Autumn Dragon",
         "Avarice Dragon",
+        "Awoo Dragon",
         "Azurite Dragon",
         "Barbarous Dragon",
         "Barite Dragon",
@@ -192,6 +194,7 @@
         "Double Leap Year Dragon",
         "Double Rainbow Dragon",
         "Dracabra Dragon",
+        "Dragpir Dragon",
         "Dream Dragon",
         "Drifter Dragon",
         "Dungeon Dragon",
@@ -385,6 +388,7 @@
         "Jester Dragon",
         "Jet Dragon",
         "Jetstream Dragon",
+        "Jiaolong Dragon",
         "Jingle Dragon",
         "Jumpiplop Dragon",
         "Kage Dragon",
@@ -577,6 +581,7 @@
         "Plumpkin Dragon",
         "Poison Dragon",
         "Polarian Dragon",
+        "Polarus Dragon",
         "Pollen Dragon",
         "Pollenizer Dragon",
         "Pond Dragon",
@@ -718,10 +723,12 @@
         "Sparkles Dragon",
         "Spectrapod Dragon",
         "Spectre Dragon",
+        "Spelldome Dragon",
         "Spellmason Dragon",
         "Spinky Dragon",
         "Spirit Dragon",
         "Spite Dragon",
+        "Spooker Dragon",
         "Spore Dragon",
         "Spring Dragon",
         "Sprite Dragon",
@@ -765,7 +772,6 @@
         "Teozinte Dragon",
         "Terracotta Dragon",
         "Terradiem Dragon",
-        "Test Dragon",
         "Thicket Dragon",
         "Thistle Dragon",
         "Thorn Dragon",
@@ -990,7 +996,10 @@
         "Water Dragon"
     ],
     "newDrags": [
-        "Doily Dragon",
-        "Nottub Dragon"
+        "Awoo Dragon",
+        "Dragpir Dragon",
+        "Jiaolong Dragon",
+        "Polarus Dragon",
+        "Spooker Dragon"
     ]
 }
