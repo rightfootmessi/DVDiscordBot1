@@ -996,11 +996,14 @@ client.on('messageCreate', async (message) => {
             if (cmdInWrongChannel(message)) return;
             message.channel.send(helpMsg1);
             message.channel.send(helpMsg2);
-        } else if (cmd === 'mod' && hasModAccess(message)) {
+        } else if (cmd === 'mod' && hasHelperAccess(message)) {
             console.log(`${message.author.tag} ran mod cmd ${message.content.toLowerCase()}`);
             if (args.length == 0) {
                 const helpMsg = `Mod command list: (prefix all commands with \`${cmdPrefix}mod\`)\n`
-                        + "- `viewlist [primaries/evolutions/enhanced/dayNight/hiding]` - sends my stored list of dragons to your DMs; optionally specify a flag to only be sent dragons matching that flag, otherwise I send the whole list (warning: it's long)\n"
+                        + "- `pin <message link/ID>` - pins the linked message to the channel (MUST use command in the same channel as the message to be pinned!); does nothing if the channel is at the pin limit already\n"
+                        + "- `unpin <message link/ID>` - unpins the linked message from the channel (MUST use commandin the same channel as the message to be unpinned!)\n";
+                if (hasModAccess(message)) {
+                    helpMsg += "- `viewlist [primaries/evolutions/enhanced/dayNight/hiding]` - sends my stored list of dragons to your DMs; optionally specify a flag to only be sent dragons matching that flag, otherwise I send the whole list (warning: it's long)\n"
                         + "- `dragon <add/remove> <dragon>` - add/remove dragon to dragon list\n"
                         + "- `flag <dragon> <primaries/evolutions/enhanced/dayNight/hiding>` - add the specified flag to the dragon\n"
                         + "- `unflag <dragon> <primaries/evolutions/enhanced/dayNight/hiding>` - remove the specified flag from the dragon\n"
@@ -1012,10 +1015,11 @@ client.on('messageCreate', async (message) => {
                         + "- `uljson` - upload a new dragon list json file for me to use (note: the file's name *must* be `dragonList.json`!)\n"
                         + "- `purge <# of messages>` - clears the specified number of most recent messages from the channel it's used in\n"
                         + "- `cleanthread <id> [# days] [list] [remove]` - counts the number of users who have not sent a message in the specified thread in the specified number of days; adding the `list` argument DMs you with the names of these users, and/or adding the `remove` argument kicks them all from the thread";
+                }
                 message.channel.send(helpMsg);
             } else {
                 const modCmd = args.shift();
-                if (modCmd === 'viewlist') {
+                if (modCmd === 'viewlist' && hasModAccess(message)) {
                     var tempList = (args == "primaries") ? [...primaries] : (args == "evolutions") ? [...evolutions] : (args == "enhanced") ? [...enhanced] : (args == "daynight") ? [...dayNight] : (args == "hiding") ? [...hiding] : (args == "new") ? [...newDrags] : [...dragonList];
                     if (tempList.length > 0) {
                         var msg = "";
@@ -1029,7 +1033,7 @@ client.on('messageCreate', async (message) => {
                         if (msg.length > 0) message.author.send(msg);
                         message.channel.send("I have sent my list of dragons to your DMs.");
                     } else message.channel.send("There are no dragons with this flag!");
-                } else if (modCmd === 'dragon') {
+                } else if (modCmd === 'dragon' && hasModAccess(message)) {
                     const subCmd = args.shift();
                     if (subCmd === 'add') {
                         var dragon = prettyString(args, " ");
@@ -1074,7 +1078,7 @@ client.on('messageCreate', async (message) => {
                             }
                         });
                     } 
-                } else if (modCmd === 'flag') {
+                } else if (modCmd === 'flag' && hasModAccess(message)) {
                     var flag = args.pop();
                     var dragon = prettyString(args, " ");
                     if (!dragon) {
@@ -1148,7 +1152,7 @@ client.on('messageCreate', async (message) => {
                             delete cache[dragon];
                         }
                     });
-                } else if (modCmd === 'unflag') {
+                } else if (modCmd === 'unflag' && hasModAccess(message)) {
                     var flag = args.pop();
                     var dragon = prettyString(args, " ");
                     if (!dragon) {
@@ -1216,7 +1220,7 @@ client.on('messageCreate', async (message) => {
                             delete cache[dragon];
                         }
                     });
-                } else if (modCmd === 'getflags') {
+                } else if (modCmd === 'getflags' && hasModAccess(message)) {
                     var dragon = prettyString(args, " ");
                     if (!dragon) {
                         message.channel.send("You must specify a dragon!");
@@ -1237,7 +1241,7 @@ client.on('messageCreate', async (message) => {
 
                     if (flags.length > 0) message.channel.send(`${dragon} has flags: \`${flags.join('`, `')}\``);
                     else message.channel.send(`${dragon} has no flags.`);
-                } else if (modCmd === 'guide') {
+                } else if (modCmd === 'guide' && hasModAccess(message)) {
                     let add = args.shift();
                     if (add === 'add') {
                         if (args.length < 2) message.channel.send("Please specify the name and contents of the guide to add.");
@@ -1268,7 +1272,7 @@ client.on('messageCreate', async (message) => {
                     } else {
                         message.channel.send(`Error: expected \`add\` or \`remove\`, but got \`${add}\``);
                     }
-                } else if (modCmd === 'qotd') {
+                } else if (modCmd === 'qotd' && hasModAccess(message)) {
                     let subCmd = args.shift();
                     let qotdData = JSON.parse(fs.readFileSync('qotdlist.json'));
                     if (subCmd === 'viewlist') {
@@ -1374,7 +1378,7 @@ client.on('messageCreate', async (message) => {
                     } else {
                         message.channel.send(`Command usage: \`${cmdPrefix}mod qotd <viewlist/add/edit/remove> <position> <asker> <anon> <question>\``);
                     }
-                } else if (modCmd === 'clearcache') {
+                } else if (modCmd === 'clearcache' && hasModAccess(message)) {
                     questTable = {};
                     loadQuests();
                     cache = {};
@@ -1407,9 +1411,9 @@ client.on('messageCreate', async (message) => {
                     // worker.terminate();
                     // worker = new Worker('./dvboxreader.js');
                     message.channel.send("Cache cleared. Information given should now reflect the most recent wiki changes.");
-                } else if (modCmd === 'dljson') {
+                } else if (modCmd === 'dljson' && hasModAccess(message)) {
                     message.author.send({content: "Here is my current `dragonList.json` file.", files: ["./dragonList.json"]});
-                } else if (modCmd === 'uljson') {
+                } else if (modCmd === 'uljson' && hasModAccess(message)) {
                     let file = message.attachments.first();
                     if (!file) message.channel.send("You must upload a file!");
                     else if (file.name != "dragonList.json") message.channel.send("Invalid file name! The file's name *must* be `dragonList.json`.");
@@ -1450,7 +1454,7 @@ client.on('messageCreate', async (message) => {
                             });
                         });
                     }
-                } else if (modCmd === 'purge') {
+                } else if (modCmd === 'purge' && hasModAccess(message)) {
                     if (message.guild.id != '233370210617262080') { // DV guild id = '233370210617262080' | ZBMC guild id = '290552335611068427'
                         message.channel.send("This command can only be used in the DragonVale Discord server.");
                         return;
@@ -1473,7 +1477,7 @@ client.on('messageCreate', async (message) => {
                             });
                         }
                     }
-                } else if (modCmd === 'cleanthread') {
+                } else if (modCmd === 'cleanthread' && hasModAccess(message)) {
                     // Removes inactive members from thread
                     // Pass in thread by ID
                     if (args.length == 0) {
@@ -1588,15 +1592,66 @@ client.on('messageCreate', async (message) => {
                             message.channel.send(`ID ${threadId} is for channel \`${thread.name}\`, which is not a thread!`);
                         }
                     } else message.channel.send(`Did not find a channel/thread with ID ${threadId}`);
-                } else if (modCmd === 'spamtest') {
-                    const oracleTestCh = message.guild.channels.cache.get('818011940160405534');
-                    const dv_turqwhat = client.emojis.cache.get('812096747672961086');
-                    for (i = 1; i <= 10; i++) {
-                        oracleTestCh.send(i + ` ${dv_turqwhat}`);
-                        await sleep(500);
-                    } 
+                } else if (modCmd === 'pin') {
+                    if (args.length == 0) {
+                        let failMsg = await message.channel.send("Please specify of the ID of the message to pin.");
+                        await sleep(3000);
+                        failMsg.delete();
+                        return;
+                    }
+                    let msgMgr = message.channel.messages;
+                    let msgId = args[0].split('/').at(-1).trim();
+                    msgMgr.fetchPinned().then(pins => {
+                        msgMgr.fetch(msgId).then(async msgToPin => {
+                            if (pins.size >= 50) {
+                                message.channel.send("ERROR: Cannot pin that message as the channel pin limit has been reached.");
+                            } else if (pins.get(msgId)) {
+                                let failMsg = await message.channel.send("ERROR: That message is already pinned!");
+                                await sleep(3000);
+                                message.delete();
+                                failMsg.delete();
+                            } else {
+                                msgMgr.pin(msgToPin).then(async () => {
+                                    let successMsg = await message.channel.send("Successfully pinned message!");
+                                    await sleep(3000);
+                                    message.delete();
+                                    successMsg.delete();
+                                })
+                            }
+                        }).catch(error => {
+                            message.channel.send("ERROR: No message found with that ID.");
+                        });
+                    });
+                } else if (modCmd === 'unpin') {
+                    if (args.length == 0) {
+                        let failMsg = await message.channel.send("Please specify of the ID of the message to unpin.");
+                        await sleep(3000);
+                        failMsg.delete();
+                        return;
+                    }
+                    let msgMgr = message.channel.messages;
+                    let msgId = args[0].split('/').at(-1).trim();
+                    msgMgr.fetchPinned().then(pins => {
+                        msgMgr.fetch(msgId).then(async msgToPin => {
+                            if (!pins.get(msgId)) {
+                                let failMsg = await message.channel.send("ERROR: That message is not pinned.");
+                                await sleep(3000);
+                                message.delete();
+                                failMsg.delete();
+                            } else {
+                                msgMgr.unpin(msgToPin).then(async () => {
+                                    let successMsg = await message.channel.send("Successfully unpinned message!");
+                                    await sleep(3000);
+                                    message.delete();
+                                    successMsg.delete();
+                                })
+                            }
+                        }).catch(error => {
+                            message.channel.send("ERROR: No message found with that ID.");
+                        });
+                    });
                 } else {
-                    message.channel.send(`Unknown mod command. Type \`${cmdPrefix}mod help\` for a list of commands.`);
+                    message.channel.send(`Unknown mod command and/or permissions error. Type \`${cmdPrefix}mod help\` for a list of available commands.`);
                 }
             }
         } else if (cmd === 'aurora') {
@@ -1694,6 +1749,7 @@ function fmt_dhms(t) {
 }
 
 hasModAccess = (message) => (message.guild.id == "233370210617262080" && message.member.roles.cache.some(r => r.name === "Mod Wizard")) || message.member.id == "295625585299030016";
+hasHelperAccess = (message) => hasModAccess(message) || (message.guild.id == "233370210617262080" && message.member.roles.cache.some(r => r.name === "Helper Dragon"));
 
 isStaffMember = (guildMember) => {
     return guildMember.roles.cache.some(r => ["Owner Wizard", "Admin Wizard", "Mod Wizard", "Helper Dragon"].includes(r.name));
@@ -1716,10 +1772,12 @@ prettyString = function(words, separator) {
 	if (words.length == 0) return false;
 	var result = words[0].toLowerCase();
 	if (result == 'ponkipong') result = 'PonkiPong';
+    else if (result === 'drack-o-lantern') result = 'Drack-o-Lantern';
 	else result = result.charAt(0).toUpperCase() + result.substring(1);
 	for (i = 1; i < words.length; i++) {
 		var str = words[i].toLowerCase();
         if (str == 'ponkipong') str = 'PonkiPong';
+        else if (str === 'drack-o-lantern') str = 'Drack-o-Lantern';
 		else str = str.charAt(0).toUpperCase() + str.substring(1);
 		result += separator + str;
 	}

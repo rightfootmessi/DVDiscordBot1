@@ -231,6 +231,10 @@
         "dragon": "Paper Dragon",
         "proper": "Backflip Trip"
     },
+    "bake it": {
+        "dragon": "Gingerbread Dragon",
+        "proper": "Bake It"
+    },
     "basking in the basket": {
         "dragon": "Basket Dragon",
         "proper": "Basking in the Basket"
@@ -2235,6 +2239,10 @@
         "dragon": "Euryale Dragon",
         "proper": "Rock the Boat"
     },
+    "rock your world": {
+        "dragon": "Tectonic Dragon",
+        "proper": "Rock Your World"
+    },
     "rocky horror tincture show": {
         "dragon": "Ghostly Poison Dragon",
         "proper": "Rocky Horror Tincture Show"
@@ -2554,6 +2562,10 @@
     "soothing waters": {
         "dragon": "Infernus Dragon",
         "proper": "Soothing Waters"
+    },
+    "sooty": {
+        "dragon": "Eaves Dragon",
+        "proper": "Sooty"
     },
     "spark in the dark": {
         "dragon": "Hidden Bolt Dragon",
@@ -3319,12 +3331,52 @@
         "dragon": "Jiaolong Dragon",
         "proper": "Year of the other Dragon"
     },
-    "": {
-        "dragon": "Awoo Dragon",
-        "proper": ""
+    "screechy": {
+        "dragon": "Dragpir Dragon",
+        "proper": "Screechy"
     },
     "boo-gie": {
         "dragon": "Spooker Dragon",
         "proper": "Boo-gie"
+    },
+    "where wolf?": {
+        "dragon": "Awoo Dragon",
+        "proper": "Where Wolf?"
+    },
+    "pun-king": {
+        "dragon": "Drack-o-Lantern Dragon",
+        "proper": "Pun-king"
+    },
+    "corn-ivore": {
+        "dragon": "Candycorn Dragon",
+        "proper": "Corn-ivore"
+    },
+    "baba": {
+        "dragon": "Yaga Dragon",
+        "proper": "Baba"
+    },
+    "brutal stuff": {
+        "dragon": "Bruntal Dragon",
+        "proper": "Brutal Stuff"
+    },
+    "uncovered evil": {
+        "dragon": "Dracomancy 1 Dragon",
+        "proper": "Uncovered Evil"
+    },
+    "evil reborn": {
+        "dragon": "Dracomancy 4 Dragon",
+        "proper": "Evil Reborn"
+    },
+    "firestorm": {
+        "dragon": "Lavaloch Dragon",
+        "proper": "Firestorm"
+    },
+    "give 'em hail": {
+        "dragon": "Iceclaw Dragon",
+        "proper": "Give 'em Hail"
+    },
+    "": {
+        "dragon": "Flamegobbler Dragon",
+        "proper": ""
     }
 }
