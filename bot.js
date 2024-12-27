@@ -51,6 +51,22 @@ const helpMsg2 = "- `quest <quest>` - get the correct dragon to send on a quest\
                 + "- `uses <dragon name>` - get all dragons that include the specified dragon in its breeding combination\n"
 				+ "- `wiki <dragon name OR item>` - get the link to a dragon's wiki page, or displays the wiki's search results if the argument is another item\n"
 				+ "- `help` - view this message";
+const helpMsgHelper = `Mod command list: (prefix all commands with \`${cmdPrefix}mod\`)\n`
+                + "- `pin <message link/ID>` - pins the linked message to the channel (MUST use command in the same channel as the message to be pinned!); does nothing if the channel is at the pin limit already\n"
+                + "- `unpin <message link/ID>` - unpins the linked message from the channel (MUST use commandin the same channel as the message to be unpinned!)\n";
+const helpMsgMod = helpMsgHelper
+                + "- `viewlist [primaries/evolutions/enhanced/dayNight/hiding]` - sends my stored list of dragons to your DMs; optionally specify a flag to only be sent dragons matching that flag, otherwise I send the whole list (warning: it's long)\n"
+                + "- `dragon <add/remove> <dragon>` - add/remove dragon to dragon list\n"
+                + "- `flag <dragon> <primaries/evolutions/enhanced/dayNight/hiding>` - add the specified flag to the dragon\n"
+                + "- `unflag <dragon> <primaries/evolutions/enhanced/dayNight/hiding>` - remove the specified flag from the dragon\n"
+                + "- `getflags <dragon>` - gets all flags on the specified dragon\n"
+                + "- `guide <add/remove> <name> [contents]` - add/remove a guide\n"
+                + "- `qotd <viewlist/add/edit/remove> <position> <asker> <anon> <question>` - Adds/removes an upcoming QOTD, or lists all pending questions\n"
+                + "- `clearcache` - clear the bot's cache (useful after updating the wiki)\n"
+                + "- `dljson` - sends a downloadable copy of my dragon list as a json file\n"
+                + "- `uljson` - upload a new dragon list json file for me to use (note: the file's name *must* be `dragonList.json`!)\n"
+                + "- `purge <# of messages>` - clears the specified number of most recent messages from the channel it's used in\n"
+                + "- `cleanthread <id> [# days] [list] [remove]` - counts the number of users who have not sent a message in the specified thread in the specified number of days; adding the `list` argument DMs you with the names of these users, and/or adding the `remove` argument kicks them all from the thread";
 
 const riftFeeding = [2500, 6000, 9000, 12000, 20000, 30000, 45000, 70000, 100000, 150000, 250000, 350000, 500000, 800000, 1200000, 1800000, 3000000, 4000000, 6250000, 12500000];
 
@@ -999,24 +1015,7 @@ client.on('messageCreate', async (message) => {
         } else if (cmd === 'mod' && hasHelperAccess(message)) {
             console.log(`${message.author.tag} ran mod cmd ${message.content.toLowerCase()}`);
             if (args.length == 0) {
-                const helpMsg = `Mod command list: (prefix all commands with \`${cmdPrefix}mod\`)\n`
-                        + "- `pin <message link/ID>` - pins the linked message to the channel (MUST use command in the same channel as the message to be pinned!); does nothing if the channel is at the pin limit already\n"
-                        + "- `unpin <message link/ID>` - unpins the linked message from the channel (MUST use commandin the same channel as the message to be unpinned!)\n";
-                if (hasModAccess(message)) {
-                    helpMsg += "- `viewlist [primaries/evolutions/enhanced/dayNight/hiding]` - sends my stored list of dragons to your DMs; optionally specify a flag to only be sent dragons matching that flag, otherwise I send the whole list (warning: it's long)\n"
-                        + "- `dragon <add/remove> <dragon>` - add/remove dragon to dragon list\n"
-                        + "- `flag <dragon> <primaries/evolutions/enhanced/dayNight/hiding>` - add the specified flag to the dragon\n"
-                        + "- `unflag <dragon> <primaries/evolutions/enhanced/dayNight/hiding>` - remove the specified flag from the dragon\n"
-                        + "- `getflags <dragon>` - gets all flags on the specified dragon\n"
-                        + "- `guide <add/remove> <name> [contents]` - add/remove a guide\n"
-                        + "- `qotd <viewlist/add/edit/remove> <position> <asker> <anon> <question>` - Adds/removes an upcoming QOTD, or lists all pending questions\n"
-                        + "- `clearcache` - clear the bot's cache (useful after updating the wiki)\n"
-                        + "- `dljson` - sends a downloadable copy of my dragon list as a json file\n"
-                        + "- `uljson` - upload a new dragon list json file for me to use (note: the file's name *must* be `dragonList.json`!)\n"
-                        + "- `purge <# of messages>` - clears the specified number of most recent messages from the channel it's used in\n"
-                        + "- `cleanthread <id> [# days] [list] [remove]` - counts the number of users who have not sent a message in the specified thread in the specified number of days; adding the `list` argument DMs you with the names of these users, and/or adding the `remove` argument kicks them all from the thread";
-                }
-                message.channel.send(helpMsg);
+                message.channel.send(hasModAccess(message) ? helpMsgMod : helpMsgHelper);
             } else {
                 const modCmd = args.shift();
                 if (modCmd === 'viewlist' && hasModAccess(message)) {
