@@ -1932,7 +1932,7 @@ readWikiPage = (dragon, $) => {
     var elems = [];
     if (isOldDragonbox) {
         $(".dragonbox").first().find('tr').eq(8).children().eq(1).children().each((i, elem) => {
-            elems.push($(elem).attr('title').split(" ")[0]);
+            elems.push($(elem).children().first().attr('title').split(" ")[0]);
         });
     } else {
         $(".dragonbox").first().find('tr').eq(10).children().eq(1).children().each((i, elem) => {
@@ -1943,7 +1943,7 @@ readWikiPage = (dragon, $) => {
 	var hiddenElems = [];
     if (isOldDragonbox) {
         $(".dragonbox").first().find('tr').eq(17).children('td').first().children().each((i, elem) => {
-            var imgName = $(elem).children().first().attr('data-image-name');
+            var imgName = $(elem).children().first().children().first().attr('data-image-name');
             if (!imgName.includes("Iconb")) {
                 hiddenElems.push(imgName.split(" ")[1].replace(".png", ""));
             }
@@ -1984,7 +1984,7 @@ readWikiPage = (dragon, $) => {
 
     var firstElemIconName, isGemstone;
 	if (isOldDragonbox) {
-        firstElemIconName = $(".dragonbox").first().find('tr').eq(8).children('td').first().children().first().children().first().attr('data-image-name');
+        firstElemIconName = $(".dragonbox").first().find('tr').eq(8).children('td').first().children().first().children().first().children().first().attr('data-image-name');
         isGemstone = firstElemIconName.includes("Gemstone") || firstElemIconName.includes("Crystalline");
     } else {
         firstElemIconName = $(".dragonbox").first().find('tr').eq(10).children('td').first().children().first().children().first().children().first().attr('data-image-name');
@@ -1994,7 +1994,7 @@ readWikiPage = (dragon, $) => {
 		var isEpicDragon = false;
         if (isOldDragonbox) {
             $(".dragonbox").first().find('tr').eq(8).children('td').first().children().each((i, elem) => {
-                var imgName = $(elem).children().first().attr('data-image-name');
+                var imgName = $(elem).children().first().children().first().attr('data-image-name');
                 if (!imgName.includes("Iconb")) {
                     var element = imgName.split(" ")[1].replace(".png", "");
                     if (isEpic(element)) isEpicDragon = true;
@@ -2216,27 +2216,27 @@ readMonolithWikiPage = function() {
             
             // Breeding combo
             for (let id = 1; id <= 6; id++) {
-                let dragon = "Monolith " + id + " Dragon";
+                let dragon = `Monolith ${id} Dragon`;
                 var table = $(".dragonbox").eq(id - 1);
                 cache[dragon] = {};
-
+                
                 // Breeding combo
                 cache[dragon]["breedCombo"] = $("#Breeding").parent().next().text().trim();
 
                 // Elements
                 var elems = [];
                 table.find('tr').eq(8).children().eq(1).children().each((j, elem) => {
-                    elems.push($(elem).attr('title').split(" ")[0]);
+                    elems.push($(elem).children().first().attr('title').split(" ")[0]);
                 });
                 var hiddenElems = [];
                 table.find('tr').eq(17).children('td').first().children().each((j, elem) => {
-                    var imgName = $(elem).children().first().attr('data-image-name');
+                    var imgName = $(elem).children().first().children().first().attr('data-image-name');
                     if (!imgName.includes("Iconb")) {
                         hiddenElems.push(imgName.split(" ")[1].replace(".png", ""));
                     }
                 });
-                var elemsResponse = dragon + " has the " + prettyString(elems, ", ") + " elements on its profile.\n";
-                elemsResponse += (hiddenElems.length == 10) ? dragon + " adds all 10 elements when breeding (often called a *pseudo*)." : (hiddenElems.length > 0) ? dragon + " adds the " + prettyString(hiddenElems, ", ") + " elements when breeding." : "Error: The wiki is missing the breeding elements of the " + dragon;
+                var elemsResponse = `${dragon} has the ${prettyString(elems, ", ")} elements on its profile.\n`;
+                elemsResponse += (hiddenElems.length == 10) ? `${dragon} adds all 10 elements when breeding (often called a *pseudo*).` : (hiddenElems.length > 0) ? `${dragon} adds the ${prettyString(hiddenElems, ", ")} elements when breeding.` : `Error: The wiki is missing the breeding elements of the ${dragon}`;
                 cache[dragon]["elements"] = elemsResponse;
 
                 // Rates
@@ -2328,7 +2328,7 @@ readSnowflakeWikiPage = function() {
             
             // Breeding combo
             for (let id = 1; id <= 7; id++) {
-                let dragon = "Snowflake " + id + " Dragon";
+                let dragon = `Snowflake ${id} Dragon`;
                 var table = $(".dragonbox").eq(id - 1);
                 cache[dragon] = {};
 
@@ -2338,11 +2338,11 @@ readSnowflakeWikiPage = function() {
                 // Elements
                 var elems = [];
                 table.find('tr').eq(8).children().eq(1).children().each((j, elem) => {
-                    elems.push($(elem).attr('title').split(" ")[0]);
+                    elems.push($(elem).children().first().attr('title').split(" ")[0]);
                 });
                 var hiddenElems = [];
                 table.find('tr').eq(17).children('td').first().children().each((j, elem) => {
-                    var imgName = $(elem).children().first().attr('data-image-name');
+                    var imgName = $(elem).children().first().children().first().attr('data-image-name');
                     if (!imgName.includes("Iconb")) {
                         hiddenElems.push(imgName.split(" ")[1].replace(".png", ""));
                     }

@@ -1491,9 +1491,9 @@
         "dragon": "Flurry Dragon",
         "proper": "It Came From the Clouds"
     },
-    "it comes in makeshift boat": {
+    "makeshift boat": {
         "dragon": "Canna Dragon",
-        "proper": "It Comes In Makeshift Boat"
+        "proper": "Makeshift Boat"
     },
     "it's real glass": {
         "dragon": "Glasswing Dragon",
@@ -3375,8 +3375,60 @@
         "dragon": "Iceclaw Dragon",
         "proper": "Give 'em Hail"
     },
-    "": {
+    "up to 1200° c": {
         "dragon": "Flamegobbler Dragon",
-        "proper": ""
+        "proper": "Up to 1200° C"
+    },
+    "ice and fire": {
+        "dragon": "Pyros & Glacius Dragon",
+        "proper": "Ice and Fire"
+    },
+    "ocean spirit": {
+        "dragon": "Aquadruple Leap Year Dragon",
+        "proper": "Ocean Spirit"
+    },
+    "core strength": {
+        "dragon": "Earthcore Dragon",
+        "proper": "Core Strength"
+    },
+    "magmificent": {
+        "dragon": "Volcano Dragon",
+        "proper": "Magmificent"
+    },
+    "wish upon a lily": {
+        "dragon": "Lilypond Dragon",
+        "proper": "Wish Upon A Lily"
+    },
+    "lotus pose": {
+        "dragon": "Hasu Dragon",
+        "proper": "Lotus Pose"
+    },
+    "slurp...": {
+        "dragon": "Smoothie Dragon",
+        "proper": "Slurp..."
+    },
+    "cha-cha-cha": {
+        "dragon": "Maracas Dragon",
+        "proper": "Cha-Cha-Cha"
+    },
+    "rollin' on the river": {
+        "dragon": "Waapawaapa Dragon",
+        "proper": "Rollin' on the River"
+    },
+    "cancelled plans": {
+        "dragon": "Shy Dragon",
+        "proper": "Cancelled Plans"
+    },
+    "no grease here": {
+        "dragon": "Hollow Dragon",
+        "proper": "No Grease Here"
+    },
+    "flight of whales": {
+        "dragon": "Koholahola Dragon",
+        "proper": "Flight of Whales"
+    },
+    "birds of a feather": {
+        "dragon": "Flamindos Dragon",
+        "proper": "Birds of a Feather"
     }
 }
