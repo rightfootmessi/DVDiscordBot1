@@ -1912,6 +1912,7 @@ cache: {
 	// etc.
 }
 */
+const lineBreakRegex = /<br\s*[\/]?>/gi;
 readWikiPage = (dragon, $) => {
 	// INITIALIZE OBJECT FIELDS
 	cache[dragon] = {};
@@ -1920,7 +1921,9 @@ readWikiPage = (dragon, $) => {
 	cache[dragon]["pictures"] = {};
 	// READ PAGE CONTENTS
 	// Breeding combo
-	var breedResponse = $("#Breeding").parent().next().text().trim();
+	let breedElem = $('#Breeding').parent().next();
+    if (breedElem.length > 0) breedElem.html(breedElem.html().replace(lineBreakRegex, '\n'));
+    var breedResponse = breedElem.text().trim();
 	if ($(".dragonbox").first().find('tr').eq(14).children('td').first().text().trim() === "EXPIRED") {
 		breedResponse += " *Note: This dragon is not available right now (per the wiki, which may not be fully up to date - check the Dragonarium to confirm)!*";
 	}
@@ -1928,6 +1931,7 @@ readWikiPage = (dragon, $) => {
 
     /* IMPORTANT: CHECK WHICH VERSION OF THE DRAGONBOX THIS PAGE USES */
     var isOldDragonbox = $(".dragonbox").first().find('tr').eq(8).children().eq(0).text().trim() === "Elements";
+    console.log(`Reading ${isOldDragonbox ? "OLD" : "NEW"} dragonbox`)
 	// Elements
     var elems = [];
     if (isOldDragonbox) {
@@ -1936,8 +1940,8 @@ readWikiPage = (dragon, $) => {
         });
     } else {
         $(".dragonbox").first().find('tr').eq(10).children().eq(1).children().each((i, elem) => {
-            let title = $(elem).children().first().attr('title');
-            if (title) elems.push($(elem).children().first().attr('title').split(" ")[0]);
+            let title = $(elem).children().first().children().first().attr('title');
+            if (title) elems.push(title.split(" ")[0]);
         });
     }
 	var hiddenElems = [];
@@ -1950,7 +1954,7 @@ readWikiPage = (dragon, $) => {
         });
     } else {
         $(".dragonbox").first().find('tr').eq(17).children('td').first().children().each((i, elem) => {
-            var imgName = $(elem).children().first().children().first().attr('data-image-name');
+            var imgName = $(elem).children().first().children().first().children().first().attr('data-image-name');
             if (!imgName.includes("Iconb")) {
                 hiddenElems.push(imgName.split(" ")[1].replace(".png", ""));
             }
@@ -1960,7 +1964,7 @@ readWikiPage = (dragon, $) => {
     elemsResponse += (hiddenElems.length == 10) ? dragon + " adds all 10 elements when breeding (often called a *pseudo*)." : (hiddenElems.length > 0) ? dragon + " adds the " + prettyString(hiddenElems, ", ") + " elements when breeding." : "Error: The wiki is missing the breeding elements of the " + dragon;
 	cache[dragon]["elements"] = elemsResponse;
 	// Evolve
-	var curr = $("#Obtaining").parent();
+	var curr = $("#Obtaining_from_Evolution").parent();
 	var evoResult = "";
 	var index = 0; // Safeguard to prevent infinite loop (will only happen if the page html is abnormal)
 	while (true) {
@@ -1987,7 +1991,7 @@ readWikiPage = (dragon, $) => {
         firstElemIconName = $(".dragonbox").first().find('tr').eq(8).children('td').first().children().first().children().first().children().first().attr('data-image-name');
         isGemstone = firstElemIconName.includes("Gemstone") || firstElemIconName.includes("Crystalline");
     } else {
-        firstElemIconName = $(".dragonbox").first().find('tr').eq(10).children('td').first().children().first().children().first().children().first().attr('data-image-name');
+        firstElemIconName = $(".dragonbox").first().find('tr').eq(10).children('td').first().children().first().children().first().children().first().children().first().attr('data-image-name');
         isGemstone = firstElemIconName.includes("Gemstone") || firstElemIconName.includes("Crystalline");
     }
 	if (!isGemstone) {
@@ -2002,8 +2006,8 @@ readWikiPage = (dragon, $) => {
             });
         } else {
             $(".dragonbox").first().find('tr').eq(10).children('td').first().children().each((i, elem) => {
-                var imgName = $(elem).children().first().children().first().attr('data-image-name');
-                if (!imgName.includes("Iconb")) {
+                var imgName = $(elem).children().first().children().first().children().first().attr('data-image-name');
+                if (imgName && !imgName.includes("Iconb")) {
                     var element = imgName.split(" ")[1].replace(".png", "");
                     if (isEpic(element)) isEpicDragon = true;
                 }
@@ -2035,11 +2039,12 @@ readWikiPage = (dragon, $) => {
 				table += `\n| ${sprintf('%-4d', (i+1))}:${sprintf('%7s', rates[i])} | ${sprintf('%-4d', (i+11))}:${sprintf('%7s', rates[i+10])} |`;
 			}
             if (elders.includes(dragon)) {
-                let elderRate = roundRate(Math.ceil(parseInt(title.parent().next().next().children().first().children().eq(5).children().first().text().trim()) * (1 + 0.3 * boosts)));
+                let elderRate = roundRate(Math.ceil(parseInt(title.parent().next().next().children().first().children().eq(1).children().last().text().trim()) * (1 + 0.3 * boosts)));
                 table += `\n|              | 21  :${sprintf('%7s', elderRate)} |`;
             }
 			cache[dragon]["rates"]["non-rift"][boosts] = "DragonCash earning rates for " + dragon + " (" + boosts + "/" + maxBoosts + " boosts):\n" + table + "```"
-					+ "\nNOTE: Your dragon's profile will likely show a lower number than what's in this table. That number is wrong (this has been experimentally proven). The numbers here are the *actual* earning rates.";
+					+ "\nNOTE: The above table has not yet been updated to reflect the most recent discoveries about DC earning mechanics. Please treat these numbers as estimates for now, and not exactly correct values.";
+					// + "\nNOTE: Your dragon's profile will likely show a lower number than what's in this table. That number is wrong (this has been experimentally proven). The numbers here are the *actual* earning rates.";
 		}
 		var rates = [];
 		for (i = 0; i < 20; i++) {
