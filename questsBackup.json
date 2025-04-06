@@ -3375,9 +3375,9 @@
         "dragon": "Iceclaw Dragon",
         "proper": "Give 'em Hail"
     },
-    "up to 1200° c": {
+    "up to 1200 °c": {
         "dragon": "Flamegobbler Dragon",
-        "proper": "Up to 1200° C"
+        "proper": "Up to 1200 °C"
     },
     "ice and fire": {
         "dragon": "Pyros & Glacius Dragon",
@@ -3430,5 +3430,29 @@
     "birds of a feather": {
         "dragon": "Flamindos Dragon",
         "proper": "Birds of a Feather"
+    },
+    "king of flan": {
+        "dragon": "Caramelo Dragon",
+        "proper": "King of Flan"
+    },
+    "sour hour": {
+        "dragon": "Sourtail Dragon",
+        "proper": "Sour Hour"
+    },
+    "lollipop'n'roll": {
+        "dragon": "Swirly Dragon",
+        "proper": "Lollipop'n'roll"
+    },
+    "jelly on, jelly strong": {
+        "dragon": "Jiggly Dragon",
+        "proper": "Jelly On, Jelly Strong"
+    },
+    "inconspicuous": {
+        "dragon": "Legit Dragon",
+        "proper": "Inconspicuous"
+    },
+    "cake in a cup": {
+        "dragon": "Cupcake Dragon",
+        "proper": "Cake in a Cup"
     }
 }

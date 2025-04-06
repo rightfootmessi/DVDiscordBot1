@@ -1953,7 +1953,7 @@ readWikiPage = (dragon, $) => {
             }
         });
     } else {
-        $(".dragonbox").first().find('tr').eq(17).children('td').first().children().each((i, elem) => {
+        $(".dragonbox").first().find('tr').eq(17).children('td').first().children().first().children().each((i, elem) => {
             var imgName = $(elem).children().first().children().first().children().first().attr('data-image-name');
             if (!imgName.includes("Iconb")) {
                 hiddenElems.push(imgName.split(" ")[1].replace(".png", ""));
@@ -1991,7 +1991,7 @@ readWikiPage = (dragon, $) => {
         firstElemIconName = $(".dragonbox").first().find('tr').eq(8).children('td').first().children().first().children().first().children().first().attr('data-image-name');
         isGemstone = firstElemIconName.includes("Gemstone") || firstElemIconName.includes("Crystalline");
     } else {
-        firstElemIconName = $(".dragonbox").first().find('tr').eq(10).children('td').first().children().first().children().first().children().first().children().first().attr('data-image-name');
+        firstElemIconName = $(".dragonbox").first().find('tr').eq(10).children('td').first().children().first().children().first().children().first().children().first().children().first().attr('data-image-name');
         isGemstone = firstElemIconName.includes("Gemstone") || firstElemIconName.includes("Crystalline");
     }
 	if (!isGemstone) {

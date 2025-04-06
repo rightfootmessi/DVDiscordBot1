@@ -105,6 +105,7 @@
         "Cansian Dragon",
         "Canvas Dragon",
         "Capricornian Dragon",
+        "Caramelo Dragon",
         "Carnival Dragon",
         "Cave Dragon",
         "Celerulean Dragon",
@@ -154,6 +155,7 @@
         "Cuddlewing Dragon",
         "Cumberpatch Dragon",
         "Cumulus Dragon",
+        "Cupcake Dragon",
         "Cupido Dragon",
         "Curlyleaf Dragon",
         "Current Dragon",
@@ -198,7 +200,10 @@
         "Double Rainbow Dragon",
         "Dracabra Dragon",
         "Drack-o-Lantern Dragon",
-        "Dracomancy Dragon",
+        "Dracomancy 1 Dragon",
+        "Dracomancy 2 Dragon",
+        "Dracomancy 3 Dragon",
+        "Dracomancy 4 Dragon",
         "Dragpir Dragon",
         "Dream Dragon",
         "Drifter Dragon",
@@ -402,6 +407,7 @@
         "Jet Dragon",
         "Jetstream Dragon",
         "Jiaolong Dragon",
+        "Jiggly Dragon",
         "Jingle Dragon",
         "Jumpiplop Dragon",
         "Kage Dragon",
@@ -437,6 +443,7 @@
         "Leaf Dragon",
         "Leap Year Dragon",
         "Leathery Dragon",
+        "Legit Dragon",
         "Leonian Dragon",
         "Leviathan Dragon",
         "Liberty Dragon",
@@ -738,6 +745,7 @@
         "Soot Dragon",
         "Sorarian Dragon",
         "Soriak Dragon",
+        "Sourtail Dragon",
         "Sow Dragon",
         "Spark Dragon",
         "Sparkles Dragon",
@@ -783,6 +791,7 @@
         "Swamp Dragon",
         "Sweetheart Dragon",
         "Swiftgrace Dragon",
+        "Swirly Dragon",
         "Tansy Dragon",
         "Taurian Dragon",
         "Tebori Dragon",
@@ -907,6 +916,9 @@
         "Burglehoo Dragon",
         "Corrupticorn Dragon",
         "Curlyleaf Dragon",
+        "Dracomancy 2 Dragon",
+        "Dracomancy 3 Dragon",
+        "Dracomancy 4 Dragon",
         "Dracomancy Dragon",
         "Ghostly Cold Dragon",
         "Ghostly Earth Dragon",
@@ -1022,5 +1034,7 @@
         "Plant Dragon",
         "Water Dragon"
     ],
-    "newDrags": []
+    "newDrags": [
+        "Cupcake Dragon"
+    ]
 }
