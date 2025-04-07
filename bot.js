@@ -1939,8 +1939,8 @@ readWikiPage = (dragon, $) => {
             elems.push($(elem).children().first().attr('title').split(" ")[0]);
         });
     } else {
-        $(".dragonbox").first().find('tr').eq(10).children().eq(1).children().each((i, elem) => {
-            let title = $(elem).children().first().children().first().attr('title');
+        $(".dragonbox").first().find('tr').eq(10).children().eq(1).find('a').each((i, elem) => {
+            let title = $(elem).attr('title');
             if (title) elems.push(title.split(" ")[0]);
         });
     }
