@@ -1,0 +1,86 @@
+{
+    "BreedingHints.json": [
+        "Any",
+        "BuyPrice",
+        "BuyPriceType",
+        "DragonExceptions",
+        "IsEvolution",
+        "MinimumRequiredElements",
+        "Prerequisites",
+        "RequiredCave",
+        "RequiredCloneCave",
+        "RequiredDecorations",
+        "RequiredDragonTraits",
+        "RequiredDragons",
+        "RequiredElements",
+        "RequiredElementsForBothParents",
+        "RequiredTime",
+        "RequiredTraits",
+        "RequiredWeather",
+        "RiftAlignment",
+        "Text"
+    ],
+    "Dragons.json": [
+        "Alias",
+        "BreedingElements",
+        "BreedingTime",
+        "BuyCurrency",
+        "BuyPrice",
+        "Description",
+        "Devolution",
+        "Elder",
+        "Elements",
+        "Evolutions",
+        "Ghostly",
+        "Goal",
+        "HatchExperience",
+        "IsLimited",
+        "LevelRequirement",
+        "Name",
+        "Pedestal",
+        "Rarity",
+        "ReleaseDate",
+        "SellCurrency",
+        "SellPrice",
+        "Tags",
+        "Traits"
+    ],
+    "EarningRates.json": [
+        "Currency",
+        "Rates"
+    ],
+    "EtheriumEarningRates.json": [
+        "Corrupticorn",
+        "Currency",
+        "Dracomancy 1",
+        "Epic",
+        "Rare",
+        "Rates"
+    ],
+    "Limited.json": {
+        "main": [
+            "decorations",
+            "dragons",
+            "events",
+            "islandThemes"
+        ],
+        "eventNames": [
+            "Deepest Depths II"
+        ],
+        "event": [
+            "Breedable",
+            "Cost",
+            "Currency"
+        ]
+    },
+    "Quests.json": [
+        "Elements",
+        "Name",
+        "Rarity",
+        "Time"
+    ],
+    "compEarnRates.json": [
+        "Dragon",
+        "Gold"
+    ]
+}

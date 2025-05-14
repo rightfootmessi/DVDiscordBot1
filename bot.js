@@ -31,7 +31,7 @@ const { Worker } = require('worker_threads');
 const fs = require('fs');
 const sprintf = require('sprintf-js').sprintf;
 
-const cmdPrefix = 'd!';
+const cmdPrefix = 'd%';
 
 // if odd # of cmds, give the extra to msg2 since msg1 also has the header
 const helpMsg1 = `Command list (prefix all commands with \`${cmdPrefix}\`):\n`
@@ -153,6 +153,8 @@ oddsCache: {
 }
 */
 
+var wiki_breedingHints = {};
+
 // let worker = new Worker('./dvboxreader.js');
 let qotd_worker = new Worker('./qotd.js');
 
@@ -199,6 +201,7 @@ client.on('ready', () => {
 
     qotd_worker.on('message', data => post_qotd(data));
     qotd_worker.postMessage({cmd: 'restart'});
+    loadWikiData();
 });
 
 
@@ -1877,6 +1880,210 @@ loadQuests = () => {
         questsLoaded = true;
     });
 }
+
+/*
+DV Wiki json files:
+- BreedingHints.json [some fields may not be present]
+    {
+        breedingHints: {
+            [dragon]: {
+                BuyPrice: int
+                BuyPriceType: string
+                RequiredElements: [string]
+                RequiredDragons: [string]
+                RequiredCave: string
+                RequiredCloneCave: string
+                RequiredTime: string
+                RequiredWeather: string
+                DragonExceptions: [string]
+                Text: string
+                IsEvolution: boolean
+                RequiredDecorations: string
+                MinimumRequiredElements: int
+                Any: boolean
+                RequiredElementsForBothParents: string
+                RequiredTraits: string
+                RequiredDragonTraits: [string]
+                RiftAlignment: string
+                Prerequisites: {Owned: {Elements: string}}
+            }
+            ...
+        }
+    }
+- BreedingOdds.json
+    (basically just compendium data)
+- DecorationCommemorations.json
+    (where each decoration comes from / why it exists)
+- DecorationForms.json
+    (not sure what this is for)
+- Decorations.json [some fields may not be present]
+    {
+        decorations: [
+            {
+                Name: string
+                Description: string
+                Dragon: string
+                Element: string
+                Size: string
+                ReleaseDate: string
+                Order: int
+                BuyPrice: int
+                BuyCurrency: string
+                SellPrice: int
+                SellCurrency: string
+                BuyExperience: int
+                isLimited: boolean
+            }
+            ...
+        ]
+    }
+- DragonCommemorations.json
+    (where each dragon comes from / why it exists)
+- DragonForms.json
+    {
+        forms: {
+            [dragon]: [string]
+            ...
+        }
+    }
+- DragonNames.json
+    (auto-generated names for newly hatched dragons)
+- Dragonarium.json
+    (in-game dragonarium sections)
+- Dragons.json
+    {
+        dragons: [
+            {
+                Name: string
+                Rarity: string
+                BreedingTime: string
+                Description: string
+                ReleaseDate: string
+                BuyPrice: int
+                BuyCurrency: string
+                SellPrice: int
+                SellCurrency: string
+                HatchExperience: int
+                LevelRequirement: int
+                Elements: [string]
+                BreedingElements: [string]
+                Evolutions: [
+                    {
+                        Name: string
+                        Cost: int
+                        CostType: string
+                    }
+                ]
+                Devolution: string
+                IsLimited: boolean
+                Pedestal: {
+                    BuyPrice: int
+                    BuyCurrent: string
+                }
+                Traits: {
+                    Available: string
+                    Default: string
+                }
+                Goal: string
+                Tags: [string]
+                Ghostly: boolean
+            }
+        ]
+    }
+- EarningRates.json
+    {
+        earningRates: {
+            [dragon]: {
+                Rates: [int]
+                Currency: string
+            }
+        }
+    }
+- EtheriumEarningRates.json
+    {
+        etheriumEarningRates: {
+            [dragon or dragon type]: {
+                Rates: [int]
+                Currency: "Etherium"
+            }
+        }
+    }
+- Events.json
+    (incomplete file, ignore for now)
+- Game.json
+    (info about general game elements/features)
+- IslandThemes.json
+    (incomplete file, ignore for now)
+- Islands.json
+    {
+        islands: [
+            {
+                Name: string
+                Description: string
+                Build: string
+                Elements: [string]
+                Size: string
+                BuyPrice: int
+                BuyPriceType: string
+                LevelRequirement: int
+            }
+        ]
+    }
+- ItemSets
+- ItemSets.json
+    (appears to enumerate the items listed in each set for the RequiredDecorations field of BreedingHints.json)
+- Limited.json
+    (currently available limited dragons/items)
+- Missing Dragon Info Dashboard
+- NewDragonConfig.json
+    (template file, ignore)
+- PageViews.json
+    (wiki stuff, ignore)
+- Quests.json
+    {
+        quests: {
+            [dragon]: {
+                Name: string
+                Time: string
+                Rarity: string
+                Elements: [string]
+            }
+        }
+    }
+- ReleaseSchedule.json
+    (not much here, ignore for now)
+- Sandbox.json
+    (empty file, ignore)
+- SandboxConfig.json
+    (wiki stuff, ignore)
+- UnofficialDragonDecorationAffiliations.json
+    (not much here, ignore for now)
+*/
+
+function loadWikiData() {
+    https.get('https://dragonvale.fandom.com/wiki/Data:BreedingHints.json?action=raw', (res) => {
+        console.log(`Received ${res.statusCode} status code for quest request`);
+        var body = [];
+        res.on('data', (chunk) => {
+            body.push(chunk);
+        }).on('end', () => {
+            body = Buffer.concat(body).toString();
+            json = JSON.parse(body);
+            json = json.breedingHints;
+            wiki_breedingHints = json;
+            // let fields = [];
+            // for (let d in json) {
+            //     for (let field in json[d]) {
+            //         if (!fields.includes(field)) fields.push(field);
+            //     }
+            // }
+            // console.log(fields.join(", "));
+        });
+    }).on('error', (e) => {
+        console.log(`Error trying to fetch quests from wiki: ${e}`);
+    });
+}
+
 
 /*
 cache: {

@@ -35,7 +35,8 @@ function post() {
     console.log('function call worked');
     next_q = {
         "num": data.num,
-        "q": data.queue.shift() // TODO change to queue.shift()
+        "q": data.queue.shift(), // TODO change to queue.shift()
+        "remaining": data.queue.length
     };
     parentPort.postMessage(next_q);
     data.num++;

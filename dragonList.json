@@ -50,6 +50,7 @@
         "Avarice Dragon",
         "Awoo Dragon",
         "Azurite Dragon",
+        "Bakey Dragon",
         "Barbarous Dragon",
         "Barite Dragon",
         "Barkskin Dragon",
@@ -198,6 +199,7 @@
         "Dortal Dragon",
         "Double Leap Year Dragon",
         "Double Rainbow Dragon",
+        "Dousa Dragon",
         "Dracabra Dragon",
         "Drack-o-Lantern Dragon",
         "Dracomancy 1 Dragon",
@@ -268,6 +270,7 @@
         "Forest Dragon",
         "Forge Dragon",
         "Fortified Dragon",
+        "Fragolita Dragon",
         "Frond Dragon",
         "Frons Dragon",
         "Frostbite Dragon",
@@ -469,6 +472,7 @@
         "Lovey Dragon",
         "Loveydovey Dragon",
         "Lovonone Dragon",
+        "Lucee Dragon",
         "Luck Dragon",
         "Lullaby Dragon",
         "Lumineux Dragon",
@@ -505,6 +509,7 @@
         "Miasma Dragon",
         "Midday Dragon",
         "Midnight Dragon",
+        "Mimicake Dragon",
         "Minchi Dragon",
         "Mine Dragon",
         "Mirage Dragon",
@@ -555,6 +560,7 @@
         "Nosferatu Dragon",
         "Nottub Dragon",
         "Nova Dragon",
+        "Novem Dragon",
         "Nox Dragon",
         "Nubis Dragon",
         "Oaris Dragon",
@@ -643,6 +649,7 @@
         "Razortail Dragon",
         "Razzle Dragon",
         "Redbeard Dragon",
+        "Redbelly Dragon",
         "Redfrill Dragon",
         "Regal Dragon",
         "Regift Dragon",
@@ -1035,6 +1042,8 @@
         "Water Dragon"
     ],
     "newDrags": [
-        "Cupcake Dragon"
+        "Dousa Dragon",
+        "Lucee Dragon",
+        "Redbelly Dragon"
     ]
 }
