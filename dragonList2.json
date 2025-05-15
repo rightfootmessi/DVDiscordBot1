@@ -998,7 +998,9 @@
         "Apex",
         "Atramento",
         "Aubergine",
+        "Basket",
         "Bloatato",
+        "Candycorn",
         "Coldcoil",
         "Crackle",
         "Cumberpatch",
@@ -1007,8 +1009,10 @@
         "Diggy",
         "Frons",
         "Igluit",
+        "Ignis",
         "Karroot",
         "Lilypond",
+        "Mimicake",
         "Minchi",
         "Morphimagus",
         "Plateau",
@@ -1017,9 +1021,11 @@
         "Scout",
         "Stoneshell",
         "Tansy",
+        "Tectonic",
         "Tulip",
         "Umbra",
-        "Vidalia"
+        "Vidalia",
+        "Waterwalker"
     ],
     "elders": [
         "Air",

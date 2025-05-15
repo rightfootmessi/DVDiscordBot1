@@ -171,6 +171,7 @@ client.on('ready', () => {
     qotd_worker.on('message', data => post_qotd(data));
     qotd_worker.postMessage({cmd: 'restart'});
     loadWikiData();
+    guides = JSON.parse(fs.readFileSync('guides.json'));
 
     // const modChatCh = client.guilds.cache.get('233370210617262080').channels.cache.get('818011940160405534'); // mod-chat = '276384829593878529'
     client.channels.fetch('276384829593878529').then(channel => {
