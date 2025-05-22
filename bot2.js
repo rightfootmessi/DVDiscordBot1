@@ -32,7 +32,7 @@ const fs = require('fs');
 const sprintf = require('sprintf-js').sprintf;
 const crypto = require('crypto');
 
-const cmdPrefix = 'd%';
+const cmdPrefix = 'd!';
 
 // if odd # of cmds, give the extra to msg2 since msg1 also has the header
 const helpMsg1 = `Command list (prefix all commands with \`${cmdPrefix}\`):\n`
