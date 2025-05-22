@@ -8443,6 +8443,27 @@
                 "Light",
                 "Plant"
             ]
+        },
+        "Maelstrom": {
+            "Name": "Beware, Beware",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Water",
+                "Cold",
+                "Plant",
+                "Lightning"
+            ]
+        },
+        "Blobert": {
+            "Name": "Blob to the Bone",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Water",
+                "Cold",
+                "Dark"
+            ]
         }
     }
 }

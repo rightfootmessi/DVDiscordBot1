@@ -70,6 +70,7 @@
         "Blightwing",
         "Blizzard",
         "Bloatato",
+        "Blobert",
         "Bloom",
         "Blossom",
         "Blue Fire",
@@ -482,6 +483,7 @@
         "Lyuba",
         "Macabre",
         "Machina",
+        "Maelstrom",
         "Magma",
         "Magnetic",
         "Magnolia",
@@ -1045,7 +1047,9 @@
         "Water"
     ],
     "newDrags": [
+        "Blobert",
         "Dousa",
+        "Maelstrom",
         "Redbelly"
     ]
 }

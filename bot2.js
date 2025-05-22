@@ -32,7 +32,7 @@ const fs = require('fs');
 const sprintf = require('sprintf-js').sprintf;
 const crypto = require('crypto');
 
-const cmdPrefix = 'd!';
+const cmdPrefix = 'd%';
 
 // if odd # of cmds, give the extra to msg2 since msg1 also has the header
 const helpMsg1 = `Command list (prefix all commands with \`${cmdPrefix}\`):\n`
@@ -165,6 +165,7 @@ client.on('ready', () => {
         if (file.includes('-backup')) {
             lastBackupDate = file.slice(17, -5).split('.');
             lastBackupDate = new Date(2000 + parseInt(lastBackupDate[2]), lastBackupDate[0] - 1, lastBackupDate[1]);
+            lastBackupDate.setUTCHours(5);
             lastBackupDate = lastBackupDate.getTime() / 1000;
         }
     });
@@ -231,7 +232,7 @@ client.on('messageCreate', async (message) => {
             else if (isPrimary(dragon)) message.channel.send(`**__${dragon}:__** ${dragon} is a primary dragon. To get more, breed 2 together or just buy it from the market.`);
             else if (wikiBreedingHints[dragon].IsEvolution) message.channel.send(`**__${dragon}:__** ${dragon} is obtained through evolution. Use \`${cmdPrefix}evolve ${dragon}\` to find out how to evolve it. In order to breed more, *both* parents must be ${dragon}.`);
             else {
-                let msg = `**__${dragon}:__**\n**Hint:** ${wikiBreedingHints[dragon].Text.replace(/\<br \/\>/g, ' ')}`;
+                let msg = `**__${dragon}:__**\n**Hint:** ${wikiBreedingHints[dragon].Text ? wikiBreedingHints[dragon].Text : generateBreedingHint(dragon)}`;
                 let availability = getAvailability(dragon);
                 let isAvailable = !availability ? 0 : availability === 'permanent' ? -1 : 1;
                 if (isAvailable >= 0) {
@@ -258,7 +259,7 @@ client.on('messageCreate', async (message) => {
             else if (wikiBreedingHints[dragon].IsEvolution) {
                 let currency, cost;
                 wikiDragons[wikiDragons[dragon].Devolution].Evolutions.map(o => {if (o.Name === dragon) {currency = o.CostType; cost = o.Cost;}});
-                message.channel.send(`**__${dragon}:__**\n**Hint:** ${wikiBreedingHints[dragon].Text.replace(/<br\s*[\/]?>/gi, ' ')}\n**Cost:** ${getIcon(currency)} ${cost}`);
+                message.channel.send(`**__${dragon}:__**\n**Hint:** ${wikiBreedingHints[dragon].Text ? wikiBreedingHints[dragon].Text : generateBreedingHint(dragon)}\n**Cost:** ${getIcon(currency)} ${cost}`);
             }
             else message.channel.send(`**${dragon}** is not obtained through evolution.`);
         } else if (cmd === 'feed') {
@@ -338,15 +339,15 @@ client.on('messageCreate', async (message) => {
             let isAvailable = !availability ? 0 : availability === 'permanent' ? -1 : 1;
             let embed = new EmbedBuilder()
                 .setColor(rarity === 'Rare' ? 0x009FFF : rarity === 'Epic' ? 0xBF00FF : rarity === 'Gemstone' ? 0xFF7F00 : rarity === 'Galaxy' ? 0x00FFFF : 0xBFBFBF)
-                .setTitle(`${dragon} Dragon Info Card`)
+                .setTitle(`${dragon} Dragon`)
                 .setThumbnail(`https://dvboxcdn.com/dragons/${dragon.replace(/ /g, '_').replace("_&", "")}.png`)
-                .setDescription(desc.length <= 500 ? desc : `${desc.substring(0, 500)}...`)
+                .setDescription(desc.length <= 500 ? `*${desc}*` : `*${desc.substring(0, 500)}...*`)
                 .addFields(
                     {name: 'Purchase Price', value: (isAvailable > 0 && availability.currency.length > 0) ? `${getIcon(availability.currency)} ${availability.cost}` : dInfo.BuyCurrency ? `${getIcon(dInfo.BuyCurrency)} ${dInfo.BuyPrice}` : "N/A", inline: true},
                     {name: 'Profile Elements', value: `${dInfo.Elements.map(x => getIcon(x)).join('')}`, inline: true},
                     {name: 'Breeding Elements', value: `${dInfo.BreedingElements ? dInfo.BreedingElements.map(x => getIcon(x)).join('') : dInfo.Elements.map(x => getIcon(x)).join('')}`, inline: true},
                 )
-                .addFields({name: `${(wikiBreedingHints[dragon] && wikiBreedingHints[dragon].IsEvolution) ? "Evolution" : "Breeding"} Hint`, value: `${wikiBreedingHints[dragon] ? wikiBreedingHints[dragon].Text.replace(/<br\s*[\/]?>/gi, ' ') : "N/A"}`})
+                .addFields({name: `${(wikiBreedingHints[dragon] && wikiBreedingHints[dragon].IsEvolution) ? "Evolution" : "Breeding"} Hint`, value: `${wikiBreedingHints[dragon] ? (wikiBreedingHints[dragon].Text ? wikiBreedingHints[dragon].Text : generateBreedingHint(dragon)) : "N/A"}`})
                 .addFields({name: 'Availability', value: isAvailable < 0 ? ":white_check_mark: Always available" : isAvailable > 0 ? `:white_check_mark: Available until **${availability.countdown}** ${!availability.isBreedable ? "(but __NOT__ through breeding!)" : ""}` : ":prohibited: Currently unavailable"})
                 .addFields(
                     {name: 'Unlocks at Level', value: `${dInfo.LevelRequirement}`, inline: true},
@@ -422,7 +423,7 @@ client.on('messageCreate', async (message) => {
                     return true;
                 } else return false;
             });
-            cave = cave.length > 0 ? cave[0] : 'normal';
+            cave = cave.length > 0 ? cave[0].toLowerCase() : 'normal';
             if (cave === 'fast') cave = 'upgraded';
             else if (cave === 'social' || cave == 'coop') cave = 'cooperative';
             let dragon = parseDragon(args, message);
@@ -584,7 +585,7 @@ client.on('messageCreate', async (message) => {
                     return true;
                 } else return false;
             });
-            cave = cave.length > 0 ? cave[0] : 'normal';
+            cave = cave.length > 0 ? cave[0].toLowerCase() : 'normal';
             if (cave === 'fast') cave = 'upgraded';
             else if (cave === 'social' || cave == 'coop') cave = 'cooperative';
 
@@ -690,7 +691,7 @@ client.on('messageCreate', async (message) => {
                     return true;
                 } else return false;
             });
-            cave = cave.length > 0 ? cave[0] : 'normal';
+            cave = cave.length > 0 ? cave[0].toLowerCase() : 'normal';
             if (cave === 'fast') cave = 'upgraded';
             else if (cave === 'social' || cave == 'coop') cave = 'cooperative';
             var parents = args.join(" ").split(",");
@@ -1542,6 +1543,7 @@ client.on('messageCreate', async (message) => {
             if (!cmdInWrongChannel(message)) message.channel.send(`Unknown command. Type \`${cmdPrefix}help\` for a list of commands.`);
         }
     } catch (err) {
+        message.channel.send('An unexpected error occurred while attempting to process this command. The bot developer has been notified and will look into it soon.');
         const oracleTestCh = client.guilds.cache.get('233370210617262080').channels.cache.get('818011940160405534');
         oracleTestCh.send(`<@!295625585299030016> an error occurred while attempting to execute command \`${message.content}\` (full stack trace logged to console):\n\`\`\`${err.stack/*.split('\n').slice(0,4).join('\n')*/.replace(/aroni/g, '<name>')}\`\`\``);
     }
@@ -1714,6 +1716,71 @@ function generateImageLink(dragon, age, form, message) {
     return calculateURL(filename);
 }
 
+const evoMsgs = {
+    "Aquadruple Leap Year": "This dragon can only be obtained by evolving a Quadruple Leap Year Dragon with the Rainbow Fountain decoration.",
+    "Aubergine": "To evolve the level 18 Berry Dragon with any rift trait into the Aubergine Dragon, 6 Jelly Plants must be fully-grown but not harvested and the Jelly Plant Log decoration must be placed in the park. The Aubergine Dragon also requires that it is raining in the park at the time of the evolution.",
+    "Avarice": "Evolve a Coal dragon with all ten colors of Poinsettia decorations.",
+    "Bloatato": "The Bloatato Dragon requires 6 Omega Squashes to be fully-grown but not harvested, and the Omega Squash Barrel decoration must be placed in the park to be able to evolve the level 20 Sprout Dragon.",
+    "Burglehoo": "Evolve a Coal dragon with all ten colors of Present decorations.",
+    "Corrupticorn": "Evolve a Chromacorn dragon with all ten colors of Flame of Corruption decorations.",
+    "Curlyleaf": "The Curlyleaf Dragon requires 6 Kraken Kabbages to be fully-grown but not harvested, and the Kraken Kabbage Planter decoration must be placed in the park to be able to evolve the level 20 Leaf Dragon.",
+    "Dracomancy 2": "Evolve Dracomancy 1 with an Ominous Digsite decoration at upgrade 2 or higher.",
+    "Dracomancy 3": "Evolve Dracomancy 2 with an Ominous Digsite decoration at upgrade 3 or higher.",
+    "Dracomancy 4": "Evolve Dracomancy 3 with an Ominous Digsite decoration at upgrade 5.",
+    "Ghostly Cold": "Evolve a Cold dragon with the Effigy of the Frost decoration.",
+    "Ghostly Earth": "Evolve a Earth dragon with the Effigy of the Ground decoration.",
+    "Ghostly Fire": "Evolve a Fire dragon with the Effigy of the Flame decoration.",
+    "Ghostly Plant": "Evolve a Plant dragon with the Effigy of the Leaf decoration.",
+    "Glyph": "Evolve a Monolith 4 dragon with all ten colors of Wooden Idol decorations.",
+    "Gulletail": "Evolve a Coal dragon with all ten colors of Stocking decorations.",
+    "Hedera": "Evolve a Monolith 3 dragon with all ten colors of Ivy Leaf decorations.",
+    "Jadice": "Evolve a Coal dragon with all ten colors of Arc Lamp decorations.",
+    "Karroot": "To evolve into the Karroot Dragon, the level 20 Seed Dragon must be placed in the same habitat as a Curlyleaf Dragon and Bloatato Dragon. The Karroot Dragon also requires 6 Meta-carotene to be fully-grown but not harvested, and the Meta-carotene Planter decoration must be placed in the park at the time of the evolution.",
+    "Lavaloch": "Evolve a Liveloch dragon with the Volcano decoration.",
+    "Libretto": "Evolve a Gift dragon with all ten colors of Tuplet decorations.",
+    "Lokilure": "Evolve a Coal dragon with all ten colors of Feather decorations.",
+    "Loveydovey": "Evolve a Lovey dragon with the Love Potion decoration.",
+    "Mesmerus": "Evolve a Mesmer dragon with all ten colors of Idol of Hypnosis decorations.",
+    "Minchi": "Evolve a Stoneshell dragon with all ten colors of Shell decorations.",
+    "Nibwhip": "Evolve a Gift dragon with all ten colors of Cocoa Mug decorations.",
+    "Pixie": "Evolve a Monolith 6 dragon with all ten colors of Rose decorations.",
+    "Porcelain": "Evolve a Bone dragon with all ten colors of Ornament of Porcelain decorations.",
+    "Saccharine": "Evolve a Gift dragon with all ten colors of Gumdrop decorations.",
+    "Sugarplum": "Evolve a Gift dragon with all ten colors of Flutter Fruit decorations.",
+    "Trepak": "Evolve a Gift dragon with all ten colors of Nutcracker decorations.",
+    "Umbra": "Evolve a Scout dragon with all ten colors of Tent decorations.",
+    "Vidalia": "To evolve into the Vidalia Dragon, the level 20 Seed Dragon must be placed in the same habitat as a Curlyleaf Dragon and Bloatato Dragon. The Vidalia Dragon also requires 6 Jive Chives to be fully-grown but not harvested, and the Jive Chive Planter decoration must be placed in the park at the time of the evolution.",
+    "Wrath": "Evolve a Love dragon with all ten colors of Tendril of Wrath decorations."
+};
+function generateBreedingHint(dragon) {
+    let hint = wikiBreedingHints[dragon];
+    let msg = '';
+    if (!hint.IsEvolution) {
+        if (hint.RequiredElementsForBothParents) msg = `The breeding pair must be two dragons *both* with the ${hint.RequiredElementsForBothParents.map(x => getIcon(x)).join('')} element(s).`;
+        else if (hint.RequiredDragons) {
+            if (hint.RequiredDragons.length == 2) msg = `The breeding pair must be **${hint.RequiredDragons[0]}** ${hint.RequiredDragonTraits ? `with the ${getIcon(hint.RequiredDragonTraits[0])} trait and` : 'and'} **${hint.RequiredDragons[1]}**${hint.RequiredDragonTraits ? ` with the ${getIcon(hint.RequiredDragonTraits[1])} trait.` : '.'}`;
+            else if (hint.RequiredElements) msg = `The breeding pair must include **${hint.RequiredDragons[0]}** and the ${hint.RequiredElements.map(x => getIcon(x)).join('')} element(s).`;
+            else msg = `The breeding pair must include **${hint.RequiredDragons[0]}**. The other parent can be any dragon.`;
+        } else if (hint.RequiredElements) {
+            msg = `The breeding pair must include the ${hint.RequiredElements.map(x => getIcon(x)).join('')} element(s).`;
+        } else msg = 'The breeding pair can be any two dragons!';
+        if (hint.DragonExceptions) msg += ` The breeding pair must NOT include *${hint.DragonExceptions.join('*, *')}*.`;
+        if (hint.MinimumRequiredElements) msg += ` The breeding pair must include at least ${hint.MinimumRequiredElements} different elements.`;
+        if (hint.RequiredTraits) msg += ` The breeding pair must include the ${hint.RequiredTraits.map(x => getIcon(x)).join('')} trait(s).`;
+        if (hint.RiftAlignment) msg += ` The rift must be aligned to ${getIcon(hint.RiftAlignment)} during breeding.`;
+        if (hint.RequiredTime) msg += ` Breeding must start during the ${hint.RequiredTime.toLowerCase()}.`;
+        if (hint.RequiredWeather) msg += ` The weather in your park must be set to ${hint.RequiredWeather}.`;
+        if (hint.RequiredTraits || hint.RiftAlignment || (hint.RequiredElements && hint.RequiredElements.includes('Rift')) || (hint.RequiredElementsForBothParents && hint.RequiredElementsForBothParents.includes('Rift'))) msg += ` Breeding must occur in the rift cave.`;
+        else if (wikiDragons[dragon].Elements.includes('Galaxy') && !hint.RequiredCave) msg += ` Breeding must occur in the cooperative cave.`;
+        if (hint.RequiredCloneCave) msg += ` Cloning can only occur in the cooperative cave.`;
+        if (hint.Prerequisites && dragon === 'Rigel') msg += ` All other galaxy dragons must already be owned and present in your park.`;
+    } else {
+        msg = evoMsgs[dragon] ? evoMsgs[dragon] : "ERROR: the evolution hint for this dragon is missing!";
+    }
+    wikiBreedingHints[dragon].Text = msg;
+    return msg;
+}
+
 const emotes = {
     plant: "<:a:1028651087135248444>",
     fire: "<:a:1028651255322652712>",
@@ -1831,7 +1898,9 @@ getAvailability = function(dragon) {
     };
     for (let d in wikiLimited.dragons) {
         if (d === dragon) {
-            response.countdown = wikiLimited.dragons[d].countdown;
+            let date = new Date(wikiLimited.dragons[d].countdown);
+            date.setUTCHours(14);
+            response.countdown = `<t:${Math.floor(date.getTime() / 1000)}:F>`;
             response.cost = 0;
             response.isBreedable = true;
             return response;
@@ -1842,6 +1911,9 @@ getAvailability = function(dragon) {
             if (d === dragon) {
                 response.countdown = wikiLimited.events[e].dragons[d].countdown;
                 if (!response.countdown) response.countdown = wikiLimited.events[e].countdown;
+                let date = new Date(response.countdown);
+                date.setUTCHours(14);
+                response.countdown = `<t:${Math.floor(date.getTime() / 1000)}:F>`;
                 response.cost = wikiLimited.events[e].dragons[d].Cost;
                 response.currency = wikiLimited.events[e].dragons[d].Currency;
                 response.isBreedable = wikiLimited.events[e].dragons[d].Breedable;
@@ -1851,6 +1923,33 @@ getAvailability = function(dragon) {
         }
     }
     return undefined;
+}
+
+async function getThreadMsgsAfterDate(thread, time) {
+    let snowflake = SnowflakeUtil.generate({timestamp: time});
+    let mostRecentMsg = (await thread.messages.fetch({limit: 1})).first();
+    console.log(`Most recent message was sent at ${(new Date(mostRecentMsg.createdTimestamp)).toLocaleString()}`);
+    let msgsObj = [];
+    let fetchMore = true;
+    while (fetchMore) {
+        let threadMsgs = await thread.messages.fetch({limit: 100, after: snowflake});
+        threadMsgs.reverse().each(message => {
+            msgsObj.push({
+                "time": message.createdTimestamp,
+                "author": message.author.id
+            });
+        });
+        let lastFetched = msgsObj[msgsObj.length - 1];
+        let newTime = new Date(lastFetched.time);
+        console.log(`Most recent fetch of this batch was sent at ${newTime.toLocaleString()}`);
+        if (lastFetched) fetchMore = mostRecentMsg.createdTimestamp != lastFetched.time;
+        else fetchMore = false; // only happens if the first fetch yields no messages, i.e. nothing sent at all in the specified timeframe
+        console.log(`fetchMore = ${fetchMore}`);
+        snowflake = SnowflakeUtil.generate({timestamp: newTime});
+    }
+    console.log(`Found ${msgsObj.length} messages in \`${thread.name}\` after ${time.toLocaleString()}`);
+
+    return msgsObj;
 }
 
 botToken = (fs.existsSync("./bot_token.txt")) ? fs.readFileSync("./bot_token.txt").toString('utf-8') : process.env.BOT_TOKEN;

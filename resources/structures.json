@@ -7,6 +7,7 @@
         "IsEvolution",
         "MinimumRequiredElements",
         "Prerequisites",
+        "RequiredArtifacts",
         "RequiredCave",
         "RequiredCloneCave",
         "RequiredDecorations",
@@ -17,8 +18,7 @@
         "RequiredTime",
         "RequiredTraits",
         "RequiredWeather",
-        "RiftAlignment",
-        "Text"
+        "RiftAlignment"
     ],
     "Dragons.json": [
         "Alias",
@@ -37,6 +37,7 @@
         "IsLimited",
         "LevelRequirement",
         "Name",
+        "Order",
         "Pedestal",
         "Rarity",
         "ReleaseDate",
@@ -70,7 +71,8 @@
         "event": [
             "Breedable",
             "Cost",
-            "Currency"
+            "Currency",
+            "countdown"
         ]
     },
     "Quests.json": [

@@ -6,11 +6,11 @@
         "Spring": {
             "countdown": "June 21, 2025"
         },
-        "Wavelyte": {
-            "countdown": "May 15, 2025"
+        "Azurite": {
+            "countdown": "June 15, 2025"
         },
-        "Lapis": {
-            "countdown": "May 15, 2025"
+        "Jade": {
+            "countdown": "August 15, 2025"
         },
         "Bouquet": {
             "countdown": "May 18, 2025"
@@ -20,6 +20,9 @@
         },
         "Novem": {
             "countdown": "June 4, 2025"
+        },
+        "Butterfly": {
+            "countdown": "June 12, 2025"
         }
     },
     "islandThemes": {},
@@ -27,20 +30,28 @@
         "Emerald Triquetra": {
             "countdown": "June 1, 2025"
         },
-        "Azure Emblem": {
-            "countdown": "May 15, 2025"
+        "Jadeite Oasis": {
+            "countdown": "August 15, 2025"
         },
         "Family Imprint": {
             "countdown": "May 18, 2025"
         },
         "The Stocking Beans": {
             "countdown": "May 24, 2025"
+        },
+        "Butterfly Pavilion": {
+            "countdown": "June 12, 2025"
         }
     },
     "events": {
         "Deepest Depths II": {
             "countdown": "June 23, 2025",
             "dragons": {
+                "Blobert": {
+                    "countdown": "May 29, 2025",
+                    "Currency": "Doubloons",
+                    "Cost": 12500
+                },
                 "Dousa": {
                     "Currency": "Doubloons",
                     "Cost": 10000,

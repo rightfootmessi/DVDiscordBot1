@@ -70,6 +70,7 @@
         "Blightwing",
         "Blizzard",
         "Bloatato",
+        "Blobert",
         "Bloom",
         "Blossom",
         "Blue Fire",
@@ -395,8 +396,8 @@
         "Invento",
         "Ire",
         "Iridescent",
-        "Iron Blossom",
         "Iron",
+        "Iron Blossom",
         "Ironwood",
         "Ironwrought",
         "Ivy",
@@ -482,6 +483,7 @@
         "Lyuba",
         "Macabre",
         "Machina",
+        "Maelstrom",
         "Magma",
         "Magnetic",
         "Magnolia",
@@ -998,7 +1000,9 @@
         "Apex",
         "Atramento",
         "Aubergine",
+        "Basket",
         "Bloatato",
+        "Candycorn",
         "Coldcoil",
         "Crackle",
         "Cumberpatch",
@@ -1007,7 +1011,10 @@
         "Diggy",
         "Frons",
         "Igluit",
+        "Ignis",
         "Karroot",
+        "Lilypond",
+        "Mimicake",
         "Minchi",
         "Morphimagus",
         "Plateau",
@@ -1016,9 +1023,11 @@
         "Scout",
         "Stoneshell",
         "Tansy",
+        "Tectonic",
         "Tulip",
         "Umbra",
-        "Vidalia"
+        "Vidalia",
+        "Waterwalker"
     ],
     "elders": [
         "Air",
@@ -1038,8 +1047,9 @@
         "Water"
     ],
     "newDrags": [
+        "Blobert",
         "Dousa",
-        "Lucee",
+        "Maelstrom",
         "Redbelly"
     ]
 }
