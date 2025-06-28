@@ -71,8 +71,7 @@
         "event": [
             "Breedable",
             "Cost",
-            "Currency",
-            "countdown"
+            "Currency"
         ]
     },
     "Quests.json": [

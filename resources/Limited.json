@@ -1,57 +1,43 @@
 {
     "dragons": {
-        "Emerald": {
-            "countdown": "June 1, 2025"
+        "Pearl": {
+            "countdown": "July 1, 2025"
         },
-        "Spring": {
-            "countdown": "June 21, 2025"
+        "Summer": {
+            "countdown": "September 22, 2025"
         },
-        "Azurite": {
-            "countdown": "June 15, 2025"
+        "Labradorite": {
+            "countdown": "July 15, 2025"
         },
         "Jade": {
             "countdown": "August 15, 2025"
         },
-        "Bouquet": {
-            "countdown": "May 18, 2025"
+        "Bearded": {
+            "countdown": "June 26, 2025"
         },
-        "Sprout": {
-            "countdown": "May 24, 2025"
-        },
-        "Novem": {
-            "countdown": "June 4, 2025"
-        },
-        "Butterfly": {
-            "countdown": "June 12, 2025"
+        "Firework": {
+            "countdown": "July 17, 2025"
         }
     },
     "islandThemes": {},
     "decorations": {
-        "Emerald Triquetra": {
-            "countdown": "June 1, 2025"
+        "La Reine De Pearls": {
+            "countdown": "July 1, 2025"
         },
         "Jadeite Oasis": {
             "countdown": "August 15, 2025"
         },
-        "Family Imprint": {
-            "countdown": "May 18, 2025"
+        "Rustic Cave": {
+            "countdown": "June 26, 2025"
         },
-        "The Stocking Beans": {
-            "countdown": "May 24, 2025"
-        },
-        "Butterfly Pavilion": {
-            "countdown": "June 12, 2025"
+        "Firework Cauldron": {
+            "countdown": "July 17, 2025"
         }
     },
     "events": {
         "Deepest Depths II": {
             "countdown": "June 23, 2025",
             "dragons": {
-                "Blobert": {
-                    "countdown": "May 29, 2025",
-                    "Currency": "Doubloons",
-                    "Cost": 12500
-                },
                 "Dousa": {
                     "Currency": "Doubloons",
                     "Cost": 10000,

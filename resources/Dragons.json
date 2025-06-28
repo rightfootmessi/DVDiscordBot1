@@ -14260,7 +14260,10 @@
                 "Cold"
             ],
             "BreedingElements": [
-                "Ornamental"
+                "Ornamental",
+                "Plant",
+                "Fire",
+                "Cold"
             ],
             "Devolution": "Gift",
             "IsLimited": true,
@@ -14293,7 +14296,10 @@
                 "Cold"
             ],
             "BreedingElements": [
-                "Ornamental"
+                "Ornamental",
+                "Plant",
+                "Fire",
+                "Cold"
             ],
             "Devolution": "Gift",
             "IsLimited": true,
@@ -14326,7 +14332,10 @@
                 "Cold"
             ],
             "BreedingElements": [
-                "Ornamental"
+                "Ornamental",
+                "Plant",
+                "Fire",
+                "Cold"
             ],
             "Devolution": "Gift",
             "IsLimited": true,
@@ -14470,7 +14479,10 @@
                 "Cold"
             ],
             "BreedingElements": [
-                "Ornamental"
+                "Ornamental",
+                "Plant",
+                "Fire",
+                "Cold"
             ],
             "Devolution": "Gift",
             "IsLimited": true,
@@ -14540,7 +14552,10 @@
                 "Cold"
             ],
             "BreedingElements": [
-                "Ornamental"
+                "Ornamental",
+                "Plant",
+                "Fire",
+                "Cold"
             ],
             "Devolution": "Gift",
             "IsLimited": true,
@@ -27246,7 +27261,7 @@
             "Name": "Novem",
             "Rarity": "Epic",
             "BreedingTime": "19 H",
-            "Description": "When the wizard Kael tried to summon Hyperion, the energies from the portal sent out shockwaves through the otherworld. Upon sensing this bridge between our worlds, the novem dragons rushed through in the nick of time. A world in constant turmoil, voilent magical storms, jagged rocks and lakes of toxic gasses breeds dragons that are built to survive it, so they should have no trouble here. But have they arrived to terraform our world to resemble theirs, or to get away from it all in the comfort of the Vale?",
+            "Description": "When the wizard Kael tried to summon Hyperion, the energies from the portal sent out shockwaves through the otherworld. Upon sensing this bridge between our worlds, the novem dragons rushed through in the nick of time. A world in constant turmoil, violent magical storms, jagged rocks and lakes of toxic gasses breeds dragons that are built to survive it, so they should have no trouble here. But have they arrived to terraform our world to resemble theirs, or to get away from it all in the comfort of the Vale?",
             "ReleaseDate": "April 29, 2025 #900",
             "Order": 900,
             "BuyPrice": 0,
@@ -27280,7 +27295,7 @@
             "Name": "Dousa",
             "Rarity": "Rare",
             "BreedingTime": "14 H",
-            "Description": "Like a princess of the ocean, these dragons ferry themselves with grandeur and magnificence. But even they can be a bit shy sometimes, as they have been seen hiding from sight in their gorgeous manes. As spotted by the wizards who found them, Earny and Burny, some dousas even swim into swarms of actual jellyfish, to hide in plain sight.",
+            "Description": "Like a princess of the ocean, these dragons ferry themselves with grandeur and magnificence. But even they can get a bit shy sometimes, as they have been seen hiding from sight in their gorgeous manes. As spotted by the wizards who found them, Earny and Burny, some dousas even swim into swarms of actual jellyfish, to hide in plain sight.",
             "ReleaseDate": "May 8, 2025 #901",
             "Order": 901,
             "BuyPrice": 0,
@@ -27336,7 +27351,7 @@
             "Name": "Lucee",
             "Rarity": "Rare",
             "BreedingTime": "13 H",
-            "Description": "Hiding within the dense kelp forests, lucees will even mimic the sunlight passing through the seed clusters in order to become near invisible! These dragons blend in so well that wizard-divers are often unsure if what they saw was actually there. They may find themselves in beautiful waters, and they may tell themselves \"How did I get here?, Where is that large dragon? This is not my beautiful diving suit! These are not my beautiful kelp seeds!\"",
+            "Description": "Hiding within the dense kelp forests, lucees will even mimic the sunlight passing through the seed clusters in order to become near invisible! These dragons blend in so well that wizard-divers are often unsure if what they saw was actually there. They may find themselves in beautiful waters, and they may tell themselves \"How did I get here? Where is that large dragon? This is not my beautiful diving suit! These are not my beautiful kelp seeds!\"",
             "ReleaseDate": "May 8, 2025 #903",
             "Order": 903,
             "BuyPrice": 0,
@@ -27394,15 +27409,15 @@
             "Name": "Blobert",
             "Rarity": "Rare",
             "BreedingTime": "23 H",
-            "Description": "The deepest places hold all kinds of interesting creatures, all designed to withstand the crushing  pressure of these depths. Blobert dragons are an excellent example, as they are not too bothered by the pressure of the ocean above them. They are so impressive, that the wizard Asch wanted to study them, to learn how to withstand Peer pressure, but he got talked out of it.",
+            "Description": "The deepest places hold all kinds of interesting creatures, all designed and adapted to withstand the crushing  pressure of these depths. Blobert dragons are an excellent example, as they are not too bothered by the pressure of all the ocean above them. They are so impressive, that the wizard Asch wanted to study them, to learn how to withstand Peer pressure, but he got talked out of it.",
             "ReleaseDate": "May 22, 2025 #905",
             "Order": 905,
             "BuyPrice": 0,
             "BuyCurrency": "Gems",
             "SellPrice": 2500000,
             "SellCurrency": "DragonCash",
-            "HatchExperience": 0,
-            "LevelRequirement": 0,
+            "HatchExperience": 2500000,
+            "LevelRequirement": 14,
             "Elements": [
                 "Water",
                 "Cold",
@@ -27416,7 +27431,120 @@
             "Traits": {
                 "Available": "All"
             },
-            "Goal": ""
+            "Goal": "This dragon can withstand immense pressure!"
+        },
+        {
+            "Name": "Bounty",
+            "Rarity": "Epic",
+            "BreedingTime": "19 H",
+            "Description": "As relatives of the gold dragons, they sure do like their treasure, and they aren't going anywhere without it! Wizards have tried inspecting the chest multiple times, curious as to what can be so precious and captivating. But the dragons are fiercely protective and will chase away any who get close to what they own. Although, one could argue in reality it is the treasure that owns the dragon.",
+            "ReleaseDate": "May 29, 2025 #906",
+            "Order": 906,
+            "BuyPrice": 0,
+            "BuyCurrency": "Gems",
+            "SellPrice": 2000000,
+            "SellCurrency": "DragonCash",
+            "HatchExperience": 2000000,
+            "LevelRequirement": 19,
+            "Elements": [
+                "Treasure",
+                "Water",
+                "Plant"
+            ],
+            "IsLimited": true,
+            "Pedestal": {
+                "BuyPrice": 0,
+                "BuyCurrency": "Gems"
+            },
+            "Traits": {
+                "Available": "All"
+            },
+            "Goal": "This dragon will protect your treasure!"
+        },
+        {
+            "Name": "Aykula",
+            "Rarity": "Rare",
+            "BreedingTime": "18 H",
+            "Description": "Terrors of the deep, known for sinking countless vessels, like many of Tolzar's prototypes for The Nautilus. While aykulas were engaging in their mindless and destructive fun, Tolzar was engaged in a mindful and constructive study to make The Nautilus impervious to their attacks. It is thanks to them that he perfected his design, as one after another the unmanned prototypes would sink to the bottom, assuming there was anything left to even reach the bottom.",
+            "ReleaseDate": "June 5, 2025 #907",
+            "Order": 907,
+            "BuyPrice": 0,
+            "BuyCurrency": "Gems",
+            "SellPrice": 2500000,
+            "SellCurrency": "DragonCash",
+            "HatchExperience": 2500000,
+            "LevelRequirement": 26,
+            "Elements": [
+                "Water",
+                "Dark",
+                "Cold"
+            ],
+            "IsLimited": true,
+            "Pedestal": {
+                "BuyPrice": 0,
+                "BuyCurrency": "Gems"
+            },
+            "Traits": {
+                "Available": "All"
+            },
+            "Goal": "This dragon plays with its food!"
+        },
+        {
+            "Name": "Sea Angel",
+            "Rarity": "Epic",
+            "BreedingTime": "22 H",
+            "Description": "Cute and curious dragons that are interested in studying the diving wizards just as much as they are in them. They will often flap their wings to get the attention of divers, leading them to shiny pearls, treasures or pockets of air. Similar to how one might lead a hatchling to a treat or to a chew toy. These sea angels grew so fond of their new wizard friends, that they followed them to the surface, where they discovered a whole plethora of new friends to make and curiosities to discover.",
+            "ReleaseDate": "June 12, 2025 #908",
+            "Order": 908,
+            "BuyPrice": 0,
+            "BuyCurrency": "Gems",
+            "SellPrice": 3000000,
+            "SellCurrency": "DragonCash",
+            "HatchExperience": 2400000,
+            "LevelRequirement": 19,
+            "Elements": [
+                "Treasure",
+                "Water",
+                "Air"
+            ],
+            "IsLimited": true,
+            "Pedestal": {
+                "BuyPrice": 0,
+                "BuyCurrency": "Gems"
+            },
+            "Traits": {
+                "Available": "All"
+            },
+            "Goal": "This dragon will be kind to all your visitors!"
+        },
+        {
+            "Name": "Piggy Bank",
+            "Rarity": "Epic",
+            "BreedingTime": "19 H",
+            "Description": "Saving up for the latest flying broom can be a challenge, even for the most frugal of wizzlings. So to speed things up, one of our clever little apprentices spent a wish to have their piggy bank be giant so they can fly. As we all know, one should be careful what they wish for, as instead of a giant piggy bank full of Dragon Cash which would let the wizzling fly, the piggy bank itself came to life and took off on its tiny wings.",
+            "ReleaseDate": "June 16, 2025 #909",
+            "Order": 909,
+            "BuyPrice": 0,
+            "BuyCurrency": "Gems",
+            "SellPrice": 2580000,
+            "SellCurrency": "DragonCash",
+            "HatchExperience": 2580000,
+            "LevelRequirement": 25,
+            "Elements": [
+                "Treasure",
+                "Metal",
+                "Fire",
+                "Cold"
+            ],
+            "IsLimited": true,
+            "Pedestal": {
+                "BuyPrice": 0,
+                "BuyCurrency": "Gems"
+            },
+            "Traits": {
+                "Available": "All"
+            },
+            "Goal": "This dragon is here to invest!"
         }
     ]
 }

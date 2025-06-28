@@ -49,6 +49,7 @@
         "Autumn",
         "Avarice",
         "Awoo",
+        "Aykula",
         "Azurite",
         "Bakey",
         "Barbarous",
@@ -81,6 +82,7 @@
         "Bonescale",
         "Bouldershock",
         "Bounteous",
+        "Bounty",
         "Bouquet",
         "Bramble",
         "Brass",
@@ -597,6 +599,7 @@
         "Petunia",
         "Phantom",
         "Pharaoh",
+        "Piggy Bank",
         "Pikeleaf",
         "Pisceian",
         "Pixie",
@@ -692,6 +695,7 @@
         "Scribe",
         "Scryer",
         "Scuttle",
+        "Sea Angel",
         "Sea Shanty",
         "Seasonal",
         "Seaweed",
@@ -1046,10 +1050,5 @@
         "Plant",
         "Water"
     ],
-    "newDrags": [
-        "Blobert",
-        "Dousa",
-        "Maelstrom",
-        "Redbelly"
-    ]
+    "newDrags": []
 }

@@ -93,8 +93,9 @@ function post_qotd(data) {
             }).then(thread => console.log(thread.name));
             client.channels.fetch('276384829593878529').then(channel => {
                 let modMsg = `Just posted QOTD #${data.num}.`;
-                if (data.q.remaining == 0) modMsg += ` **WARNING: NO MORE QUESTIONS IN THE QOTD QUEUE!!!**`;
-                else if (data.q.remaining <= 5) modMsg += ` Warning: only ${data.q.remaining} question(s) currently in the QOTD queue!`;
+                if (data.q.remaining == 0) modMsg += ` **__WARNING: NO MORE QUESTIONS IN THE QOTD QUEUE!!!__**`;
+                else if (data.q.remaining <= 5) modMsg += ` **Warning: only ${data.q.remaining} question(s) currently in the QOTD queue!**`;
+                else modMsg += ` There are ${data.q.remaining} questions in the QOTD queue.`;
                 channel.send(modMsg);
             });
         });
@@ -319,7 +320,7 @@ client.on('messageCreate', async (message) => {
             let rarity = dInfo.Rarity;
             let releaseDate = dInfo.ReleaseDate.split("#");
             let timer = 0;
-            let timeStr = wikiDragons[dragon].BreedingTime.split(" ");
+            let timeStr = wikiDragons[dragon].BreedingTime.replace(/\s{2,}/g, ' ').split(" ");
             if (timeStr.length > 1) for (i = 1; i < timeStr.length; i++) {
                 switch (timeStr[i]) {
                     case 'H':
@@ -495,10 +496,10 @@ client.on('messageCreate', async (message) => {
             }
         } else if (cmd === 'quest') {
             if (cmdInWrongChannel(message)) return;
-            var questname = prettyString(args, " ").replace('…', '...');
+            var questname = prettyString(args, " ");
             if (!questname) message.channel.send("You must give me a quest name to look for!");
             else {
-                let answer = questTable[questname.toLowerCase()];
+                let answer = questTable[questname.replace('…', '...').toLowerCase()];
                 if (answer) message.channel.send(`Use **${answer.dragon}** to complete the quest "${answer.proper}"`);
                 else message.channel.send(`"${questname}" is not a recognized quest name (did you type it correctly?)`);
             }
@@ -521,13 +522,15 @@ client.on('messageCreate', async (message) => {
             let rift = args.filter((x, i, a) => {if (x.toLowerCase() === 'rift' && !isPrimary(prettyString(a.slice(Math.max(0, i-1), i+1), ' '))) {a.splice(i,1); return true;} else return false;}).length > 0;
             let dragon = parseDragon(args, message);
             if (!dragon) return;
-            let maxBoosts = wikiDragons[dragon].Elements.length
+            let maxBoosts = getMaxBoosts(dragon);
+            let multiplier = maxBoosts[1];
+            maxBoosts = maxBoosts[0];
             boosts = Math.min(boosts, maxBoosts);
             if (!rift) {
                 if (!wikiDragons[dragon].Elements.includes('Gemstone') && !wikiDragons[dragon].Elements.includes('Crystalline')) {
                     let rates = [];
                     let s = compEarnRates[dragon];
-                    let b = 1 + 0.3*boosts + 0.02*gens;
+                    let b = 1 + multiplier + 0.02*gens;
                     let getRate = (L) => Math.floor(6000 / Math.floor(Math.floor(s / (0.6*L + 0.4)) / b));
                     for (i = 1; i <= (elders.includes(dragon) ? 21 : 20); i++) {rates[i-1] = getRate(i); if (rates[i-1] == Infinity) rates[i-1] = 0;}
                     let table = "```| Lvl : DC/min | Lvl : DC/min |"
@@ -834,7 +837,7 @@ client.on('messageCreate', async (message) => {
             if (!dragon) return;
             else {
                 let timer = 0;
-                let timeStr = wikiDragons[dragon].BreedingTime.split(" ");
+                let timeStr = wikiDragons[dragon].BreedingTime.replace(/\s{2,}/g, ' ').split(" ");
                 if (timeStr.length > 1) for (i = 1; i < timeStr.length; i++) {
                     switch (timeStr[i]) {
                         case 'H':
@@ -1559,7 +1562,7 @@ hasModAccess = (message) => (message.guild.id == "233370210617262080" && message
 hasHelperAccess = (message) => hasModAccess(message) || (message.guild.id == "233370210617262080" && message.member.roles.cache.some(r => r.name === "Helper Dragon"));
 
 isStaffMember = (guildMember) => {
-    return guildMember.roles.cache.some(r => ["Owner Wizard", "Admin Wizard", "Mod Wizard", "Helper Dragon"].includes(r.name));
+    return guildMember && guildMember.roles.cache.some(r => ["Owner Wizard", "Admin Wizard", "Mod Wizard", "Helper Dragon"].includes(r.name));
 };
 
 cmdInWrongChannel = function(message) {
@@ -1714,6 +1717,17 @@ function generateImageLink(dragon, age, form, message) {
     }
     filename = `${dragon.replace(/ /g, '')}Dragon${age}${form}${num}.png`;
     return calculateURL(filename);
+}
+
+function getMaxBoosts(dragon) {
+    let elements = wikiDragons[dragon].Elements;
+    let numBoosts = 0;
+    let multiplier = 0;
+    for (let e of elements) {
+        if (isPrimary(e)) {numBoosts += 1; multiplier += 0.3;}
+        else if (e === 'Monolith' || e === 'Zodiac') {numBoosts += 1; multiplier += 0.2;}
+    }
+    return [numBoosts, Math.round(multiplier*10)/10];
 }
 
 const evoMsgs = {

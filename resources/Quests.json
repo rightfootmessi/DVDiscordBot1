@@ -695,6 +695,16 @@
                 "Plant"
             ]
         },
+        "Aykula": {
+            "Name": "Bigger Submarine",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Water",
+                "Dark",
+                "Cold"
+            ]
+        },
         "Gawk": {
             "Name": "Bird Of Paradise",
             "Time": "16 hours",
@@ -8463,6 +8473,37 @@
                 "Water",
                 "Cold",
                 "Dark"
+            ]
+        },
+        "Bounty": {
+            "Name": "Their Precious",
+            "Time": "16 hours",
+            "Rarity": "Epic",
+            "Elements": [
+                "Treasure",
+                "Water",
+                "Plant"
+            ]
+        },
+        "Sea Angel": {
+            "Name": "Sea-through",
+            "Time": "16 hours",
+            "Rarity": "Epic",
+            "Elements": [
+                "Treasure",
+                "Water",
+                "Air"
+            ]
+        },
+        "Piggy Bank": {
+            "Name": "Greed is Good",
+            "Time": "16 hours",
+            "Rarity": "Epic",
+            "Elements": [
+                "Treasure",
+                "Metal",
+                "Fire",
+                "Cold"
             ]
         }
     }

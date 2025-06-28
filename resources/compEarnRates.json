@@ -196,6 +196,10 @@
         "Gold": 220
     },
     {
+        "Dragon": "Aykula",
+        "Gold": 200
+    },
+    {
         "Dragon": "Azurite",
         "Gold": ""
     },
@@ -326,6 +330,10 @@
     {
         "Dragon": "Bounteous",
         "Gold": 775
+    },
+    {
+        "Dragon": "Bounty",
+        "Gold": 170
     },
     {
         "Dragon": "Bouquet",
@@ -2400,6 +2408,10 @@
         "Gold": 125
     },
     {
+        "Dragon": "Piggy Bank",
+        "Gold": 100
+    },
+    {
         "Dragon": "Pikeleaf",
         "Gold": 240
     },
@@ -2778,6 +2790,10 @@
     {
         "Dragon": "Scuttle",
         "Gold": 200
+    },
+    {
+        "Dragon": "Sea Angel",
+        "Gold": 160
     },
     {
         "Dragon": "Sea Shanty",

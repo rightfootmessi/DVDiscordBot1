@@ -7751,6 +7751,40 @@
             "RequiredElements": [
                 "Dark"
             ]
+        },
+        "Bounty": {
+            "BuyPrice": 20,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Gold",
+                "Tidepool"
+            ]
+        },
+        "Aykula": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Valeodon",
+                "Manomano"
+            ]
+        },
+        "Sea Angel": {
+            "BuyPrice": 20,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Djinni"
+            ],
+            "RequiredElements": [
+                "Water"
+            ]
+        },
+        "Piggy Bank": {
+            "BuyPrice": 20,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Gold",
+                "Mine"
+            ]
         }
     }
 }
