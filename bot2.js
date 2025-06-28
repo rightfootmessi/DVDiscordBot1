@@ -526,6 +526,7 @@ client.on('messageCreate', async (message) => {
             let multiplier = maxBoosts[1];
             maxBoosts = maxBoosts[0];
             boosts = Math.min(boosts, maxBoosts);
+            multiplier = Math.min(0.3 * boosts, multiplier);
             if (!rift) {
                 if (!wikiDragons[dragon].Elements.includes('Gemstone') && !wikiDragons[dragon].Elements.includes('Crystalline')) {
                     let rates = [];
