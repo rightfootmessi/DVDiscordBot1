@@ -93,9 +93,9 @@ function post_qotd(data) {
             }).then(thread => console.log(thread.name));
             client.channels.fetch('276384829593878529').then(channel => {
                 let modMsg = `Just posted QOTD #${data.num}.`;
-                if (data.q.remaining == 0) modMsg += ` **__WARNING: NO MORE QUESTIONS IN THE QOTD QUEUE!!!__**`;
-                else if (data.q.remaining <= 5) modMsg += ` **Warning: only ${data.q.remaining} question(s) currently in the QOTD queue!**`;
-                else modMsg += ` There are ${data.q.remaining} questions in the QOTD queue.`;
+                if (data.remaining == 0) modMsg += ` **__WARNING: NO MORE QUESTIONS IN THE QOTD QUEUE!!!__**`;
+                else if (data.remaining <= 5) modMsg += ` **Warning: only ${data.remaining} question(s) currently in the QOTD queue!**`;
+                else modMsg += ` There are ${data.remaining} questions in the QOTD queue.`;
                 channel.send(modMsg);
             });
         });
