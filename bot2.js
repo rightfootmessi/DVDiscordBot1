@@ -1588,6 +1588,7 @@ prettyString = function(words, separator) {
 	var result = words[0].toLowerCase();
 	if (result == 'ponkipong') result = 'PonkiPong';
     else if (result === 'drack-o-lantern') result = 'Drack-o-Lantern';
+    else if (result === 'drak-e') result = 'Drak-E';
     else if (result === 'nightenhanced') result = 'NightEnhanced';
 	else result = result.charAt(0).toUpperCase() + result.substring(1);
 	for (i = 1; i < words.length; i++) {
