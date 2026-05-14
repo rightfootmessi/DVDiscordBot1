@@ -32,7 +32,7 @@ const fs = require('fs');
 const sprintf = require('sprintf-js').sprintf;
 const crypto = require('crypto');
 
-const cmdPrefix = 'd!';
+const cmdPrefix = 'd%';
 
 // if odd # of cmds, give the extra to msg2 since msg1 also has the header
 const helpMsg1 = `Command list (prefix all commands with \`${cmdPrefix}\`):\n`
@@ -257,7 +257,7 @@ client.on('messageCreate', async (message) => {
             let dragon = parseDragon(args, message);
             if (!dragon) return;
             else if (newDrags.includes(dragon)) message.channel.send(`**__${dragon}:__** ${dragon} is a new release, so this information may not be available yet. Try again later, or check out <#738831348915241051> in the meantime.`);
-            else if (wikiBreedingHints[dragon].IsEvolution) {
+            else if (wikiBreedingHints[dragon] && wikiBreedingHints[dragon].IsEvolution) {
                 let currency, cost;
                 wikiDragons[wikiDragons[dragon].Devolution].Evolutions.map(o => {if (o.Name === dragon) {currency = o.CostType; cost = o.Cost;}});
                 message.channel.send(`**__${dragon}:__**\n**Hint:** ${wikiBreedingHints[dragon].Text ? wikiBreedingHints[dragon].Text : generateBreedingHint(dragon)}\n**Cost:** ${getIcon(currency)} ${cost}`);
@@ -293,7 +293,10 @@ client.on('messageCreate', async (message) => {
             }
         } else if (cmd === 'image' || cmd === 'picture' || cmd === 'img' || cmd === 'pic') {
             if (cmdInWrongChannel(message)) return;
-            if (args[0].toLowerCase() === 'flags') {
+            if (args.length == 0) {
+                message.channel.send(`Usage: \`${cmdPrefix}image <dragon> <adult|juvenile|baby|egg> [qualifier]\` - get a PNG image of the dragon; defaults to adult if no stage specified; valid qualifiers can be listed using \`d!image flags\`  (aliases: \`picture\`, \`img\`, \`pic\`)`);
+                return;
+            } else if (args[0].toLowerCase() === 'flags') {
                 message.channel.send("All currently available image flags (note that no flags are applicable to every dragon; if no flag is specified, the normal/day form is assumed): `normal`, `day`, `night`, `organic`/`conjured` (spellforms), `enhanced`/`nightEnhanced` (rave set), `charlatan`/`scourge`/`barbarous`/`macabre` (eldritch), `hiding`, `summer`/`autumn`/`winter`/`spring` (seasonal), `snowman` (snowball), `wrapped` (giddle), `bush` (dargon)");
                 return;
             }
@@ -898,7 +901,7 @@ client.on('messageCreate', async (message) => {
                 let timestamps = JSON.parse(fs.readFileSync('resources/downloadtimes.json'));
                 let tsStr = "";
                 for (let f in timestamps) {
-                    tsStr += `${f}: ${timestamps[f]}\n`;
+                    tsStr += `${f}: <t:${Math.floor(timestamps[f] / 1000)}:F>\n`;
                 }
                 let attach = new AttachmentBuilder('lodestoned.jpg');
                 let embed = new EmbedBuilder()
@@ -1984,8 +1987,9 @@ function loadWikiData() {
     let structures = JSON.parse(fs.readFileSync('resources/structures.json'));
     let downloadtimes = JSON.parse(fs.readFileSync('resources/downloadtimes.json'));
     const oracleTestCh = client.guilds.cache.get('233370210617262080').channels.cache.get('818011940160405534');
+    oracleTestCh.send(":arrows_counterclockwise: Attempting resource file downloads...");
 
-    function loadAndProcess(url, filename, processData, processFields) {
+    function loadAndProcess(url, isFandom, filename, processData, processFields) {
         httpsFR.get(url, (res) => {
             console.log(`Received ${res.statusCode} for ${filename} request`);
             let body = [];
@@ -1994,36 +1998,43 @@ function loadWikiData() {
             }).on('end', () => {
                 if (res.statusCode != 200) {
                     console.log(`Data for ${filename} was unavailable, loading from backup!`);
+                    oracleTestCh.send(`:x: Data for ${filename} was unavailable (server returned ${res.statusCode}), loading from backup!`);
                     readWikiFail.push(filename);
                     processData(JSON.parse(fs.readFileSync(`resources/${filename}`)));
                     saveAfterLoad(structures, downloadtimes);
                     return;
                 }
+                oracleTestCh.send(`:white_check_mark: Data for ${filename} was successfully retrieved!`);
                 body = Buffer.concat(body).toString();
                 json = JSON.parse(body);
+                if (isFandom) {
+                    json = json['parse']['wikitext']['*'];
+                    json = JSON.parse(json);
+                }
                 fs.writeFile(`resources/${filename}`, JSON.stringify(json, null, 4), () => {console.log(`Saved a copy of ${filename}`);});
-                downloadtimes[filename] = (new Date()).toUTCString();
+                downloadtimes[filename] = Date.now();
                 processData(json);
                 let fields = processFields(json);
                 if (JSON.stringify(fields) !== JSON.stringify(structures[filename])) {
                     readWikiChangesDetected.push(filename);
-                    oracleTestCh.send(`Warning: a structure change was detected in ${filename}!\nNew: \`\`\`${JSON.stringify(fields, null, 4)}\`\`\`\nOld: \`\`\`${JSON.stringify(structures[filename], null, 4)}\`\`\``);
+                    oracleTestCh.send(`:warning: Warning: a structure change was detected in ${filename}!\nNew: \`\`\`${JSON.stringify(fields, null, 4)}\`\`\`\nOld: \`\`\`${JSON.stringify(structures[filename], null, 4)}\`\`\``);
                 }
                 structures[filename] = fields;
-                saveAfterLoad(structures, downloadtimes);
+                saveAfterLoad(structures, downloadtimes, oracleTestCh);
                 readWikiSuccess.push(filename);
             });
         }).on('error', e => {
             console.log(`Error trying to fetch ${filename}: ${e}`);
+            oracleTestCh.send(`Error trying to fetch ${filename}: ${e}`);
             readWikiFail.push(filename);
             processData(JSON.parse(fs.readFileSync(`resources/${filename}`)));
-            saveAfterLoad(structures, downloadtimes);
+            saveAfterLoad(structures, downloadtimes, oracleTestCh);
         });
     }
 
     // BreedingHints.json from wiki
     loadAndProcess(
-        'https://dragonvale.fandom.com/wiki/Data:BreedingHints.json?action=raw',
+        'https://dragonvale.fandom.com/api.php?action=parse&page=Data:BreedingHints.json&prop=wikitext&format=json', true,
         'BreedingHints.json',
         (json) => {
             wikiBreedingHints = json.breedingHints;
@@ -2037,7 +2048,7 @@ function loadWikiData() {
     );
     // Dragons.json from wiki
     loadAndProcess(
-        'https://dragonvale.fandom.com/wiki/Data:Dragons.json?action=raw',
+        'https://dragonvale.fandom.com/api.php?action=parse&page=Data:Dragons.json&prop=wikitext&format=json', true,
         'Dragons.json',
         (json) => {
             json = json.dragons;
@@ -2053,7 +2064,7 @@ function loadWikiData() {
     );
     // EarningRates.json from wiki
     loadAndProcess(
-        'https://dragonvale.fandom.com/wiki/Data:EarningRates.json?action=raw',
+        'https://dragonvale.fandom.com/api.php?action=parse&page=Data:EarningRates.json&prop=wikitext&format=json', true,
         'EarningRates.json',
         (json) => {
             wikiEarnRates = json.earningRates;
@@ -2067,7 +2078,7 @@ function loadWikiData() {
     );
     // EtheriumEarningRates.json from wiki
     loadAndProcess(
-        'https://dragonvale.fandom.com/wiki/Data:EtheriumEarningRates.json?action=raw',
+        'https://dragonvale.fandom.com/api.php?action=parse&page=Data:EtheriumEarningRates.json&prop=wikitext&format=json', true,
         'EtheriumEarningRates.json',
         (json) => {
             wikiEthEarnRates = json.etheriumEarningRates;
@@ -2084,7 +2095,7 @@ function loadWikiData() {
     );
     // Limited.json from wiki
     loadAndProcess(
-        'https://dragonvale.fandom.com/wiki/Data:Limited.json?action=raw',
+        'https://dragonvale.fandom.com/api.php?action=parse&page=Data:Limited.json&prop=wikitext&format=json', true,
         'Limited.json',
         (json) => {
             wikiLimited = json;
@@ -2108,7 +2119,7 @@ function loadWikiData() {
     );
     // Quests.json from wiki
     loadAndProcess(
-        'https://dragonvale.fandom.com/wiki/Data:Quests.json?action=raw',
+        'https://dragonvale.fandom.com/api.php?action=parse&page=Data:Quests.json&prop=wikitext&format=json', true,
         'Quests.json',
         (json) => {
             questTable = {};
@@ -2127,7 +2138,7 @@ function loadWikiData() {
     );
     // Compendium earning rates
     loadAndProcess(
-        'https://script.google.com/macros/s/AKfycbwvFX3FtYmAr4nsPcpXsGyEqrX7jC8y8sqguX9GMgLDyXdBBn7Sa300GGO3vR9pFV0k-g/exec?type=gold',
+        'https://script.google.com/macros/s/AKfycbwvFX3FtYmAr4nsPcpXsGyEqrX7jC8y8sqguX9GMgLDyXdBBn7Sa300GGO3vR9pFV0k-g/exec?type=gold', false,
         'compEarnRates.json',
         (json) => {
             compEarnRates = {};
@@ -2145,9 +2156,10 @@ function loadWikiData() {
     );
 }
 
-function saveAfterLoad(structures, downloadtimes) {
+function saveAfterLoad(structures, downloadtimes, oracleTestCh) {
     if (!checkIfLoaded()) return;
     console.log('All data loaded, saving!');
+    oracleTestCh.send(":floppy_disk: All resource files loaded!")
     fs.writeFile('resources/structures.json', JSON.stringify(structures, null, 4), () => {console.log('Resource structures updated');});
     fs.writeFile('resources/downloadtimes.json', JSON.stringify(downloadtimes, null, 4), () => {console.log('Resource download times updated');});
 }

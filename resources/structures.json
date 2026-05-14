@@ -3,7 +3,6 @@
         "Any",
         "BuyPrice",
         "BuyPriceType",
-        "DragonExceptions",
         "IsEvolution",
         "MinimumRequiredElements",
         "Prerequisites",
@@ -66,12 +65,13 @@
             "islandThemes"
         ],
         "eventNames": [
-            "Deepest Depths II"
+            "Refresh-o-Vale"
         ],
         "event": [
             "Breedable",
             "Cost",
-            "Currency"
+            "Currency",
+            "countdown"
         ]
     },
     "Quests.json": [

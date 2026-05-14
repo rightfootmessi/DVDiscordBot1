@@ -2717,8 +2717,8 @@
             "BuyPrice": 10,
             "BuyPriceType": "Gems",
             "RequiredDragons": [
-                "Bearded",
-                "Bloom"
+                "Mountain",
+                "Storm"
             ]
         },
         "Candescent": {
@@ -4322,6 +4322,7 @@
                 "Galaxy",
                 "Rift"
             ],
+            "RequiredCave": "Rift",
             "Prerequisites": {
                 "Owned": {
                     "Elements": [
@@ -4849,11 +4850,7 @@
                 "Galaxy"
             ],
             "RequiredCave": "Any",
-            "RequiredCloneCave": "Cooperative",
-            "DragonExceptions": [
-                "Solis",
-                "Lunis"
-            ]
+            "RequiredCloneCave": "Cooperative"
         },
         "Lunis": {
             "BuyPrice": 20,
@@ -4865,11 +4862,7 @@
                 "Galaxy"
             ],
             "RequiredCave": "Any",
-            "RequiredCloneCave": "Cooperative",
-            "DragonExceptions": [
-                "Solis",
-                "Lunis"
-            ]
+            "RequiredCloneCave": "Cooperative"
         },
         "Stella": {
             "BuyPrice": 20,
@@ -7435,7 +7428,7 @@
             ]
         },
         "Eaves": {
-            "BuyPrice": 0,
+            "BuyPrice": 15,
             "BuyPriceType": "Gems",
             "RequiredDragons": [
                 "Icebound"
@@ -7445,7 +7438,7 @@
             ]
         },
         "Gingerbread": {
-            "BuyPrice": 0,
+            "BuyPrice": 20,
             "BuyPriceType": "Gems",
             "RequiredDragons": [
                 "Saccharine"
@@ -7456,7 +7449,7 @@
             ]
         },
         "Tectonic": {
-            "BuyPrice": 0,
+            "BuyPrice": 20,
             "BuyPriceType": "Gems",
             "RequiredElements": [
                 "Hidden",
@@ -7524,7 +7517,7 @@
             ]
         },
         "Hasu": {
-            "BuyPrice": 0,
+            "BuyPrice": 15,
             "BuyPriceType": "Gems",
             "RequiredDragons": [
                 "Begonia"
@@ -7534,7 +7527,7 @@
             ]
         },
         "Lilypond": {
-            "BuyPrice": 0,
+            "BuyPrice": 20,
             "BuyPriceType": "Gems",
             "RequiredDragons": [
                 "Bellflower"
@@ -7544,7 +7537,7 @@
             ]
         },
         "Smoothie": {
-            "BuyPrice": 0,
+            "BuyPrice": 15,
             "BuyPriceType": "Gems",
             "RequiredElements": [
                 "Water",
@@ -7608,7 +7601,7 @@
             ]
         },
         "Caramelo": {
-            "BuyPrice": 0,
+            "BuyPrice": 15,
             "BuyPriceType": "Gems",
             "RequiredElements": [
                 "Fire",
@@ -7617,7 +7610,7 @@
             ]
         },
         "Sourtail": {
-            "BuyPrice": 0,
+            "BuyPrice": 15,
             "BuyPriceType": "Gems",
             "RequiredDragons": [
                 "Swallowtail"
@@ -7628,7 +7621,7 @@
             ]
         },
         "Swirly": {
-            "BuyPrice": 0,
+            "BuyPrice": 15,
             "BuyPriceType": "Gems",
             "RequiredDragons": [
                 "Cotton"
@@ -7708,7 +7701,7 @@
             ]
         },
         "Dousa": {
-            "BuyPrice": 0,
+            "BuyPrice": 15,
             "BuyPriceType": "Gems",
             "RequiredDragons": [
                 "Euryale"
@@ -7719,7 +7712,7 @@
             ]
         },
         "Lucee": {
-            "BuyPrice": 0,
+            "BuyPrice": 15,
             "BuyPriceType": "Gems",
             "RequiredDragons": [
                 "Mylio",
@@ -7727,7 +7720,7 @@
             ]
         },
         "Redbelly": {
-            "BuyPrice": 0,
+            "BuyPrice": 15,
             "BuyPriceType": "Gems",
             "RequiredDragons": [
                 "Redfrill",
@@ -7784,6 +7777,472 @@
             "RequiredDragons": [
                 "Gold",
                 "Mine"
+            ]
+        },
+        "Zephyr": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Wind",
+                "Herald"
+            ]
+        },
+        "Guerrero": {
+            "BuyPrice": 20,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Ouroboros"
+            ],
+            "RequiredElements": [
+                "Earth"
+            ]
+        },
+        "Tulong": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Plateau",
+                "Panlong"
+            ]
+        },
+        "Primal Hidden Bolt": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Hidden Bolt",
+                "Midnight"
+            ]
+        },
+        "Pavonini": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Regal"
+            ],
+            "RequiredElements": [
+                "Air",
+                "Water"
+            ]
+        },
+        "Glimmer": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredElements": [
+                "Light",
+                "Earth",
+                "Metal"
+            ]
+        },
+        "Primal Mountain Sun": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Mountain Sun",
+                "Sunstruck"
+            ]
+        },
+        "Keraunos": {
+            "BuyPrice": 20,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Tempest",
+                "Thunderbolt"
+            ]
+        },
+        "Luciflora": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Dandelion",
+                "Flower"
+            ]
+        },
+        "Snapsnap": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Snapper"
+            ],
+            "RequiredElements": [
+                "Water",
+                "Earth"
+            ]
+        },
+        "Rooty": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Root"
+            ],
+            "RequiredElements": [
+                "Water",
+                "Plant"
+            ]
+        },
+        "Jasmine": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Pollen"
+            ],
+            "RequiredElements": [
+                "Light"
+            ]
+        },
+        "Nectavira": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Nectar"
+            ],
+            "RequiredElements": [
+                "Plant"
+            ]
+        },
+        "Greenhouse": {
+            "BuyPrice": 20,
+            "BuyPriceType": "Gems",
+            "RequiredElements": [
+                "Hidden",
+                "Plant",
+                "Water",
+                "Light"
+            ]
+        },
+        "Ivory": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredElements": [
+                "Metal",
+                "Fire",
+                "Light",
+                "Earth"
+            ]
+        },
+        "Firevine": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Ivy"
+            ],
+            "RequiredElements": [
+                "Plant",
+                "Fire"
+            ]
+        },
+        "Rootwyrm": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Wyrmwood"
+            ],
+            "RequiredElements": [
+                "Earth"
+            ]
+        },
+        "Pit": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Decay"
+            ],
+            "RequiredElements": [
+                "Dark",
+                "Fire"
+            ]
+        },
+        "Dumi": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Trick",
+                "Bone"
+            ]
+        },
+        "Mirhor": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Dungeon",
+                "Mirror"
+            ]
+        },
+        "Tartarus": {
+            "BuyPrice": 20,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Stygian",
+                "Cave"
+            ]
+        },
+        "Sinking": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Spirit"
+            ],
+            "RequiredElements": [
+                "Dark",
+                "Water"
+            ]
+        },
+        "Brainiac": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Kwall"
+            ],
+            "RequiredElements": [
+                "Water",
+                "Dark"
+            ]
+        },
+        "Righteous": {
+            "BuyPrice": 20,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Sun"
+            ],
+            "RequiredElements": [
+                "Light",
+                "Fire"
+            ]
+        },
+        "Reaper": {
+            "BuyPrice": 20,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Macabre",
+                "Scourge"
+            ]
+        },
+        "Om": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredElements": [
+                "Lightning",
+                "Water",
+                "Light"
+            ]
+        },
+        "Thaw": {
+            "BuyPrice": 20,
+            "BuyPriceType": "Gems",
+            "IsEvolution": true,
+            "RequiredDecorations": [
+                "Shnowbiz Shparkleton"
+            ]
+        },
+        "Fubuki": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Sakura",
+                "Elkar"
+            ]
+        },
+        "Drak-E": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Earthcore"
+            ],
+            "RequiredElements": [
+                "Metal",
+                "Cold"
+            ]
+        },
+        "Onsen": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Snapper",
+                "Steam"
+            ]
+        },
+        "Jawny": {
+            "BuyPrice": 20,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Yeti"
+            ],
+            "RequiredElements": [
+                "Dark"
+            ]
+        },
+        "Kitse": {
+            "BuyPrice": 20,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Ribbon",
+                "Snow"
+            ]
+        },
+        "Iceere": {
+            "BuyPrice": 20,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Verglace"
+            ],
+            "RequiredElements": [
+                "Air"
+            ]
+        },
+        "Chochin": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Paper",
+                "Wick"
+            ]
+        },
+        "Chime": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Ironwood"
+            ],
+            "RequiredElements": [
+                "Melody"
+            ]
+        },
+        "Spirit Mist": {
+            "BuyPrice": 20,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Lunis",
+                "Steam"
+            ]
+        },
+        "Greenty": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Nightbloom"
+            ],
+            "RequiredElements": [
+                "Plant",
+                "Water"
+            ]
+        },
+        "Agran": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Century",
+                "Mosser"
+            ]
+        },
+        "Kyrken": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Quake",
+                "Glasswing"
+            ]
+        },
+        "Monolith 7": {
+            "BuyPrice": 20,
+            "BuyPriceType": "Gems",
+            "RequiredElements": [
+                "Monolith",
+                "Monolith"
+            ],
+            "RequiredElementsForBothParents": [
+                "Monolith"
+            ]
+        },
+        "Vitrail": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Glass",
+                "Crystal"
+            ]
+        },
+        "Cecropia": {
+            "BuyPrice": 20,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Starwing"
+            ],
+            "RequiredElements": [
+                "Plant"
+            ]
+        },
+        "Leleek": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredElements": [
+                "Plant",
+                "Water",
+                "Earth"
+            ]
+        },
+        "Erudine": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Thunder"
+            ],
+            "RequiredElements": [
+                "Earth"
+            ]
+        },
+        "Pinco": {
+            "BuyPrice": 20,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Conifer"
+            ],
+            "RequiredElements": [
+                "Hidden"
+            ]
+        },
+        "Protegg": {
+            "BuyPrice": 20,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Bellflower",
+                "Forest"
+            ]
+        },
+        "Dustroyer": {
+            "BuyPrice": 0,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Lyuba"
+            ],
+            "RequiredElements": [
+                "Air"
+            ]
+        },
+        "Scrubby": {
+            "BuyPrice": 0,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Moppey"
+            ],
+            "RequiredElements": [
+                "Light"
+            ]
+        },
+        "Dusty": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredElements": [
+                "Earth",
+                "Air"
+            ]
+        },
+        "Bubbly": {
+            "BuyPrice": 15,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Bubble"
+            ],
+            "RequiredElements": [
+                "Cold"
             ]
         }
     }

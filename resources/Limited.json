@@ -1,644 +1,197 @@
 {
     "dragons": {
-        "Pearl": {
-            "countdown": "July 1, 2025"
+        "Emerald": {
+            "countdown": "June 1, 2026"
         },
-        "Summer": {
-            "countdown": "September 22, 2025"
+        "Spring": {
+            "countdown": "June 20, 2026"
         },
-        "Labradorite": {
-            "countdown": "July 15, 2025"
+        "Wavelyte": {
+            "countdown": "May 15, 2026"
         },
-        "Jade": {
-            "countdown": "August 15, 2025"
+        "Lapis": {
+            "countdown": "May 15, 2026"
         },
-        "Bearded": {
-            "countdown": "June 26, 2025"
+        "Taurian": {
+            "countdown": "May 21, 2026"
         },
-        "Firework": {
-            "countdown": "July 17, 2025"
+        "Midday": {
+            "countdown": "May 21, 2026"
+        },
+        "Dusk": {
+            "countdown": "May 21, 2026"
+        },
+        "Bouquet": {
+            "countdown": "May 18, 2026"
         }
     },
     "islandThemes": {},
     "decorations": {
-        "La Reine De Pearls": {
-            "countdown": "July 1, 2025"
+        "Emerald Triquetra": {
+            "countdown": "June 1, 2026"
         },
-        "Jadeite Oasis": {
-            "countdown": "August 15, 2025"
+        "Azure Emblem": {
+            "countdown": "May 15, 2026"
         },
-        "Rustic Cave": {
-            "countdown": "June 26, 2025"
-        },
-        "Firework Cauldron": {
-            "countdown": "July 17, 2025"
+        "Family Imprint": {
+            "countdown": "May 18, 2026"
         }
     },
     "events": {
-        "Deepest Depths II": {
-            "countdown": "June 23, 2025",
+        "Refresh-o-Vale": {
+            "countdown": "May 27, 2026",
             "dragons": {
-                "Dousa": {
-                    "Currency": "Doubloons",
-                    "Cost": 10000,
+                "Bubbly": {
+                    "countdown": "May 14, 2026",
+                    "Currency": "Magic",
+                    "Cost": 15000
+                },
+                "Scrubby": {
+                    "Currency": "Magic",
+                    "Cost": 14000,
                     "Breedable": false
                 },
-                "Redbelly": {
-                    "Currency": "Doubloons",
-                    "Cost": 10500,
+                "Dustroyer": {
+                    "Currency": "Magic",
+                    "Cost": 13500,
                     "Breedable": false
                 },
-                "Lucee": {
-                    "Currency": "Doubloons",
-                    "Cost": 11000,
-                    "Breedable": false
+                "Soriak": {
+                    "Currency": "Magic",
+                    "Cost": 3500
                 },
-                "Sunstruck": {
-                    "Currency": "Doubloons",
-                    "Cost": 4000
-                },
-                "Sun": {
-                    "Currency": "Doubloons",
-                    "Cost": 1300
-                },
-                "Frond": {
-                    "Currency": "Doubloons",
-                    "Cost": 1700
-                },
-                "Tidal": {
-                    "Currency": "Doubloons",
-                    "Cost": 2450
-                },
-                "Chromacorn": {
-                    "Currency": "Doubloons",
-                    "Cost": 4500
-                },
-                "Sprite": {
-                    "Currency": "Doubloons",
-                    "Cost": 6500
-                },
-                "Hakahaka": {
-                    "Currency": "Doubloons",
+                "Gourd": {
+                    "Currency": "Magic",
                     "Cost": 7000
                 },
-                "Manomano": {
-                    "Currency": "Doubloons",
-                    "Cost": 7500
+                "Curlyleaf": {
+                    "Currency": "Magic",
+                    "Cost": 5000
                 },
-                "Oracle": {
-                    "Currency": "Doubloons",
-                    "Cost": 7500
+                "Leaf": {
+                    "Currency": "Magic",
+                    "Cost": 5000
                 },
-                "Sunscorch": {
-                    "Currency": "Doubloons",
-                    "Cost": 7500
+                "Seed": {
+                    "Currency": "Magic",
+                    "Cost": 5000
                 },
-                "Rigel": {
-                    "Currency": "Doubloons",
-                    "Cost": 7500
+                "Teozinte": {
+                    "Currency": "Magic",
+                    "Cost": 5500
                 },
-                "Limulimu": {
-                    "Currency": "Doubloons",
-                    "Cost": 7500
+                "Whimsical": {
+                    "Currency": "Magic",
+                    "Cost": 5000
                 },
-                "Totem": {
-                    "Currency": "Doubloons",
-                    "Cost": 7500
-                },
-                "Honuhonu": {
-                    "Currency": "Doubloons",
-                    "Cost": 7500
-                },
-                "Humuhumu": {
-                    "Currency": "Doubloons",
-                    "Cost": 7500
-                },
-                "Knarr": {
-                    "Currency": "Doubloons",
-                    "Cost": 7500
-                },
-                "Party": {
-                    "Currency": "Doubloons",
-                    "Cost": 8000
-                },
-                "Kaiju": {
-                    "Currency": "Doubloons",
+                "Keyper": {
+                    "Currency": "Magic",
                     "Cost": 8500
                 },
-                "Glimmerwing": {
-                    "Currency": "Doubloons",
-                    "Cost": 9000
+                "Magnolia": {
+                    "Currency": "Magic",
+                    "Cost": 7600
                 },
-                "Oasian": {
-                    "Currency": "Doubloons",
-                    "Cost": 11000
+                "Maze": {
+                    "Currency": "Magic",
+                    "Cost": 7600
                 },
-                "Saharus": {
-                    "Currency": "Doubloons",
-                    "Cost": 12000
+                "Sow": {
+                    "Currency": "Magic",
+                    "Cost": 7600
                 },
-                "Quadruple Leap Year": {
-                    "Currency": "Doubloons",
-                    "Cost": 13000
+                "Gryphus": {
+                    "Currency": "Magic",
+                    "Cost": 7600
                 },
-                "Sipho": {
-                    "Currency": "Doubloons",
-                    "Cost": 12000
+                "Diggy": {
+                    "Currency": "Magic",
+                    "Cost": 7600
                 },
-                "Grin": {
-                    "Currency": "Doubloons",
-                    "Cost": 13000
-                },
-                "Leviathan": {
-                    "Currency": "Doubloons",
-                    "Cost": 14000
-                },
-                "Aquatech": {
-                    "Currency": "Doubloons",
-                    "Cost": 14500
-                },
-                "Monte": {
-                    "Currency": "Doubloons",
-                    "Cost": 6000
-                },
-                "Sailback": {
-                    "Currency": "Doubloons",
-                    "Cost": 6000
-                },
-                "Razzle": {
-                    "Currency": "Doubloons",
-                    "Cost": 6700
-                },
-                "Dazzle": {
-                    "Currency": "Doubloons",
-                    "Cost": 6700
-                },
-                "Toco": {
-                    "Currency": "Doubloons",
-                    "Cost": 6700
-                },
-                "Elegant": {
-                    "Currency": "Doubloons",
-                    "Cost": 8700
-                },
-                "Ruckus": {
-                    "Currency": "Doubloons",
-                    "Cost": 9200
-                },
-                "Vibe": {
-                    "Currency": "Doubloons",
-                    "Cost": 9800
-                },
-                "Pharaoh": {
-                    "Currency": "Doubloons",
-                    "Cost": 1800
-                },
-                "Misfortune": {
-                    "Currency": "Doubloons",
-                    "Cost": 4000
-                },
-                "Loot": {
-                    "Currency": "Doubloons",
-                    "Cost": 4300
-                },
-                "Regal": {
-                    "Currency": "Doubloons",
-                    "Cost": 6500
-                },
-                "Opulent": {
-                    "Currency": "Doubloons",
-                    "Cost": 7000
-                },
-                "Spinky": {
-                    "Currency": "Doubloons",
-                    "Cost": 7500
-                },
-                "Scarab": {
-                    "Currency": "Doubloons",
-                    "Cost": 7500
-                },
-                "Djinni": {
-                    "Currency": "Doubloons",
-                    "Cost": 7800
-                },
-                "Kann": {
-                    "Currency": "Doubloons",
-                    "Cost": 9000
-                },
-                "Alayzem": {
-                    "Currency": "Doubloons",
-                    "Cost": 10000
-                },
-                "Mantasu": {
-                    "Currency": "Doubloons",
-                    "Cost": 12000
-                },
-                "Efreet": {
-                    "Currency": "Doubloons",
-                    "Cost": 13000
-                },
-                "Exandrew": {
-                    "Currency": "Doubloons",
-                    "Cost": 6000
-                },
-                "Scuttle": {
-                    "Currency": "Doubloons",
-                    "Cost": 6000
-                },
-                "Crawler": {
-                    "Currency": "Doubloons",
-                    "Cost": 6500
-                },
-                "Valeodon": {
-                    "Currency": "Doubloons",
-                    "Cost": 6800
-                },
-                "Mylio": {
-                    "Currency": "Doubloons",
-                    "Cost": 7000
-                },
-                "Zilla": {
-                    "Currency": "Doubloons",
-                    "Cost": 7200
-                },
-                "Ikatako": {
-                    "Currency": "Doubloons",
-                    "Cost": 7500
-                },
-                "Ahoy": {
-                    "Currency": "Doubloons",
-                    "Cost": 7500
-                },
-                "Chimmit": {
-                    "Currency": "Doubloons",
-                    "Cost": 7500
-                },
-                "Jumpiplop": {
-                    "Currency": "Doubloons",
-                    "Cost": 7500
+                "Kroki": {
+                    "Currency": "Magic",
+                    "Cost": 7600
                 },
                 "Liveloch": {
-                    "Currency": "Doubloons",
-                    "Cost": 8000
+                    "Currency": "Magic",
+                    "Cost": 7600
                 },
-                "Sea Shanty": {
-                    "Currency": "Doubloons",
-                    "Cost": 8000
+                "Pollenizer": {
+                    "Currency": "Magic",
+                    "Cost": 7600
                 },
-                "Gawk": {
-                    "Currency": "Doubloons",
-                    "Cost": 8500
+                "Bloatato": {
+                    "Currency": "Magic",
+                    "Cost": 3800
                 },
-                "Enfis": {
-                    "Currency": "Doubloons",
-                    "Cost": 8500
+                "Karroot": {
+                    "Currency": "Magic",
+                    "Cost": 3800
                 },
-                "Delicia": {
-                    "Currency": "Doubloons",
-                    "Cost": 8500
+                "Vidalia": {
+                    "Currency": "Magic",
+                    "Cost": 3800
                 },
-                "Euryale": {
-                    "Currency": "Doubloons",
-                    "Cost": 8500
+                "Aubergine": {
+                    "Currency": "Magic",
+                    "Cost": 3800
                 },
-                "Oaris": {
-                    "Currency": "Doubloons",
-                    "Cost": 8500
+                "Sprout": {
+                    "Currency": "Magic",
+                    "Cost": 3800
                 },
-                "Grove": {
-                    "Currency": "Doubloons",
-                    "Cost": 8500
+                "Dartwing": {
+                    "Currency": "Magic",
+                    "Cost": 3800
                 },
-                "Hanno": {
-                    "Currency": "Doubloons",
-                    "Cost": 8500
+                "Lyuba": {
+                    "Currency": "Magic",
+                    "Cost": 5900
                 },
-                "Spectrapod": {
-                    "Currency": "Doubloons",
-                    "Cost": 8000
+                "Icebound": {
+                    "Currency": "Magic",
+                    "Cost": 2400
                 },
-                "Lazuli": {
-                    "Currency": "Doubloons",
-                    "Cost": 8500
+                "Tidal": {
+                    "Currency": "Magic",
+                    "Cost": 2450
                 },
-                "Corsair": {
-                    "Currency": "Doubloons",
-                    "Cost": 8500
+                "Plate": {
+                    "Currency": "Magic",
+                    "Cost": 10000
                 },
-                "Curse": {
-                    "Currency": "Doubloons",
-                    "Cost": 9000
+                "Armament": {
+                    "Currency": "Magic",
+                    "Cost": 5000
                 },
-                "Tebori": {
-                    "Currency": "Doubloons",
-                    "Cost": 8000
+                "Drak-E": {
+                    "Currency": "Magic",
+                    "Cost": 15000
                 },
-                "Alffa": {
-                    "Currency": "Doubloons",
-                    "Cost": 8000
-                },
-                "Alure": {
-                    "Currency": "Doubloons",
-                    "Cost": 9000
-                },
-                "Yarr": {
-                    "Currency": "Doubloons",
-                    "Cost": 9500
-                },
-                "Trove": {
-                    "Currency": "Doubloons",
-                    "Cost": 9500
-                },
-                "Nubis": {
-                    "Currency": "Doubloons",
-                    "Cost": 9500
-                },
-                "Tutan": {
-                    "Currency": "Doubloons",
-                    "Cost": 12000
-                },
-                "Aurum": {
-                    "Currency": "Doubloons",
+                "Earthcore": {
+                    "Currency": "Magic",
                     "Cost": 13000
                 },
-                "Redfrill": {
-                    "Currency": "Doubloons",
-                    "Cost": 10000
+                "Nottub": {
+                    "Currency": "Magic",
+                    "Cost": 11500
                 },
-                "Shelly": {
-                    "Currency": "Doubloons",
-                    "Cost": 10000
+                "Bounty": {
+                    "Currency": "Magic",
+                    "Cost": 13500
                 },
-                "Kelpie": {
-                    "Currency": "Doubloons",
-                    "Cost": 10000
+                "Berry": {
+                    "Currency": "Magic",
+                    "Cost": 5500
+                },
+                "Moppey": {
+                    "Currency": "Magic",
+                    "Cost": 9000
                 }
             },
-            "decorations": {
-                "Monte's Mohawk": {
-                    "Currency": "Doubloons",
-                    "Cost": 1600
-                },
-                "Sailback's Fin": {
-                    "Currency": "Doubloons",
-                    "Cost": 1600
-                },
-                "Razzle's Glitz": {
-                    "Currency": "Doubloons",
-                    "Cost": 1600
-                },
-                "Dazzle's Glamour": {
-                    "Currency": "Doubloons",
-                    "Cost": 1600
-                },
-                "Toco's Plumage": {
-                    "Currency": "Doubloons",
-                    "Cost": 1600
-                },
-                "Elegant's Frills": {
-                    "Currency": "Doubloons",
-                    "Cost": 1600
-                },
-                "Ruckus' Ruffles": {
-                    "Currency": "Doubloons",
-                    "Cost": 1600
-                },
-                "Vibe's Regalia": {
-                    "Currency": "Doubloons",
-                    "Cost": 1600
-                },
-                "Stream": {
-                    "Currency": "Doubloons",
-                    "Cost": 1500
-                },
-                "Kelp": {
-                    "Currency": "Doubloons",
-                    "Cost": 200
-                },
-                "Celpe": {
-                    "Currency": "Doubloons",
-                    "Cost": 200
-                },
-                "Kelpy": {
-                    "Currency": "Doubloons",
-                    "Cost": 200
-                },
-                "Kelp Forest": {
-                    "Currency": "Doubloons",
-                    "Cost": 500
-                },
-                "The Nautilus": {
-                    "Currency": "Doubloons",
-                    "Cost": 2000
-                },
-                "Waterway": {
-                    "Currency": "Doubloons",
-                    "Cost": 2000
-                },
-                "Medium Coral": {
-                    "Currency": "Doubloons",
-                    "Cost": 400
-                },
-                "Coral Rock": {
-                    "Currency": "Doubloons",
-                    "Cost": 900
-                },
-                "Small Coral": {
-                    "Currency": "Doubloons",
-                    "Cost": 200
-                },
-                "Large Coral": {
-                    "Currency": "Doubloons",
-                    "Cost": 600
-                },
-                "Brine Pool": {
-                    "Currency": "Doubloons",
-                    "Cost": 1000
-                },
-                "Small Pyramid": {
-                    "Currency": "Doubloons",
-                    "Cost": 400
-                },
-                "Medium Pyramid": {
-                    "Currency": "Doubloons",
-                    "Cost": 600
-                },
-                "Large Pyramid": {
-                    "Currency": "Doubloons",
-                    "Cost": 800
-                },
-                "Obelisk": {
-                    "Currency": "Doubloons",
-                    "Cost": 800
-                },
-                "Sand Dune": {
-                    "Currency": "Doubloons",
-                    "Cost": 800
-                },
-                "Oasis": {
-                    "Currency": "Doubloons",
-                    "Cost": 1000
-                },
-                "Little Nile": {
-                    "Currency": "Doubloons",
-                    "Cost": 1250
-                },
-                "Tiki Torch": {
-                    "Currency": "Doubloons",
-                    "Cost": 150
-                },
-                "Palm Tree": {
-                    "Currency": "Doubloons",
-                    "Cost": 150
-                },
-                "The Sun Kissed Sands": {
-                    "Currency": "Doubloons",
-                    "Cost": 250
-                },
-                "Pylon of Aquafication": {
-                    "Currency": "Doubloons",
-                    "Cost": 300
-                },
-                "Pylon of Blazing Luminance": {
-                    "Currency": "Doubloons",
-                    "Cost": 300
-                },
-                "Artificial Bone": {
-                    "Currency": "Doubloons",
-                    "Cost": 200
-                },
-                "X Marks": {
-                    "Currency": "Doubloons",
-                    "Cost": 650
-                },
-                "Sand Castle": {
-                    "Currency": "Doubloons",
-                    "Cost": 600
-                },
-                "Pile of Gold": {
-                    "Currency": "Doubloons",
-                    "Cost": 600
-                },
-                "Shipwreck": {
-                    "Currency": "Doubloons",
-                    "Cost": 600
-                },
-                "Greedy Spoils": {
-                    "Currency": "Doubloons",
-                    "Cost": 600
-                },
-                "Inconspicuous Barrel": {
-                    "Currency": "Doubloons",
-                    "Cost": 600
-                }
-            },
-            "habitats": {
-                "Aquarium": {
-                    "Currency": "Doubloons",
-                    "Cost": 8500
-                },
-                "Treasure": {
-                    "Currency": "Doubloons",
-                    "Cost": 500
-                },
-                "Large Treasure": {
-                    "Currency": "Doubloons",
-                    "Cost": 1500
-                },
-                "Giant Treasure": {
-                    "Currency": "Doubloons",
-                    "Cost": 3000
-                },
-                "Paradise": {
-                    "Currency": "Doubloons",
-                    "Cost": 500
-                },
-                "Large Paradise": {
-                    "Currency": "Doubloons",
-                    "Cost": 1500
-                },
-                "Giant Paradise": {
-                    "Currency": "Doubloons",
-                    "Cost": 3000
-                },
-                "Giant Rainbow": {
-                    "Currency": "Doubloons",
-                    "Cost": 3000
-                },
-                "Giant Sun": {
-                    "Currency": "Doubloons",
-                    "Cost": 2000
-                },
-                "Surface": {
-                    "Currency": "Doubloons",
-                    "Cost": 500
-                },
-                "Melody": {
-                    "Currency": "Doubloons",
-                    "Cost": 500
-                },
-                "Large Melody": {
-                    "Currency": "Doubloons",
-                    "Cost": 1500
-                },
-                "Giant Melody": {
-                    "Currency": "Doubloons",
-                    "Cost": 3000
-                }
-            },
-            "buildings": {
-                "Twilight Tower": {
-                    "Currency": "Doubloons",
-                    "Cost": 8000
-                },
-                "Weather Station": {
-                    "Currency": "Doubloons",
-                    "Cost": 8000
-                },
-                "Relic of the Epics": {
-                    "Currency": "Doubloons",
-                    "Cost": 8000
-                },
-                "Monument of the Epics": {
-                    "Currency": "Doubloons",
-                    "Cost": 8000
-                }
-            },
+            "decorations": {},
             "islands": {},
-            "islandThemes": {
-                "Subaquatica": {
-                    "Currency": "Doubloons",
-                    "Cost": 3000
-                },
-                "Water": {
-                    "Currency": "Doubloons",
-                    "Cost": 1250
-                },
-                "Light": {
-                    "Currency": "Doubloons",
-                    "Cost": 1250
-                },
-                "Sun": {
-                    "Currency": "Doubloons",
-                    "Cost": 2500
-                },
-                "Rainbow": {
-                    "Currency": "Doubloons",
-                    "Cost": 2500
-                },
-                "Treasure": {
-                    "Currency": "Doubloons",
-                    "Cost": 2500
-                },
-                "Summer": {
-                    "Currency": "Doubloons",
-                    "Cost": 2500
-                },
-                "Surface": {
-                    "Currency": "Doubloons",
-                    "Cost": 2500
-                }
-            }
+            "islandThemes": {}
         }
     }
 }

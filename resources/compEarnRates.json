@@ -12,6 +12,10 @@
         "Gold": 960
     },
     {
+        "Dragon": "Agran",
+        "Gold": 230
+    },
+    {
         "Dragon": "Ahoy",
         "Gold": 300
     },
@@ -340,6 +344,10 @@
         "Gold": 500
     },
     {
+        "Dragon": "Brainiac",
+        "Gold": 220
+    },
+    {
         "Dragon": "Bramble",
         "Gold": 500
     },
@@ -378,6 +386,10 @@
     {
         "Dragon": "Bubble",
         "Gold": 740
+    },
+    {
+        "Dragon": "Bubbly",
+        "Gold": 240
     },
     {
         "Dragon": "Bumi",
@@ -452,6 +464,10 @@
         "Gold": 1200
     },
     {
+        "Dragon": "Cecropia",
+        "Gold": 250
+    },
+    {
         "Dragon": "Celerulean",
         "Gold": 175
     },
@@ -488,6 +504,10 @@
         "Gold": 185
     },
     {
+        "Dragon": "Chime",
+        "Gold": 230
+    },
+    {
         "Dragon": "Chimmit",
         "Gold": 100
     },
@@ -502,6 +522,10 @@
     {
         "Dragon": "Chitin",
         "Gold": 400
+    },
+    {
+        "Dragon": "Chochin",
+        "Gold": 240
     },
     {
         "Dragon": "Chomp",
@@ -844,12 +868,20 @@
         "Gold": 280
     },
     {
+        "Dragon": "Drak-E",
+        "Gold": 220
+    },
+    {
         "Dragon": "Dream",
         "Gold": 100
     },
     {
         "Dragon": "Drifter",
         "Gold": 980
+    },
+    {
+        "Dragon": "Dumi",
+        "Gold": 240
     },
     {
         "Dragon": "Dungeon",
@@ -862,6 +894,14 @@
     {
         "Dragon": "Duskwing",
         "Gold": 650
+    },
+    {
+        "Dragon": "Dustroyer",
+        "Gold": 210
+    },
+    {
+        "Dragon": "Dusty",
+        "Gold": 220
     },
     {
         "Dragon": "Earth",
@@ -934,6 +974,10 @@
     {
         "Dragon": "Eridanian",
         "Gold": 104
+    },
+    {
+        "Dragon": "Erudine",
+        "Gold": 240
     },
     {
         "Dragon": "Etch",
@@ -1014,6 +1058,10 @@
     {
         "Dragon": "Firefly",
         "Gold": 700
+    },
+    {
+        "Dragon": "Firevine",
+        "Gold": 230
     },
     {
         "Dragon": "Firework",
@@ -1122,6 +1170,10 @@
     {
         "Dragon": "Frostfluff",
         "Gold": 450
+    },
+    {
+        "Dragon": "Fubuki",
+        "Gold": 220
     },
     {
         "Dragon": "Fuefuego",
@@ -1340,6 +1392,10 @@
         "Gold": 340
     },
     {
+        "Dragon": "Glimmer",
+        "Gold": 200
+    },
+    {
         "Dragon": "Glimmerwing",
         "Gold": 115
     },
@@ -1384,6 +1440,14 @@
         "Gold": 140
     },
     {
+        "Dragon": "Greenhouse",
+        "Gold": 170
+    },
+    {
+        "Dragon": "Greenty",
+        "Gold": 220
+    },
+    {
         "Dragon": "Greymatter",
         "Gold": 140
     },
@@ -1402,6 +1466,10 @@
     {
         "Dragon": "Gryphus",
         "Gold": 325
+    },
+    {
+        "Dragon": "Guerrero",
+        "Gold": 180
     },
     {
         "Dragon": "Gulletail",
@@ -1540,6 +1608,10 @@
         "Gold": 260
     },
     {
+        "Dragon": "Iceere",
+        "Gold": 230
+    },
+    {
         "Dragon": "Ichigo",
         "Gold": 190
     },
@@ -1616,6 +1688,10 @@
         "Gold": 325
     },
     {
+        "Dragon": "Ivory",
+        "Gold": 140
+    },
+    {
         "Dragon": "Ivy",
         "Gold": 400
     },
@@ -1636,8 +1712,16 @@
         "Gold": 220
     },
     {
+        "Dragon": "Jasmine",
+        "Gold": 240
+    },
+    {
         "Dragon": "Jasper",
         "Gold": ""
+    },
+    {
+        "Dragon": "Jawny",
+        "Gold": 230
     },
     {
         "Dragon": "Jester",
@@ -1696,6 +1780,10 @@
         "Gold": 350
     },
     {
+        "Dragon": "Keraunos",
+        "Gold": 130
+    },
+    {
         "Dragon": "Ketu",
         "Gold": 390
     },
@@ -1714,6 +1802,10 @@
     {
         "Dragon": "Kite",
         "Gold": 500
+    },
+    {
+        "Dragon": "Kitse",
+        "Gold": 240
     },
     {
         "Dragon": "Knarr",
@@ -1742,6 +1834,10 @@
     {
         "Dragon": "Kwall",
         "Gold": 200
+    },
+    {
+        "Dragon": "Kyrken",
+        "Gold": 230
     },
     {
         "Dragon": "Labradorite",
@@ -1801,6 +1897,10 @@
     },
     {
         "Dragon": "Legit",
+        "Gold": 240
+    },
+    {
+        "Dragon": "Leleek",
         "Gold": 240
     },
     {
@@ -1905,6 +2005,10 @@
     },
     {
         "Dragon": "Lucee",
+        "Gold": 260
+    },
+    {
+        "Dragon": "Luciflora",
         "Gold": 260
     },
     {
@@ -2072,6 +2176,10 @@
         "Gold": 940
     },
     {
+        "Dragon": "Mirhor",
+        "Gold": 230
+    },
+    {
         "Dragon": "Mirror",
         "Gold": 900
     },
@@ -2109,6 +2217,10 @@
     },
     {
         "Dragon": "Monolith 6",
+        "Gold": 500
+    },
+    {
+        "Dragon": "Monolith 7",
         "Gold": 500
     },
     {
@@ -2198,6 +2310,10 @@
     {
         "Dragon": "Nectar",
         "Gold": 700
+    },
+    {
+        "Dragon": "Nectavira",
+        "Gold": 250
     },
     {
         "Dragon": "Neoteric",
@@ -2296,12 +2412,20 @@
         "Gold": ""
     },
     {
+        "Dragon": "Om",
+        "Gold": 230
+    },
+    {
         "Dragon": "Omen",
         "Gold": 125
     },
     {
         "Dragon": "Oni",
         "Gold": 650
+    },
+    {
+        "Dragon": "Onsen",
+        "Gold": 210
     },
     {
         "Dragon": "Ooze",
@@ -2372,6 +2496,10 @@
         "Gold": 79
     },
     {
+        "Dragon": "Pavonini",
+        "Gold": 220
+    },
+    {
         "Dragon": "Pearl",
         "Gold": ""
     },
@@ -2416,8 +2544,16 @@
         "Gold": 240
     },
     {
+        "Dragon": "Pinco",
+        "Gold": 220
+    },
+    {
         "Dragon": "Pisceian",
         "Gold": 134
+    },
+    {
+        "Dragon": "Pit",
+        "Gold": 250
     },
     {
         "Dragon": "Pixie",
@@ -2516,6 +2652,14 @@
         "Gold": 250
     },
     {
+        "Dragon": "Primal Hidden Bolt",
+        "Gold": 250
+    },
+    {
+        "Dragon": "Primal Mountain Sun",
+        "Gold": 250
+    },
+    {
         "Dragon": "Prism",
         "Gold": 105
     },
@@ -2530,6 +2674,10 @@
     {
         "Dragon": "Promethium",
         "Gold": 1240
+    },
+    {
+        "Dragon": "Protegg",
+        "Gold": 250
     },
     {
         "Dragon": "Psyche",
@@ -2616,6 +2764,10 @@
         "Gold": 189
     },
     {
+        "Dragon": "Reaper",
+        "Gold": 240
+    },
+    {
         "Dragon": "Redbeard",
         "Gold": 110
     },
@@ -2656,6 +2808,10 @@
         "Gold": 105
     },
     {
+        "Dragon": "Righteous",
+        "Gold": 240
+    },
+    {
         "Dragon": "Riptide",
         "Gold": 420
     },
@@ -2666,6 +2822,14 @@
     {
         "Dragon": "Root",
         "Gold": 1200
+    },
+    {
+        "Dragon": "Rootwyrm",
+        "Gold": 210
+    },
+    {
+        "Dragon": "Rooty",
+        "Gold": 225
     },
     {
         "Dragon": "Rose",
@@ -2784,6 +2948,10 @@
         "Gold": 145
     },
     {
+        "Dragon": "Scrubby",
+        "Gold": 230
+    },
+    {
         "Dragon": "Scryer",
         "Gold": 100
     },
@@ -2884,6 +3052,10 @@
         "Gold": 95
     },
     {
+        "Dragon": "Sinking",
+        "Gold": 230
+    },
+    {
         "Dragon": "Sipho",
         "Gold": 250
     },
@@ -2918,6 +3090,10 @@
     {
         "Dragon": "Snapper",
         "Gold": 500
+    },
+    {
+        "Dragon": "Snapsnap",
+        "Gold": 240
     },
     {
         "Dragon": "Snootroot",
@@ -3076,6 +3252,10 @@
         "Gold": 755
     },
     {
+        "Dragon": "Spirit Mist",
+        "Gold": 210
+    },
+    {
         "Dragon": "Spite",
         "Gold": 340
     },
@@ -3228,6 +3408,10 @@
         "Gold": 650
     },
     {
+        "Dragon": "Tartarus",
+        "Gold": 210
+    },
+    {
         "Dragon": "Taurian",
         "Gold": 133
     },
@@ -3262,6 +3446,10 @@
     {
         "Dragon": "Terradiem",
         "Gold": 400
+    },
+    {
+        "Dragon": "Thaw",
+        "Gold": 240
     },
     {
         "Dragon": "Thicket",
@@ -3396,6 +3584,10 @@
         "Gold": 480
     },
     {
+        "Dragon": "Tulong",
+        "Gold": 210
+    },
+    {
         "Dragon": "Tumblethorn",
         "Gold": 375
     },
@@ -3482,6 +3674,10 @@
     {
         "Dragon": "Viridian",
         "Gold": 350
+    },
+    {
+        "Dragon": "Vitrail",
+        "Gold": 230
     },
     {
         "Dragon": "Void",
@@ -3622,6 +3818,10 @@
     {
         "Dragon": "Zaffer",
         "Gold": 325
+    },
+    {
+        "Dragon": "Zephyr",
+        "Gold": 250
     },
     {
         "Dragon": "Zero",

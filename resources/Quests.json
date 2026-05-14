@@ -8505,6 +8505,507 @@
                 "Fire",
                 "Cold"
             ]
+        },
+        "Zephyr": {
+            "Name": "Prevailing Wind",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Air",
+                "Light",
+                "Lightning",
+                "Cold"
+            ]
+        },
+        "Guerrero": {
+            "Name": "Warpath",
+            "Time": "16 hours",
+            "Rarity": "Epic",
+            "Elements": [
+                "Apocalypse",
+                "Earth",
+                "Lightning"
+            ]
+        },
+        "Tulong": {
+            "Name": "Brick by Brick",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Earth",
+                "Water",
+                "Plant"
+            ]
+        },
+        "Primal Hidden Bolt": {
+            "Name": "A Dark Spark",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Dark",
+                "Lightning"
+            ]
+        },
+        "Pavonini": {
+            "Name": "Feathers and Folly",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Air",
+                "Water",
+                "Light"
+            ]
+        },
+        "Glimmer": {
+            "Name": "Shiny Shiny Pretty Pretty",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Light",
+                "Earth",
+                "Metal"
+            ]
+        },
+        "Primal Mountain Sun": {
+            "Name": "Cliffhanger",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Earth",
+                "Light"
+            ]
+        },
+        "Keraunos": {
+            "Name": "Ride the Lightning",
+            "Time": "16 hours",
+            "Rarity": "Epic",
+            "Elements": [
+                "Olympus",
+                "Lightning",
+                "Air"
+            ]
+        },
+        "Luciflora": {
+            "Name": "Garden Guardian",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Plant",
+                "Air",
+                "Fire"
+            ]
+        },
+        "Snapsnap": {
+            "Name": "Floral Fuss",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Earth",
+                "Dark",
+                "Water",
+                "Plant"
+            ]
+        },
+        "Rooty": {
+            "Name": "Plotted and Potted",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Plant",
+                "Earth",
+                "Water",
+                "Dark"
+            ]
+        },
+        "Jasmine": {
+            "Name": "Eau de Pollen",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Light",
+                "Plant",
+                "Air"
+            ]
+        },
+        "Nectavira": {
+            "Name": "Sting Operation",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Plant",
+                "Water",
+                "Light"
+            ]
+        },
+        "Greenhouse": {
+            "Name": "Glass Act",
+            "Time": "16 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Hidden",
+                "Plant",
+                "Water",
+                "Light"
+            ]
+        },
+        "Ivory": {
+            "Name": "Ivory Tower",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Metal",
+                "Fire",
+                "Light",
+                "Earth"
+            ]
+        },
+        "Firevine": {
+            "Name": "Fan the Flames",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Fire",
+                "Plant",
+                "Lightning"
+            ]
+        },
+        "Rootwyrm": {
+            "Name": "Root Awakening",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Earth",
+                "Plant",
+                "Fire"
+            ]
+        },
+        "Pit": {
+            "Name": "Howl of Terror",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Fire",
+                "Earth",
+                "Dark",
+                "Cold"
+            ]
+        },
+        "Dumi": {
+            "Name": "Gourd Hoard",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Earth",
+                "Fire",
+                "Plant"
+            ]
+        },
+        "Mirhor": {
+            "Name": "On the Flip Side",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Dark",
+                "Fire",
+                "Metal",
+                "Light"
+            ]
+        },
+        "Tartarus": {
+            "Name": "Lost and Unfound",
+            "Time": "16 hours",
+            "Rarity": "Epic",
+            "Elements": [
+                "Olympus",
+                "Earth",
+                "Dark",
+                "Fire"
+            ]
+        },
+        "Sinking": {
+            "Name": "Surface Tension",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Dark",
+                "Water",
+                "Cold",
+                "Earth"
+            ]
+        },
+        "Brainiac": {
+            "Name": "Drain of Thought",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Water",
+                "Dark",
+                "Light"
+            ]
+        },
+        "Righteous": {
+            "Name": "On the Bright Side",
+            "Time": "16 hours",
+            "Rarity": "Epic",
+            "Elements": [
+                "Sun",
+                "Light",
+                "Fire"
+            ]
+        },
+        "Reaper": {
+            "Name": "Reaping the Benefits",
+            "Time": "16 hours",
+            "Rarity": "Epic",
+            "Elements": [
+                "Apocalypse",
+                "Dark",
+                "Cold"
+            ]
+        },
+        "Om": {
+            "Name": "And Zen?",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Lightning",
+                "Water",
+                "Light"
+            ]
+        },
+        "Thaw": {
+            "Name": "Breaking the Ice",
+            "Time": "16 hours",
+            "Rarity": "Epic",
+            "Elements": [
+                "Ornamental",
+                "Cold",
+                "Water"
+            ]
+        },
+        "Fubuki": {
+            "Name": "Awesome Blossom",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Cold",
+                "Plant",
+                "Earth"
+            ]
+        },
+        "Drak-E": {
+            "Name": "Steam Sweep",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Metal",
+                "Earth",
+                "Fire",
+                "Lightning"
+            ]
+        },
+        "Onsen": {
+            "Name": "Quick Dip",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Earth",
+                "Water",
+                "Fire"
+            ]
+        },
+        "Jawny": {
+            "Name": "Axe a Question",
+            "Time": "16 hours",
+            "Rarity": "Epic",
+            "Elements": [
+                "Apocalypse",
+                "Cold",
+                "Dark"
+            ]
+        },
+        "Kitse": {
+            "Name": "Clean, Clean, Clean",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Cold",
+                "Air"
+            ]
+        },
+        "Iceere": {
+            "Name": "Double Bubble",
+            "Time": "16 hours",
+            "Rarity": "Epic",
+            "Elements": [
+                "Ornamental",
+                "Air",
+                "Cold"
+            ]
+        },
+        "Chochin": {
+            "Name": "Light the Way",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Fire",
+                "Air",
+                "Light"
+            ]
+        },
+        "Chime": {
+            "Name": "Singing in the Wind",
+            "Time": "16 hours",
+            "Rarity": "Epic",
+            "Elements": [
+                "Melody",
+                "Plant",
+                "Air"
+            ]
+        },
+        "Spirit Mist": {
+            "Name": "Missed the Mist",
+            "Time": "16 hours",
+            "Rarity": "Epic",
+            "Elements": [
+                "Moon",
+                "Water",
+                "Air"
+            ]
+        },
+        "Greenty": {
+            "Name": "Hot Leaf Juice",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Plant",
+                "Water"
+            ]
+        },
+        "Agran": {
+            "Name": "Maize Maze",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Earth",
+                "Plant",
+                "Water"
+            ]
+        },
+        "Kyrken": {
+            "Name": "Divine Design",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Light",
+                "Earth"
+            ]
+        },
+        "Vitrail": {
+            "Name": "Winged Radiance",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Light",
+                "Earth",
+                "Lightning"
+            ]
+        },
+        "Cecropia": {
+            "Name": "Moth and Majesty",
+            "Time": "16 hours",
+            "Rarity": "Epic",
+            "Elements": [
+                "Chrysalis"
+            ]
+        },
+        "Monolith 7": {
+            "Name": "Taken for Granite",
+            "Time": "16 hours",
+            "Rarity": "Epic",
+            "Elements": [
+                "Earth",
+                "Water",
+                "Plant"
+            ]
+        },
+        "Leleek": {
+            "Name": "Leekalike",
+            "Time": "16 hours",
+            "Rarity": "Epic",
+            "Elements": [
+                "Hidden",
+                "Seasonal"
+            ]
+        },
+        "Erudine": {
+            "Name": "Lightning in a Bottle",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Lightning",
+                "Earth"
+            ]
+        },
+        "Pinco": {
+            "Name": "Pine Soul",
+            "Time": "16 hours",
+            "Rarity": "Epic",
+            "Elements": [
+                "Hidden",
+                "Plant",
+                "Cold"
+            ]
+        },
+        "Protegg": {
+            "Name": "Nest Quest",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Plant",
+                "Light",
+                "Earth"
+            ]
+        },
+        "Dusty": {
+            "Name": "Dust to Dust",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Earth",
+                "Air"
+            ]
+        },
+        "Scrubby": {
+            "Name": "Wishy-Washy",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Water",
+                "Air",
+                "Dark",
+                "Light"
+            ]
+        },
+        "Dustroyer": {
+            "Name": "Dustruction",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Cold",
+                "Earth",
+                "Air"
+            ]
+        },
+        "Bubbly": {
+            "Name": "Bubble Wand",
+            "Time": "8 hours",
+            "Rarity": "Rare",
+            "Elements": [
+                "Water",
+                "Air",
+                "Cold"
+            ]
         }
     }
 }
