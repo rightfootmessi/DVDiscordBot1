@@ -751,36 +751,43 @@ client.on('messageCreate', async (message) => {
                                 }
                             }
                             if (skip) continue;
-                            if (combined.length == desired.length) {
-                                // possibly an exact match
-                                for (e of desired) {
-                                    if (!combined.includes(e)) {
-                                        skip = true;
-                                        break;
+                            if (desiredElements.length > 0) {
+                                // Query included epic elements and breeding elements
+                                combined = combined.filter(e => !allEpics.includes(e));
+                                if (combined.length == desiredElements.length) {
+                                    // possibly an exact match
+                                    for (e of desiredElements) {
+                                        if (!combined.includes(e)) {
+                                            skip = true;
+                                            break;
+                                        }
                                     }
+                                    if (skip) continue;
+                                    exactMatches.push(dragon);
+                                } else if (combined.length == desiredElements.length + 1) {
+                                    // possibly a plusOne match
+                                    for (e of desiredElements) {
+                                        if (!combined.includes(e)) {
+                                            skip = true;
+                                            break;
+                                        }
+                                    }
+                                    if (skip) continue;
+                                    plusOne.push(dragon);
+                                } else if (combined.length == desiredElements.length + 2) {
+                                    // possibly a plusTwo match
+                                    for (e of desiredElements) {
+                                        if (!combined.includes(e)) {
+                                            skip = true;
+                                            break;
+                                        }
+                                    }
+                                    if (skip) continue;
+                                    plusTwo.push(dragon);
                                 }
-                                if (skip) continue;
+                            } else {
+                                // Query only included epic elements
                                 exactMatches.push(dragon);
-                            } else if (combined.length == desired.length + 1) {
-                                // possibly a plusOne match
-                                for (e of desired) {
-                                    if (!combined.includes(e)) {
-                                        skip = true;
-                                        break;
-                                    }
-                                }
-                                if (skip) continue;
-                                plusOne.push(dragon);
-                            } else if (combined.length == desired.length + 2) {
-                                // possibly a plusTwo match
-                                for (e of desired) {
-                                    if (!combined.includes(e)) {
-                                        skip = true;
-                                        break;
-                                    }
-                                }
-                                if (skip) continue;
-                                plusTwo.push(dragon);
                             }
                         }
 
@@ -797,11 +804,11 @@ client.on('messageCreate', async (message) => {
                             .addFields([
                                 {
                                     name: 'Desired Epic Elements',
-                                    value: desiredEpics.length > 0 ? desiredEpics.map(x => getIcon(x)).join(" ") : "None selected"
+                                    value: desiredEpics.length > 0 ? desiredEpics.map(x => getIcon(x)).join(" ") : "Any"
                                 },
                                 {
                                     name: 'Desired Breeding Elements',
-                                    value: desiredElements.length > 0 ? desiredElements.map(x => getIcon(x)).join(" ") : "None selected"
+                                    value: desiredElements.length > 0 ? desiredElements.map(x => getIcon(x)).join(" ") : "Any"
                                 },
                                 {
                                     name: 'Exact Matches',
@@ -811,17 +818,18 @@ client.on('messageCreate', async (message) => {
 
                         toCache['exact'] = responseEmbed;
 
+                        if (desiredElements.length > 0)
                         responseEmbed = new EmbedBuilder()
                             .setColor(0xFFFF00)
                             .setTitle("Element Parent Finder")
                             .addFields([
                                 {
                                     name: 'Desired Epic Elements',
-                                    value: desiredEpics.length > 0 ? desiredEpics.map(x => getIcon(x)).join(" ") : "None selected"
+                                    value: desiredEpics.length > 0 ? desiredEpics.map(x => getIcon(x)).join(" ") : "Any"
                                 },
                                 {
                                     name: 'Desired Breeding Elements',
-                                    value: desiredElements.length > 0 ? desiredElements.map(x => getIcon(x)).join(" ") : "None selected"
+                                    value: desiredElements.length > 0 ? desiredElements.map(x => getIcon(x)).join(" ") : "Any"
                                 },
                                 {
                                     name: 'Exact Matches',
