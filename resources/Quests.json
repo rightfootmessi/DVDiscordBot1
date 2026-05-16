@@ -9006,6 +9006,16 @@
                 "Air",
                 "Cold"
             ]
+        },
+        "Trashure": {
+            "Name": "One Dragon's Trash",
+            "Time": "16 hours",
+            "Rarity": "Epic",
+            "Elements": [
+                "Treasure",
+                "Dark",
+                "Plant"
+            ]
         }
     }
 }

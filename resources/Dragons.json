@@ -29006,6 +29006,38 @@
                 "Available": "All"
             },
             "Goal": "This dragon gets cold pretty quickly!"
+        },
+        {
+            "Name": "Trashure",
+            "Rarity": "Epic",
+            "BreedingTime": "18 H",
+            "Description": "One wizard's trash may be another's treasure, and the same goes for dragons too. If an ocular dragon came upon a pair of spectacles, they would need them about as much as a helianthus would. But a trashure dragon? Oh, they might not need them now, but some day maybe. Maybe.",
+            "ReleaseDate": "May 14, 2026 #962",
+            "Order": 962,
+            "BuyPrice": 0,
+            "BuyCurrency": "Gems",
+            "SellPrice": 2800000,
+            "SellCurrency": "DragonCash",
+            "HatchExperience": 2800000,
+            "LevelRequirement": 25,
+            "Elements": [
+                "Treasure",
+                "Dark",
+                "Plant"
+            ],
+            "BreedingElements": [
+                "Dark",
+                "Plant"
+            ],
+            "IsLimited": true,
+            "Pedestal": {
+                "BuyPrice": 0,
+                "BuyCurrency": "Gems"
+            },
+            "Traits": {
+                "Available": "All"
+            },
+            "Goal": "This dragon will probably need all that later for something."
         }
     ]
 }

@@ -216,7 +216,7 @@
         "Dracomancy 3",
         "Dracomancy 4",
         "Dragpir",
-        "Drak-e",
+        "Drak-E",
         "Dream",
         "Drifter",
         "Dumi",
@@ -879,6 +879,7 @@
         "Totem",
         "Tourmaline",
         "Tranquil",
+        "Trashure",
         "Tree",
         "Treebark",
         "Trench",
@@ -1104,6 +1105,7 @@
         "Bubbly",
         "Dustroyer",
         "Dusty",
-        "Scrubby"
+        "Scrubby",
+        "Trashure"
     ]
 }

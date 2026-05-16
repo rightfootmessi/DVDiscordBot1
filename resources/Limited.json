@@ -6,11 +6,11 @@
         "Spring": {
             "countdown": "June 20, 2026"
         },
-        "Wavelyte": {
-            "countdown": "May 15, 2026"
+        "Jade": {
+            "countdown": "August 15, 2026"
         },
-        "Lapis": {
-            "countdown": "May 15, 2026"
+        "Azurite": {
+            "countdown": "June 15, 2026"
         },
         "Taurian": {
             "countdown": "May 21, 2026"
@@ -30,8 +30,8 @@
         "Emerald Triquetra": {
             "countdown": "June 1, 2026"
         },
-        "Azure Emblem": {
-            "countdown": "May 15, 2026"
+        "Jadeite Oasis": {
+            "countdown": "August 15, 2026"
         },
         "Family Imprint": {
             "countdown": "May 18, 2026"
@@ -41,10 +41,10 @@
         "Refresh-o-Vale": {
             "countdown": "May 27, 2026",
             "dragons": {
-                "Bubbly": {
-                    "countdown": "May 14, 2026",
+                "Trashure": {
+                    "countdown": "May 25, 2026",
                     "Currency": "Magic",
-                    "Cost": 15000
+                    "Cost": 13500
                 },
                 "Scrubby": {
                     "Currency": "Magic",

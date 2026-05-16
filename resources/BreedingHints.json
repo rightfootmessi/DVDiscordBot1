@@ -8244,6 +8244,16 @@
             "RequiredElements": [
                 "Cold"
             ]
+        },
+        "Trashure": {
+            "BuyPrice": 20,
+            "BuyPriceType": "Gems",
+            "RequiredDragons": [
+                "Bounty"
+            ],
+            "RequiredElements": [
+                "Dark"
+            ]
         }
     }
 }

@@ -47,6 +47,7 @@ const helpMsg1 = `Command list (prefix all commands with \`${cmdPrefix}\`):\n`
                 + "- `parent <dragon> [normal|fast|coop|rift|runic] [noclone]` - lists the 10 breeding combinations with the highest odds of resulting in the specified dragon in the specified cave; omitting the cave argument defaults to the normal cave; add the `noclone` to exclude all combinations that involve the dragon as a parent (aliases: `parents`, `combo`)\n";
 const helpMsg2 = "- `quest <quest>` - get the correct dragon to send on a quest\n"
                 + "- `rates <dragon> [b #] [g #] [rift]` - get the earning rates of a dragon. Add `b` followed by a number to apply boosts, and/or `g` followed by a number to apply generators, or `rift` to get etherium earning rates\n"
+                + "- `recommend` - find dragons that match the requested breeding elements (alias: `findparent`)\n"
                 + "- `result <dragon1>, <dragon2> <d:hh:mm:ss OR ##d ##h ##m ##s> [normal|fast|coop|runic]` - given 2 parent dragons and the resulting timer, find the potential dragons that can result from the breed; if a cave is not specified, the normal breeding cave is assumed (aliases: `results`, `fakeouts`)\n"
                 + "- `sandbox <dragon1>, <dragon2> [normal|fast|coop|rift|runic]` - displays all possible results of the specified breeding combo (alias: `dvbox`, `sim`, `breedsim`)\n"
                 + "- `timer <dragon name>` - get the breeding times of the dragon\n"
@@ -63,7 +64,8 @@ const helpMsgMod = helpMsgHelper
                 + "- `unflag <dragon> <primaries/evolutions/enhanced/dayNight/hiding>` - remove the specified flag from the dragon\n"
                 + "- `getflags <dragon>` - gets all flags on the specified dragon\n"
                 + "- `guide <add/remove> <name> [contents]` - add/remove a guide\n"
-                + "- `qotd <viewlist/add/edit/remove> <position> <asker> <anon> <question>` - Adds/removes an upcoming QOTD, or lists all pending questions\n"
+                + "- `qotd <viewlist/add/edit/remove> <position> <asker> <anon> <question>` - adds/removes an upcoming QOTD, or lists all pending questions\n"
+                + "- `emote <add/remove/list> [name] [emote] - adds/removes emote to emote list, or lists all currently recognized emotes\n"
                 + "- `clearcache` - clear the bot's cache and redownloads all data files\n"
                 + "- `dljson` - sends a downloadable copy of my dragon list as a json file\n"
                 + "- `purge <# of messages>` - clears the specified number of most recent messages from the channel it's used in\n"
@@ -107,6 +109,8 @@ function post_qotd(data) {
 
 var primaries, evolutions, enhanced, dayNight, hiding, elders, dragonList, newDrags, fullData;
 
+var emotes = {};
+
 var guides = {};
 
 var wikiBreedingHints = {};
@@ -142,6 +146,8 @@ var comboCache = {
 };
 var oddsCache = {};
 
+var recommendCache = {};
+
 var botStartTimestamp = 0;
 var lastBackupDate = "never";
 
@@ -153,6 +159,7 @@ client.on('ready', () => {
     botStartTimestamp = Math.floor(Date.now() / 1000);
     console.log(`Oracle is waking up at ${botStartTimestamp}...`);
     let data = JSON.parse(fs.readFileSync('dragonList2.json'));
+    emotes = JSON.parse(fs.readFileSync('emotes.json'));
     fullData = data;
     primaries = data.primaries;
     evolutions = data.evolutions;
@@ -578,6 +585,265 @@ client.on('messageCreate', async (message) => {
                     message.channel.send(`**__${dragon}:__**\n${getIcon('etherium')} Etherium earning rates:\n${table}`);
                 }
             }
+        } else if (cmd === 'recommend' || cmd === 'findparent') {
+            let allElements = ["Plant", "Fire", "Earth", "Cold", "Lightning", "Water", "Air", "Metal", "Light", "Dark"];
+            let allEpics = ["Apocalypse", "Aura", "Chrysalis", "Crystalline", "Dream", "Galaxy", "Gemstone", "Hidden", "Melody", "Monolith", "Moon", "Olympus", "Ornamental", "Rainbow", "Seasonal", "Snowflake", "Sun", "Surface", "Treasure", "Zodiac"];
+            let desiredElements = [];
+            let desiredEpics = [];
+            let findExtras = false;
+
+            let idNum = Date.now();
+            let addId = `add${idNum}`;
+            let addeId = `adde${idNum}`;
+            let findId = `find${idNum}`;
+            let resetId = `reset${idNum}`;
+            let extraId = `extra${idNum}`;
+
+            const btnFind = new ButtonBuilder().setStyle(ButtonStyle.Primary).setLabel('Find Dragons').setCustomId(findId);
+            const btnReset = new ButtonBuilder().setStyle(ButtonStyle.Danger).setLabel('Reset Selections').setCustomId(resetId);
+
+            let btnAdd = new StringSelectMenuBuilder()
+                .setCustomId(addId)
+                .setMinValues(0)
+                .setMaxValues(10)
+                .setPlaceholder("Select Elements");
+            for (e of allElements) {
+                eid = getIcon(e).match(/(\d+)/)[1];
+                btnAdd = btnAdd.addOptions(
+                    new StringSelectMenuOptionBuilder()
+                        .setLabel(e)
+                        .setValue(e)
+                        .setEmoji(eid)
+                );
+            }
+
+            let btnAddE = new StringSelectMenuBuilder()
+                .setCustomId(addeId)
+                .setMinValues(0)
+                .setMaxValues(20)
+                .setPlaceholder("Select Epic Elements");
+            for (e of allEpics) {
+                eid = getIcon(e).match(/(\d+)/)[1];
+                btnAddE = btnAddE.addOptions(
+                    new StringSelectMenuOptionBuilder()
+                        .setLabel(e)
+                        .setValue(e)
+                        .setEmoji(eid)
+                );
+            }
+
+            btnToggleExtra = () => new StringSelectMenuBuilder()
+                .setCustomId(extraId)
+                .addOptions(
+                    new StringSelectMenuOptionBuilder()
+                        .setLabel('Exact Matches Only')
+                        .setDescription('Return dragons with only the requested elements')
+                        .setValue('exact')
+                        .setDefault(!findExtras),
+                    new StringSelectMenuOptionBuilder()
+                        .setLabel('Exact and Close Matches')
+                        .setDescription('Also return dragons with one or two extra elements')
+                        .setValue('extra')
+                        .setDefault(findExtras)
+                );
+
+
+            const generateEmbed = () => {
+                return new EmbedBuilder()
+                    .setColor(0xFFFF00)
+                    .setTitle("Element Parent Finder")
+                    .setDescription("This tool finds all dragons possessing the desired breeding elements; especially useful for figuring out how to breed dragons with elements in their combo rather than specific dragons. Selected the desired epic elements(s) for the dragon, then select the required breeding element(s), then click Find Dragon.")
+                    .addFields([
+                        {
+                            name: 'Desired Epic Elements',
+                            value: desiredEpics.length > 0 ? desiredEpics.map(x => getIcon(x)).join(" ") : "None selected"
+                        },
+                        {
+                            name: 'Desired Breeding Elements',
+                            value: desiredElements.length > 0 ? desiredElements.map(x => getIcon(x)).join(" ") : "None selected"
+                        },
+                        {
+                            name: 'Requested Output',
+                            value: findExtras ? "Exact matches and close matches (one or two extra elements)" : "Exact matches only"
+                        }
+                    ]);
+            };
+
+            let msgRef = await message.channel.send({
+                embeds: [generateEmbed()],
+                components: [
+                    ...([new ActionRowBuilder().addComponents(btnAddE)]),
+                    ...([new ActionRowBuilder().addComponents(btnAdd)]),
+                    ...([new ActionRowBuilder().addComponents(btnToggleExtra())])
+                ]
+            });
+
+            const collector = msgRef.createMessageComponentCollector({filter: ({user}) => user.id === message.author.id});
+
+            collector.on('collect', interaction => {
+                if (interaction.customId === addId) {
+                    desiredElements = interaction.values;
+                    interaction.update({
+                        embeds: [generateEmbed()],
+                        components: [
+                            ...([new ActionRowBuilder().addComponents(btnAddE)]),
+                            ...([new ActionRowBuilder().addComponents(btnAdd)]),
+                            ...([new ActionRowBuilder().addComponents(btnToggleExtra())]),
+                            ...(desiredEpics.length + desiredElements.length > 0 ? [new ActionRowBuilder().addComponents(btnFind).addComponents(btnReset)] : [])
+                        ]
+                    });
+                } else if (interaction.customId === addeId) {
+                    desiredEpics = interaction.values;
+                    interaction.update({
+                        embeds: [generateEmbed()],
+                        components: [
+                            ...([new ActionRowBuilder().addComponents(btnAddE)]),
+                            ...([new ActionRowBuilder().addComponents(btnAdd)]),
+                            ...([new ActionRowBuilder().addComponents(btnToggleExtra())]),
+                            ...(desiredEpics.length + desiredElements.length > 0 ? [new ActionRowBuilder().addComponents(btnFind).addComponents(btnReset)] : [])
+                        ]
+                    });
+                } else if (interaction.customId === extraId) {
+                    findExtras = interaction.values[0] == 'extra';
+                    interaction.update({
+                        embeds: [generateEmbed()],
+                        components: [
+                            ...([new ActionRowBuilder().addComponents(btnAddE)]),
+                            ...([new ActionRowBuilder().addComponents(btnAdd)]),
+                            ...([new ActionRowBuilder().addComponents(btnToggleExtra())]),
+                            ...(desiredEpics.length + desiredElements.length > 0 ? [new ActionRowBuilder().addComponents(btnFind).addComponents(btnReset)] : [])
+                        ]
+                    });
+                } else if (interaction.customId === resetId) {
+                    desiredEpics = [];
+                    desiredElements = [];
+                    interaction.update({
+                        embeds: [generateEmbed()],
+                        components: [
+                            ...([new ActionRowBuilder().addComponents(btnAddE)]),
+                            ...([new ActionRowBuilder().addComponents(btnAdd)]),
+                            ...([new ActionRowBuilder().addComponents(btnToggleExtra())])
+                        ]
+                    });
+                } else if (interaction.customId === findId) {
+                    desired = desiredEpics.concat(desiredElements);
+                    desired.sort();
+                    cacheKey = desired.join(" ");
+
+                    if (!recommendCache[cacheKey]) {
+                        let exactMatches = [];
+                        let plusOne = [];
+                        let plusTwo = [];
+
+                        for (dragon in wikiDragons) {
+                            let dData = wikiDragons[dragon];
+                            let skip = false;
+                            let combined = dData["Elements"];
+                            if (dData["BreedingElements"]) {
+                                combined = dData["Elements"].concat(dData["BreedingElements"]);
+                                combined = [...new Set(combined)];
+                            }
+                            combined = combined.filter(e => e != "Rift"); // don't consider Rift a breeding element
+                            for (e of desiredEpics) {
+                                if (!combined.includes(e)) {
+                                    skip = true;
+                                    break;
+                                }
+                            }
+                            if (skip) continue;
+                            if (combined.length == desired.length) {
+                                // possibly an exact match
+                                for (e of desired) {
+                                    if (!combined.includes(e)) {
+                                        skip = true;
+                                        break;
+                                    }
+                                }
+                                if (skip) continue;
+                                exactMatches.push(dragon);
+                            } else if (combined.length == desired.length + 1) {
+                                // possibly a plusOne match
+                                for (e of desired) {
+                                    if (!combined.includes(e)) {
+                                        skip = true;
+                                        break;
+                                    }
+                                }
+                                if (skip) continue;
+                                plusOne.push(dragon);
+                            } else if (combined.length == desired.length + 2) {
+                                // possibly a plusTwo match
+                                for (e of desired) {
+                                    if (!combined.includes(e)) {
+                                        skip = true;
+                                        break;
+                                    }
+                                }
+                                if (skip) continue;
+                                plusTwo.push(dragon);
+                            }
+                        }
+
+                        exactMatches.sort();
+                        plusOne.sort();
+                        plusTwo.sort();
+                        
+                        let toCache = {};
+
+                        // TODO cache the response embeds?
+                        responseEmbed = new EmbedBuilder()
+                            .setColor(0xFFFF00)
+                            .setTitle("Element Parent Finder")
+                            .addFields([
+                                {
+                                    name: 'Desired Epic Elements',
+                                    value: desiredEpics.length > 0 ? desiredEpics.map(x => getIcon(x)).join(" ") : "None selected"
+                                },
+                                {
+                                    name: 'Desired Breeding Elements',
+                                    value: desiredElements.length > 0 ? desiredElements.map(x => getIcon(x)).join(" ") : "None selected"
+                                },
+                                {
+                                    name: 'Exact Matches',
+                                    value: exactMatches.length > 0 ? exactMatches.join(", ") : 'No dragons found'
+                                }
+                        ]);
+
+                        toCache['exact'] = responseEmbed;
+
+                        responseEmbed = new EmbedBuilder()
+                            .setColor(0xFFFF00)
+                            .setTitle("Element Parent Finder")
+                            .addFields([
+                                {
+                                    name: 'Desired Epic Elements',
+                                    value: desiredEpics.length > 0 ? desiredEpics.map(x => getIcon(x)).join(" ") : "None selected"
+                                },
+                                {
+                                    name: 'Desired Breeding Elements',
+                                    value: desiredElements.length > 0 ? desiredElements.map(x => getIcon(x)).join(" ") : "None selected"
+                                },
+                                {
+                                    name: 'Exact Matches',
+                                    value: exactMatches.length > 0 ? exactMatches.join(", ") : 'No dragons found'
+                                },
+                                {
+                                    name: 'Matches with 1 Extra Element',
+                                    value: plusOne.length > 0 ? plusOne.join(", "): 'No dragons found'
+                                },
+                                {
+                                    name: 'Matches with 2 Extra Elements',
+                                    value: plusTwo.length > 0 ? plusTwo.join(", ") : 'No dragons found'
+                                }
+                        ]);
+
+                        toCache['extra'] = responseEmbed;
+                        recommendCache[cacheKey] = toCache;
+                    }
+                    interaction.update({embeds: [recommendCache[cacheKey][findExtras ? 'extra' : 'exact']], components: []});
+                }
+            });
+
         } else if (cmd === 'result' || cmd === 'results' || cmd === 'fakeouts') {
             if (cmdInWrongChannel(message)) return;
 
@@ -978,6 +1244,45 @@ client.on('messageCreate', async (message) => {
                         else message.channel.send(`${dragon} was removed from my lists. If this was a mistake, type \`${cmdPrefix}mod dragon add ${dragon}\` to re-add it.`);
                     });
                 } 
+            } else if (modCmd === 'emote' && hasModAccess(message)) {
+                const subCmd = args.shift();
+                if (subCmd === 'add') {
+                    if (args.length == 2) {
+                        let emoteName = args[0];
+                        let emoteId = args[1].match(/<a?:.+:(\d+)>/);
+                        if (emoteId) {
+                            emoteId = emoteId[1];
+                            if (emotes[emoteName]) message.channel.send(`:warning: Overwriting previous emote w/ name \`${emoteName}\`: ${emotes[emoteName]}`);
+                            emotes[emoteName] = `<:a:${emoteId}>`;
+                            fs.writeFile('emotes.json', JSON.stringify(emotes, null, 4), (err) => {
+                                if (err) message.channel.send(":x: An unexpected error occurred and the emote list could not be updated.");
+                                else message.channel.send(`:white_check_mark: Added <:a:${emoteId}> to my list under the name \`${emoteName}\`.`);
+                            });
+                        } else {
+                            message.channel.send(":x: Could not parse the emote. Make sure you are sending the emote itself!");
+                        }
+                    } else {
+                        message.channel.send(`Usage: \`${cmdPrefix}mod emote add <name> <emote>\``);
+                    }
+                } else if (subCmd === 'remove') {
+                    if (args.length == 0) message.channel.send(`:x: Please indicate the emote to remove. Check all emotes with \`${cmdPrefix}mod emote list\``);
+                    else {
+                        let emote = args[0];
+                        if (emotes[emote]) {
+                            delete emotes[emote];
+                            fs.writeFile('emotes.json', JSON.stringify(emotes, null, 4), (err) => {
+                                if (err) message.channel.send(":x: An unexpected error occurred and the emote list could not be updated.");
+                                else message.channel.send(`:white_check_mark: Removed the emote named \`${emote}\` from my list.`);
+                            });
+                        } else message.channel.send(`:x: \`${emote}\` is already not in my list.`);
+                    }
+                } else if (subCmd === 'list') {
+                    let emoteStr = "Here are the emotes I currently recognize:";
+                    for (emote in emotes) emoteStr += `\n- \`${emote}\`: ${emotes[emote]}`;
+                    message.channel.send(emoteStr)
+                } else {
+                    message.channel.send(`Usage: \`${cmdPrefix}mod emote <add/remove/list> [name] [emote]\``);
+                }
             } else if (modCmd === 'flag' && hasModAccess(message)) {
                 var flag = args.pop();
                 var dragon = prettyString(args, " ");
@@ -1800,44 +2105,6 @@ function generateBreedingHint(dragon) {
     return msg;
 }
 
-const emotes = {
-    plant: "<:a:1028651087135248444>",
-    fire: "<:a:1028651255322652712>",
-    earth: "<:a:1028651314906927104>",
-    cold: "<:a:1028651439679082566>",
-    lightning: "<:a:1028651496025370774>",
-    water: "<:a:1028651647431360602>",
-    air: "<:a:1028651648685461514>",
-    metal: "<:a:1028651649755004938>",
-    light: "<:a:1028651651168485466>",
-    dark: "<:a:1028651652447740005>",
-    rift: "<:a:1029184146897117254>",
-    apocalypse: "<:a:1028652443787079740>",
-    aura: "<:a:1028652688524722217>",
-    chrysalis: "<:a:1028653236095295569>",
-    crystalline: "<:a:1028653786236977202>",
-    dream: "<:a:1028652444860813362>",
-    galaxy: "<:a:1029184385271988314>",
-    gemstone: "<:a:1028653784735416421>",
-    hidden: "<:a:1028653237395533894>",
-    melody: "<:a:1029184145269719095>",
-    monolith: "<:a:1028652685680967761>",
-    moon: "<:a:1028652003972358205>",
-    olympus: "<:a:1028652186093244498>",
-    ornamental: "<:a:1028652687224488047>",
-    rainbow: "<:a:1028652001686470806>",
-    seasonal: "<:a:1028652183773777930>",
-    snowflake: "<:a:1028652446261714954>",
-    sun: "<:a:1028652002772791296>",
-    surface: "<:a:1028653238720921681>",
-    treasure: "<:a:1028652184839131217>",
-    zodiac: "<:a:1029184149644382279>",
-    dragoncash: "<:a:794723780269834240>",
-    etherium: "<:a:1127798807413919865>",
-    gems: "<:a:804765803492016138>",
-    eom: "<:a:1285704282573897819>",
-    doubloons: "<:a:1129605812302663750>",
-};
 getIcon = function(element) {
     return Object.keys(emotes).includes(element.toLowerCase()) ? emotes[element.toLowerCase()] : element;
 };
